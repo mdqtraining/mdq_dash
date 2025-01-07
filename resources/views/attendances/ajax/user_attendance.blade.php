@@ -15,7 +15,7 @@
                 </div>
             </td>
             <td>
-                <span class="badge badge-success">@lang('modules.attendance.present')</span>
+                <span class="badge badge-green">@lang('modules.attendance.present')</span>
             </td>
             <td colspan="2">
                 <x-table class="mb-0 rounded table table-bordered table-hover">
@@ -71,22 +71,22 @@
                     <h5 class="mb-0 f-13">{{ $currentDate->translatedFormat(company()->date_format) }}
                     </h5>
                     <p class="mb-0 f-13 text-dark-grey">
-                        <span class="badge badge-secondary">{{ $currentDate->translatedFormat('l') }}</span>
+                        <span class="badge badge-secondary1">{{ $currentDate->translatedFormat('l') }}</span>
                     </p>
                 </div>
             </td>
             <td>
                 @if (!$dateData['holiday'] && !$dateData['leave'])
-                    <label class="badge badge-danger">@lang('modules.attendance.absent')</label>
+                    <label class="badge badge-red">@lang('modules.attendance.absent')</label>
                 @elseif($dateData['leave'])
                     @if ($dateData['leave']['duration'] == 'half day')
-                        <label class="badge badge-primary">@lang('modules.attendance.leave')</label><br><br>
-                        <label class="badge badge-warning">@lang('modules.attendance.halfDay')</label>
+                        <label class="badge badge-green">@lang('modules.attendance.leave')</label><br><br>
+                        <label class="badge badge-orange">@lang('modules.attendance.halfDay')</label>
                     @else
-                        <label class="badge badge-primary">@lang('modules.attendance.leave')</label>
+                        <label class="badge badge-green">@lang('modules.attendance.leave')</label>
                     @endif
                 @else
-                    <label class="badge badge-secondary">@lang('modules.attendance.holiday')</label>
+                    <label class="badge badge-secondary1">@lang('modules.attendance.holiday')</label>
                 @endif
             </td>
             <td colspan="2">

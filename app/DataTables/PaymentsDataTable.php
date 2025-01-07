@@ -166,12 +166,12 @@ class PaymentsDataTable extends BaseDataTable
             })
             ->editColumn('status', function ($row) {
                 $statusClass = match ($row->status) {
-                    'pending' => 'text-yellow',
-                    'failed' => 'text-red',
-                    default => 'text-dark-green',
+                    'pending' => '#ffa21d',
+                    'failed' => ' #ff3a6e',
+                    default => '#6fd943',
                 };
 
-                return '<i class="fa fa-circle mr-1 ' . $statusClass . ' f-10"></i>' . __('app.' . $row->status);
+                return ('<span style="background-color: ' . $statusClass . ' ; color: #fff; padding: 5px; border-radius: 5px">'  . __('app.' . $row->status). '</span>');
             })
 
             ->editColumn('amount', function ($row) {

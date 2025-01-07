@@ -15,7 +15,16 @@
         'Leaves Approved' => 'padding: 10px; border-radius:10px; background-color:  #ff3a6e;',
         'Employee Exits' => 'padding: 10px; border-radius:10px; background-color: rgb(255,162,29);',
         'Average Attendance' => 'padding: 10px; border-radius:10px; background-color:  #ff3a6e;',
-        'Total Pending Amount' => 'padding: 10px; border-radius:10px; background-color: rgb(255,162,29);'
+        'Total Pending Amount' => 'padding: 10px; border-radius:10px; background-color: rgb(255,162,29);',
+        'Closed Tickets' => 'padding: 10px; border-radius:10px; background-color:  #6FD943;',
+        'Open Tickets' => 'padding: 10px; border-radius:10px; background-color: rgb(255,162,29);',
+        'Pending Tickets' => 'padding: 10px; border-radius:10px; background-color:  #ff3a6e;',
+        'Resolved Tickets' => 'padding: 10px; border-radius:10px; background-color:  #6FD943;',
+        'Working Days' => 'padding: 10px; border-radius:10px; background-color:  #6FD943;',
+        'Days Present' => 'padding: 10px; border-radius:10px; background-color:  #6FD943;',
+        'Late' => 'padding: 10px; border-radius:10px; background-color: rgb(255,162,29);',
+        'Half Day' => 'padding: 10px; border-radius:10px; background-color: rgb(255,162,29);',
+        'Absent' => 'padding: 10px; border-radius:10px; background-color:  #ff3a6e;'
         
     ];
     $style = $styles[$title] ?? 'padding: 10px; border-radius:10px; background-color:rgb(62,201,214);';
@@ -35,7 +44,16 @@
         'Leaves Approved' => 'color:  #ff3a6e;',
         'Employee Exits' => 'color: rgb(255,162,29);',
         'Average Attendance' => 'color:  #ff3a6e;',
-        'Total Pending Amount' => 'color: rgb(255,162,29);'
+        'Total Pending Amount' => 'color: rgb(255,162,29);',
+        'Closed Tickets' => 'color:  #6FD943;',
+        'Open Tickets' => 'color: rgb(255,162,29);',
+        'Pending Tickets' => 'color:  #ff3a6e;',
+        'Resolved Tickets' => 'color:  #6FD943;',
+        'Working Days' => 'color:  #6FD943;',
+        'Days Present' => 'color:  #6FD943;',
+        'Late' => 'color: rgb(255,162,29);',
+        'Half Day' => 'color: rgb(255,162,29);',
+        'Absent' => 'color:  #ff3a6e;'
     ];
     $style1 = $styles1[$title] ?? 'color:rgb(62,201,214);';
 @endphp

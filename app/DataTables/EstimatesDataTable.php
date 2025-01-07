@@ -141,19 +141,19 @@ class EstimatesDataTable extends BaseDataTable
             $status = '';
 
             if ($row->status == 'waiting') {
-                $status .= '<i class="fa fa-circle mr-1 text-yellow f-10"></i>' . __('modules.estimates.' . $row->status) . '</label>';
+                $status .=' <span style=" background-color:#ffa21d; color:#fff; padding:  5px; border-radius: 5px">'  . __('modules.estimates.' . $row->status) .  '</span>'.'</label>';
             }
             elseif ($row->status == 'draft') {
-                $status .= '<i class="fa fa-circle mr-1 text-blue f-10"></i>' . __('app.' . $row->status) . '</label>';
+                $status .=' <span style=" background-color:#3ec9d6; color:#fff; padding:  5px; border-radius: 5px">'  . __('modules.estimates.' . $row->status) .  '</span>'.'</label>';
             }
             elseif ($row->status == 'canceled') {
-                $status .= '<i class="fa fa-circle mr-1 text-red f-10"></i>' . __('app.' . $row->status) . '</label>';
+                $status .= ' <span style=" background-color:#ff3a6e; color:#fff; padding:  5px; border-radius: 5px">'  . __('modules.estimates.' . $row->status) .  '</span>'.'</label>';
             }
             elseif ($row->status == 'declined') {
-                $status .= '<i class="fa fa-circle mr-1 text-red f-10"></i>' . __('modules.estimates.' . $row->status) . '</label>';
+                $status .=' <span style=" background-color:#ff3a6e; color:#fff; padding:  5px; border-radius: 5px">'  . __('modules.estimates.' . $row->status) .  '</span>'.'</label>';
             }
             else {
-                $status .= '<i class="fa fa-circle mr-1 text-dark-green f-10"></i>' . __('modules.estimates.' . $row->status) . '</label>';
+                $status .= ' <span style=" background-color:#6fd943; color:#fff; padding:  5px; border-radius: 5px">'  . __('modules.estimates.' . $row->status) .  '</span>'.'</label>';
             }
 
             if (!$row->send_status && $row->status != 'draft' && $row->status != 'canceled') {

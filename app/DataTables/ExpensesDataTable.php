@@ -119,21 +119,22 @@ class ExpensesDataTable extends BaseDataTable
                     $status .= 'selected';
                 }
 
-                $status .= ' value="pending" data-content="<i class=\'fa fa-circle mr-2 text-yellow\'></i> ' . __('app.pending') . '">' . __('app.pending') . '</option>';
+                $status .= ' value="approved" data-content ="<span style=\'color:#ffa21d; font-weight:600\' >  ' . __('app.pending') . ' </span> ">'.'<span style=\'color:black;\' >' . __('app.approved') .  '</span>'.'</option>';
                 $status .= '<option ';
 
                 if ($row->status == 'approved') {
                     $status .= 'selected';
                 }
 
-                $status .= ' value="approved" data-content="<i class=\'fa fa-circle mr-2 text-light-green\'></i> ' . __('app.approved') . '"' . __('app.approved') . '</option>';
+                $status .= ' value="approved" data-content ="<span style=\'color:#6fd943; font-weight:600\' >  ' . __('app.approved') . ' </span> ">'.'<span style=\'color:black;\' >' . __('app.approved') .  '</span>'.'</option>';
                 $status .= '<option ';
 
                 if ($row->status == 'rejected') {
                     $status .= 'selected';
                 }
 
-                $status .= ' value="rejected" data-content="<i class=\'fa fa-circle mr-2 text-red\'></i> ' . __('app.rejected') . '">' . __('app.rejected') . '</option>';
+                $status .= '<option value="rejected" data-content="<span style=\'color:#ff3a6e; font-weight:600\'> ' . __('app.rejected') . '</span>">' . __('app.rejected') . '</option>';
+
 
                 $status .= '</select>';
 

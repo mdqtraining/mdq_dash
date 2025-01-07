@@ -157,37 +157,46 @@ class LeadsDataTable extends BaseDataTable
 
                 $statusLi = '--';
 
-                foreach ($status as $st) {
-                    if ($row->status_id == $st->id) {
-                        $selected = 'selected';
-                    }
-                    else {
-                        $selected = '';
-                    }
+                // foreach ($status as $st) {
+                //     if ($row->status_id == $st->id) {
+                //         $selected = 'selected';
+                //     }
+                //     else {
+                //         $selected = '';
+                //     }
                     
-                    $backgroundColor = '';
-                        if ($st->type === 'done') {
-                            $backgroundColor = '#28a745'; // Green
-                        } elseif ($st->type === 'pending') {
-                            $backgroundColor = '#dc3545'; // Red
-                        } elseif ($st->type === 'in process') {
-                            $backgroundColor = '#ffc107'; // Yellow
-                        }
+                    // 
                     
 
                     // Construct the <option> tag with the dynamic background color
-                    $statusLi .= '<option data-content="'. ucfirst($st->type) . '"'
-                        . $selected 
-                        . ' value="' . $st->id . '"'
-                        . ' style="color:'. $backgroundColor .';">'
-                        . ucfirst($st->type)
-                        . '</option>';
+                    foreach ($status as $st) {
+                        if ($row->status_id == $st->id) {
+                            $selected = 'selected';
+                        }
+                        else {
+                            $selected = '';
+                        }
+                        $backgroundColor = '';
+                        if ($st->type === 'done') {
+                            $backgroundColor = ' #6fd943'; // Green
+                        } elseif ($st->type === 'pending') {
+                            $backgroundColor = '#ff3a6e'; // Red
+                        } elseif ($st->type === 'in process') {
+                            $backgroundColor = '#ffa21d'; // Yellow
+                        }
+    
+                        $statusLi .= '<option data-content="<span style=\'color: ' . $st->label_color . ';font-weight: 650;\'> ' . ucfirst($st->type) . ' </span> "' . $selected . ' value="' . $st->id . '">' . ucfirst($st->type) . '</option>';
+                    }
+    
+                    $action = '<select class="form-control statusChange" name="statusChange" onchange="changeStatus( ' . $row->id . ', this.value)">
+                            ' . $statusLi . '
+                        </select>';
 
-                }
+                
 
-                $action = '<select class="form-control statusChange" name="statusChange" onchange="changeStatus( ' . $row->id . ', this.value)">
-                        ' . $statusLi . '
-                    </select>';
+                // $action = '<select class="form-control statusChange" name="statusChange" onchange="changeStatus( ' . $row->id . ', this.value)">
+                //         ' . $statusLi . '
+                //     </select>';
 
             }
             else {

@@ -123,10 +123,10 @@ class CreditNotesDataTable extends BaseDataTable
             )
             ->editColumn('status', function ($row) {
                 if ($row->status == 'open') {
-                    return ' <i class="fa fa-circle mr-1 text-dark-green f-10"></i>' . __('app.' . $row->status);
+                    return ' <span style=" background-color:#6fd943; color:#fff; padding:  5px; border-radius: 5px">'  . __('app.' . $row->status).'</span>';
                 }
                 else {
-                    return '<i class="fa fa-circle mr-1 text-red f-10"></i>' . __('app.' . $row->status);
+                    return  ' <span style=" background-color:#ff3a6e; color:#fff; padding:  5px; border-radius: 5px">'  . __('app.' . $row->status).'</span>';
                 }
             })
             ->rawColumns(['name', 'action', 'cn_number', 'invoice_number', 'status', 'total'])

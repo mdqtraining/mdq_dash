@@ -9,10 +9,11 @@
     .btn-primary,
     .btn-primary.disabled:hover,
     .btn-primary:disabled:hover {
-        background-color: var(--header_color) !important;
-        border: 1px solid var(--header_color) !important;
+        background-color: #6fd943 !important;
     }
-
+    .btn-orange{
+        background-color: #FFA500 !important;
+    }
     .text-primary {
         color: var(--header_color) !important;
     }
@@ -34,11 +35,12 @@
     }
 
     .sidebar-brand-box .sidebar-brand-dropdown a.dropdown-item:hover,
-    .dropdown-item.active,
     .close-task-detail {
         background-color: var(--header_color) !important;
     }
-
+    .dropdown-item.active {
+        background-color:rgb(214, 216, 226)!important;
+    }
     .pagination .page-item.active .page-link,
     .custom-control-input:checked ~ .custom-control-label::before {
         background-color: var(--header_color) !important;

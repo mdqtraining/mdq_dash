@@ -76,7 +76,7 @@ class AppreciationsDataTable extends BaseDataTable
                     if (isset($row->award->awardIcon)) {
                         return view('components.award-icon', [
                             'award' => $row->award
-                        ]).' <span class="align-self-center ml-2">' . mb_ucwords($row->award->title) . '</span>';
+                        ]).' <span class="align-self-center ml-2 text-light-green" style="font-size: 15px;font-weight: 600">' . mb_ucwords($row->award->title) . '</span>';
                     }
 
                     return '-';

@@ -80,14 +80,14 @@ class AwardDataTable extends BaseDataTable
                         $status .= 'selected';
                     }
 
-                    $status .= 'value="active" data-content="<i class=\'fa fa-circle mr-2 text-light-green\'></i> ' . __('app.active') . '">' . __('app.active') . '</option>';
+                    $status .= 'value="active" data-content="<span class=\' text-light-green\' style=\'font-weight: 600;\'>  ' . __('app.active') . ' </span>">' . __('app.active') . '</option>';
                     $status .= '<option ';
 
                     if ($row->status == 'inactive') {
                         $status .= 'selected';
                     }
 
-                    $status .= ' value="inactive" data-content="<i class=\'fa fa-circle mr-2 text-red\'></i> ' . __('app.inactive') . '">' . __('app.inactive') . '</option>';
+                    $status .= ' value="inactive" data-content="<span class=\' text-red\' style=\'font-weight: 600;\'>  ' . __('app.inactive') . ' </span>">' . __('app.inactive') . '</option>';
 
                     $status .= '</select>';
 

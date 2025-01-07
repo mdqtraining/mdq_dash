@@ -36,9 +36,9 @@
                                     </div>
                                 </td>
                                 <td class="pr-20">
-                                    <i class="fa fa-circle mr-1 text-yellow"
-                                       style="color: {{ $task->boardColumn->label_color }}"></i>
+                                    <span style="color: {{ $task->boardColumn->label_color }};">
                                     {{ $task->boardColumn->column_name }}
+                                    </span>
                                 </td>
                                 <td class="pr-20" align="right">
                                     @if (is_null($task->due_date))

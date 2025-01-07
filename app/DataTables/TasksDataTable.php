@@ -341,7 +341,7 @@ class TasksDataTable extends BaseDataTable
                     || ($this->changeStatusPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id))
                     || ($row->project_admin == user()->id)
                 ) {
-                    $status = '<select class="form-control select-picker change-status" data-task-id="' . $row->id . '">';
+                    $status = '<select class="form-control select-picker change-status " data-task-id="' . $row->id . '">';
 
                     foreach ($taskBoardColumns as $item) {
                         $status .= '<option ';
@@ -350,7 +350,7 @@ class TasksDataTable extends BaseDataTable
                             $status .= 'selected';
                         }
 
-                        $status .= '  data-content="<i class=\'fa fa-circle mr-2\' style=\'color: ' . $item->label_color . '\'></i> ' . $item->column_name . '" value="' . $item->slug . '">' . $item->column_name . '</option>';
+                        $status .= '  data-content="<span style=\'color: ' . $item->label_color . '\'>  ' . $item->column_name . ' </span>" value="' . $item->slug . '">' . $item->column_name . '</option>';
                     }
 
                     $status .= '</select>';
@@ -359,8 +359,7 @@ class TasksDataTable extends BaseDataTable
 
                 }
                 else {
-                    return '<span class="p-2"><i class="fa fa-circle mr-1 text-yellow"
-                    style="color: ' . $row->boardColumn->label_color . '"></i>' . $row->boardColumn->column_name.'</span>';
+                    return '<span  style="color: ' . $row->boardColumn->label_color . '">' . $row->boardColumn->column_name.'</span>';
                 }
             }
         );

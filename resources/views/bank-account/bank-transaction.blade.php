@@ -15,7 +15,7 @@ $addBankWithdrawPermission = user()->permission('add_bank_withdraw');
             <div class="d-flex justify-content-between">
                 <div class="d-flex">
                     @php
-                        $bankLogo = $bankaccount->bank_logo ? '<img data-toggle="tooltip" src="' . $bankaccount->file_url . '" class="width-35 height-35 img-fluid">' : '<span class="f-27">'.$bankaccount->file_url .'</span>';
+                        $bankLogo = $bankaccount->bank_logo ? '<img data-toggle="tooltip" src="' . $bankaccount->file_url . '" class="width-35 height-35 img-fluid ">' : '<span class="f-27">'.$bankaccount->file_url .'</span>';
                     @endphp
                     {!! $bankLogo !!}
 
@@ -33,7 +33,7 @@ $addBankWithdrawPermission = user()->permission('add_bank_withdraw');
 
                 <div class="text-right">
                     <div class="f-12 text-dark-grey">@lang('modules.bankaccount.bankBalance')</div>
-                    <h2 class="heading-h2 text-primary mt-2">{{ currency_format($bankaccount->bank_balance, $bankaccount->currency_id) }}</h2>
+                    <h2 class="heading-h2 text-light-green mt-2">{{ currency_format($bankaccount->bank_balance, $bankaccount->currency_id) }}</h2>
                 </div>
             </div>
 
@@ -41,19 +41,19 @@ $addBankWithdrawPermission = user()->permission('add_bank_withdraw');
             <div class="card-footer bg-white border-top-grey px-0 mt-3">
                 <div class="d-flex justify-content-between mt-3">
                     @if ($addBankDepositPermission == 'all')
-                        <x-forms.link-secondary class="openRightModal" :link="route('bankaccounts.create_transaction').'?accountId='.$bankaccount->id.'&type=deposit'" icon="plus-circle">
+                        <x-forms.link-green class="openRightModal " :link="route('bankaccounts.create_transaction').'?accountId='.$bankaccount->id.'&type=deposit'" icon="plus-circle">
                             @lang('modules.bankaccount.deposit')
-                        </x-forms.link-secondary>
+                        </x-forms.link-green>
                     @endif
                     @if ($addBankWithdrawPermission == 'all')
-                        <x-forms.link-secondary class="openRightModal" :link="route('bankaccounts.create_transaction').'?accountId='.$bankaccount->id.'&type=withdraw'" icon="minus-circle">
+                        <x-forms.link-orange class="openRightModal" :link="route('bankaccounts.create_transaction').'?accountId='.$bankaccount->id.'&type=withdraw'" icon="minus-circle">
                             @lang('modules.bankaccount.withdraw')
-                        </x-forms.link-secondary>
+                        </x-forms.link-orange>
                     @endif
                     @if ($addBankTransferPermission == 'all')
-                        <x-forms.link-secondary class="openRightModal" :link="route('bankaccounts.create_transaction').'?accountId='.$bankaccount->id.'&type=account'" icon="exchange-alt">
+                        <x-forms.link-blue class="openRightModal" :link="route('bankaccounts.create_transaction').'?accountId='.$bankaccount->id.'&type=account'" icon="exchange-alt">
                             @lang('modules.bankaccount.bankAccountTransfer')
-                        </x-forms.link-secondary>
+                        </x-forms.link->
                     @endif
                 </div>
             </div>

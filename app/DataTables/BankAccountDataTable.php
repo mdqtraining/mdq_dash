@@ -100,35 +100,57 @@ class BankAccountDataTable extends BaseDataTable
             ->addColumn('currency', function ($row) {
                 return $row->currency->currency_code . ' (' . $row->currency->currency_symbol . ')';
             })
-            ->editColumn('status', function ($row) {
-                if ($this->editBankAccountPermission == 'all' || ($this->editBankAccountPermission == 'added' && user()->id == $row->added_by)) {
-                    $status = '<select class="form-control select-picker change-account-status" data-account-id="' . $row->id . '">';
-                    $status .= '<option ';
+            // ->editColumn('status', function ($row) {
+                // if ($this->editBankAccountPermission == 'all' || ($this->editBankAccountPermission == 'added' && user()->id == $row->added_by)) {
+                //     $status = '<select class="form-control select-picker change-account-status" data-account-id="' . $row->id . '">';
+                //     $status .= '<option ';
 
-                    if ($row->status == '1') {
-                        $status .= 'selected';
+                //     if ($row->status == '1') {
+                //         $status .= 'selected';
+                //     }
+
+                //     $status .= ' value="1" data-content="<i class=\'fa fa-circle mr-2 text-light-green\'></i> ' . __('app.active') . '">' . __('app.active') . '</option>';
+
+                //     $status .= '<option ';
+
+                //     if ($row->status == '0') {
+                //         $status .= 'selected';
+                //     }
+
+                //     $status .= ' value="0" data-content="<i class=\'fa fa-circle mr-2 text-red\'></i> ' . __('app.inactive') . '">' . __('app.inactive') . '</option>';
+
+                //     $status .= '</select>';
+
+                //     return $status;
+                // }
+                ->editColumn('status', function ($row) {
+                    if ($this->editBankAccountPermission == 'all' || ($this->editBankAccountPermission == 'added' && user()->id == $row->added_by)) {
+                        $status = '<select class="form-control select-picker change-account-status" data-account-id="' . $row->id . '">';
+                        $status .= '<option ';
+    
+                        if ($row->status == '1') {
+                            $status .= 'selected';
+                        }
+                        $status.= 'value="1" data-content="<span class=\'text-light-green\' style=\' font-weight:600;\'>  ' . __('app.active') . ' </span> " >' . __('app.active') . '</option>';
+    
+                        $status .= '<option  ';
+    
+                        if ($row->status == '0') {
+                            $status .= 'selected';
+                        }
+    
+                        $status .= ' value="0" data-content="<span class=\'text-red\' style=\' font-weight:600;\'>' . __('app.inactive') . ' </span> " >' . __('app.inactive') . '</option>';
+    
+                        $status .= '</select>';
+    
+                        return $status;
                     }
-
-                    $status .= ' value="1" data-content="<i class=\'fa fa-circle mr-2 text-light-green\'></i> ' . __('app.active') . '">' . __('app.active') . '</option>';
-
-                    $status .= '<option ';
-
-                    if ($row->status == '0') {
-                        $status .= 'selected';
-                    }
-
-                    $status .= ' value="0" data-content="<i class=\'fa fa-circle mr-2 text-red\'></i> ' . __('app.inactive') . '">' . __('app.inactive') . '</option>';
-
-                    $status .= '</select>';
-
-                    return $status;
-                }
                 else {
                     if ($row->status == '1') {
-                        return '<i class="fa fa-circle mr-1 text-dark-green f-10"></i>' . __('app.active');
+                        return '<span class="text-dark-green">' . __('app.active').'</span>';
                     }
                     else {
-                        return '<i class="fa fa-circle mr-1 text-red f-10"></i>' . __('app.inactive');
+                        return '<span class="text-red">'  . __('app.inactive') . '</span>';
                     }
                 }
 

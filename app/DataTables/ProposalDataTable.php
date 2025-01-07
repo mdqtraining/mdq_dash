@@ -111,15 +111,15 @@ class ProposalDataTable extends BaseDataTable
                 $status = '';
 
                 if ($row->status == 'waiting') {
-                    $status = ' <i class="fa fa-circle mr-1 text-yellow f-10"></i>' . __('modules.proposal.' . $row->status);
+                    $status = ' <span style=" background-color:#ffa21d; color:#fff; padding:  5px; border-radius: 5px">' . __('modules.proposal.' . $row->status) . '</span>' ;
                 }
 
                 if ($row->status == 'declined') {
-                    $status = ' <i class="fa fa-circle mr-1 text-red f-10"></i>' . __('modules.proposal.' . $row->status);
+                    $status = ' <span style=" background-color:#ff3a6e; color:#fff; padding:  5px; border-radius: 5px">'  . __('modules.proposal.' . $row->status). '</span>';
                 }
 
                 if ($row->status == 'accepted') {
-                    $status = ' <i class="fa fa-circle mr-1 text-dark-green f-10"></i>' . __('modules.proposal.' . $row->status);
+                    $status = ' <span style=" background-color:#6fd943; color:#fff; padding:  5px; border-radius: 5px">' . __('modules.proposal.' . $row->status) . '</span>';
                 }
 
                 if (!$row->send_status) {
