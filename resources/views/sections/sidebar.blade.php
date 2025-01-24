@@ -40,9 +40,21 @@
                     </div>
                     <!-- SIDEBAR BRAND NAME END -->
                     <!-- SIDEBAR BRAND LOGO START -->
-                    <div class="sidebar-brand-logo text-dark-gray f-12">
-                        <i class="icon-arrow-down icons pl-2"></i>
-                    </div>
+                    <div class="sidebar-brand-logo text-dark-gray f-12" 
+    style="
+        width: 20px; 
+        height: 20px; 
+        background: #ffffff; 
+        padding: 9px 10px; 
+        border-radius: 3px; 
+        box-shadow: -3px 4px 23px rgba(0, 0, 0, 0.1); 
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+    ">
+    <i class="icon-arrow-down icons"></i>
+</div>
+
                     <!-- SIDEBAR BRAND LOGO END -->
                 @endif
             </div>
@@ -107,7 +119,7 @@
     <!-- Sidebar Toggler -->
     <div
         class="text-center d-flex justify-content-between align-items-center position-fixed sidebarTogglerBox {{ user()->dark_theme ? 'bg-dark' : '' }}">
-        <button class="border-0 d-lg-block d-none text-lightest font-weight-bold" id="sidebarToggle"></button>
+        <button class="border-0 d-lg-block d-none text-lightest font-weight-bold" style="background:#ffffff; padding: 8px 9px; border-radius: 8px;box-shadow: -3px 4px 23px rgba(0, 0, 0, 0.1); " id="sidebarToggle"></button>
 
         <p class="mb-0 text-dark-grey px-1 py-0 rounded f-10">v{{ File::get('version.txt') }}</p>
     </div>

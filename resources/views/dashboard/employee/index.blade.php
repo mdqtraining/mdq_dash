@@ -126,12 +126,15 @@
 
                 @if (in_array('attendance', user_modules()) && $cannotLogin == false)
                     @if (is_null($currentClockIn) && is_null($checkTodayLeave) && is_null($checkTodayHoliday) && $checkJoiningDate == true)
-                        <button type="button" class="btn-primary rounded f-15 ml-4" id="clock-in"><i
+                    <input type="hidden" id="current-latitude" />
+                    <input type="hidden" id="current-longitude" />
+                    <button type="button" class="btn-primary rounded f-15 ml-4" id="clock-in"><i
                         class="icons icon-login mr-2"></i>@lang('modules.attendance.clock_in')</button>
                     @endif
                 @endif
 
                 @if (!is_null($currentClockIn) && is_null($currentClockIn->clock_out_time))
+              
                     <button type="button" class="btn-danger rounded f-15 ml-4" id="clock-out"><i
                             class="icons icon-login mr-2"></i>@lang('modules.attendance.clock_out')</button>
                 @endif
@@ -571,121 +574,226 @@
             });
         </script>
     @endif
-
+    
     <script>
-        window.setInterval(function () {
-            let date = new Date();
-            $('#dashboard-clock').html(moment.tz(date, "{{ company()->timezone }}").format(MOMENTJS_TIME_FORMAT))
-        }, 1000);
+    window.setInterval(function () {
+        let date = new Date();
+        $('#dashboard-clock').html(moment.tz(date, "{{ company()->timezone }}").format(MOMENTJS_TIME_FORMAT))
+    }, 1000);
 
-        $('#save-dashboard-widget').click(function() {
-            $.easyAjax({
-                url: "{{ route('dashboard.widget', 'private-dashboard') }}",
-                container: '#privateDashboardWidgetForm',
-                blockUI: true,
-                type: "POST",
-                redirect: true,
-                data: $('#privateDashboardWidgetForm').serialize(),
-                success: function() {
-                    window.location.reload();
+    $('#save-dashboard-widget').click(function() {
+        $.easyAjax({
+            url: "{{ route('dashboard.widget', 'private-dashboard') }}",
+            container: '#privateDashboardWidgetForm',
+            blockUI: true,
+            type: "POST",
+            redirect: true,
+            data: $('#privateDashboardWidgetForm').serialize(),
+            success: function() {
+                window.location.reload();
+            }
+        })
+    });
+
+    $('#clock-in').click(function() {
+        // Before performing the clock-in action, check location permission
+        checkLocationPermission(function(permissionGranted) {
+            if (permissionGranted) {
+                const url = "{{ route('attendances.clock_in_modal') }}";
+                $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+                $.ajaxModal(MODAL_LG, url);
+            } else {
+                alert("Location permission is required to clock in. Please enable location access.");
+            }
+        });
+    });
+
+    // Function to check location permission
+    function checkLocationPermission(callback) {
+        if (navigator.permissions) {
+            navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
+                if (result.state === 'granted') {
+                    callback(true); // Permission granted
+                } else if (result.state === 'denied') {
+                    // Location permission denied, show alert but do not disable button
+                    alert("Location permission is denied. Please enable location access in your browser settings.");
+                    callback(false); // Denied, but don't disable the button
+                } else {
+                    // If permission state is not determined yet, request location
+                    getLocation(callback);
                 }
-            })
+            });
+        } else {
+            // Fallback for browsers without Permissions API, directly request location
+            getLocation(callback);
+        }
+    }
+
+    // Function to get the location
+    function getLocation(callback) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    // Success callback: permission granted
+                    callback(true);
+                },
+                (error) => {
+                    // Error callback: permission denied or other issues
+                   
+                    callback(false);
+                },
+                {
+                    enableHighAccuracy: true, // Request high accuracy location
+                    timeout: 10000, // Timeout after 10 seconds
+                }
+            );
+        } else {
+            alert("Geolocation is not supported by this browser. Please update your browser.");
+            callback(false); // Fallback if geolocation is not supported
+        }
+    }
+
+    // Clock-out logic
+    @if (!is_null($currentClockIn))
+        $('#clock-out').click(function() {
+
+            var token = "{{ csrf_token() }}";
+            var currentLatitude = document.getElementById("current-latitude").value;
+            var currentLongitude = document.getElementById("current-longitude").value;
+
+            $.easyAjax({
+                url: "{{ route('attendances.update_clock_in') }}",
+                type: "GET",
+                data: {
+                    currentLatitude: currentLatitude,
+                    currentLongitude: currentLongitude,
+                    _token: token,
+                    id: '{{ $currentClockIn->id }}'
+                },
+                success: function(response) {
+                    if (response.status == 'success') {
+                        window.location.reload();
+                    }
+                }
+            });
         });
+    @endif
 
-        $('#clock-in').click(function() {
-            const url = "{{ route('attendances.clock_in_modal') }}";
-            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
-            $.ajaxModal(MODAL_LG, url);
-        });
+    $('.keep-open .dropdown-menu').on({
+        "click": function(e) {
+            e.stopPropagation();
+        }
+    });
 
-        $('.request-shift-change').click(function() {
-            var id = $(this).data('shift-schedule-id');
-            var date = $(this).data('shift-schedule-date');
-            var shiftId = $(this).data('shift-id');
-            var url = "{{ route('shifts-change.edit', ':id') }}?date="+date+"&shift_id="+shiftId;
-            url = url.replace(':id', id);
+    $('#weekly-timelogs').on('click', '.week-timelog-day', function() {
+        var date = $(this).data('date');
 
-            $(MODAL_DEFAULT + ' ' + MODAL_HEADING).html('...');
-            $.ajaxModal(MODAL_DEFAULT, url);
-        });
+        $.easyAjax({
+            url: "{{ route('dashboard.week_timelog') }}",
+            container: '#weekly-timelogs',
+            blockUI: true,
+            type: "POST",
+            redirect: true,
+            data: {
+                'date': date,
+                '_token': "{{ csrf_token() }}"
+            },
+            success: function(response) {
+                $('#weekly-timelogs').html(response.html)
+            }
+        })
+    });
+</script>
 
-        $('#view-shifts').click(function() {
-            const url = "{{ route('employee-shifts.index') }}";
-            $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
-            $.ajaxModal(MODAL_XL, url);
-        });
+@if (attendance_setting()->radius_check == 'yes' || attendance_setting()->save_current_location)
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const currentLatitude = document.getElementById("current-latitude");
+        const currentLongitude = document.getElementById("current-longitude");
+        const clockInButton = document.getElementById("clock-in");
 
-        @if (!is_null($currentClockIn))
-            $('#clock-out').click(function() {
-
-                var token = "{{ csrf_token() }}";
-                var currentLatitude = document.getElementById("current-latitude").value;
-                var currentLongitude = document.getElementById("current-longitude").value;
-
-                $.easyAjax({
-                    url: "{{ route('attendances.update_clock_in') }}",
-                    type: "GET",
-                    data: {
-                        currentLatitude: currentLatitude,
-                        currentLongitude: currentLongitude,
-                        _token: token,
-                        id: '{{ $currentClockIn->id }}'
-                    },
-                    success: function(response) {
-                        if (response.status == 'success') {
-                            window.location.reload();
-                        }
+        // Check if the clock-in button exists
+        if (clockInButton) {
+            clockInButton.addEventListener("click", function () {
+                // Check location permission when button is clicked
+                checkLocationPermission(function(permissionGranted) {
+                    if (permissionGranted) {
+                        getLocation();
+                    } else {
+                        break;
                     }
                 });
             });
-        @endif
 
-        $('.keep-open .dropdown-menu').on({
-            "click": function(e) {
-                e.stopPropagation();
-            }
-        });
-
-        $('#weekly-timelogs').on('click', '.week-timelog-day', function() {
-            var date = $(this).data('date');
-
-            $.easyAjax({
-                url: "{{ route('dashboard.week_timelog') }}",
-                container: '#weekly-timelogs',
-                blockUI: true,
-                type: "POST",
-                redirect: true,
-                data: {
-                    'date': date,
-                    '_token': "{{ csrf_token() }}"
-                },
-                success: function(response) {
-                    $('#weekly-timelogs').html(response.html)
+            // Function to check location permission status
+            function checkLocationPermission(callback) {
+                // Check if the browser supports permissions API
+                if (navigator.permissions) {
+                    navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
+                        if (result.state === 'granted') {
+                            // If permission is granted, proceed to get the location
+                            callback(true);
+                        } else if (result.state === 'denied') {
+                            // Location permission denied, show alert but do not disable button
+                            
+                            callback(false); // Denied, but don't disable the button
+                        } else {
+                            // If permission is not granted yet, request location
+                            getLocation(callback);
+                        }
+                    });
+                } else {
+                    // Fallback for browsers that do not support the Permissions API
+                    getLocation(callback);
                 }
-            })
-        });
+            }
 
-    </script>
+            // Function to get the location
+            function getLocation(callback) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            // Success callback: update latitude and longitude values
+                            currentLatitude.value = position.coords.latitude;
+                            currentLongitude.value = position.coords.longitude;
 
-    @if (attendance_setting()->radius_check == 'yes' || attendance_setting()->save_current_location)
-    <script>
-        const currentLatitude = document.getElementById("current-latitude");
-        const currentLongitude = document.getElementById("current-longitude");
-        const x = document.getElementById("current-latitude");
+                            // Trigger the clock-in action (e.g., form submission, API call, etc.)
+                            alert("Location retrieved successfully! You can now clock in.");
+                        },
+                        (error) => {
+                            // Error callback
+                            handleLocationError(error);
+                        },
+                        {
+                            enableHighAccuracy: true, // Request high accuracy location
+                            timeout: 50000, // Timeout after 10 seconds
+                        }
+                    );
+                } else {
+                    alert("Geolocation is not supported by this browser. Please update your browser.");
+                }
+            }
 
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
+            // Function to handle errors in fetching location
+            function handleLocationError(error) {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        alert("Location permission is denied. Please enable location access in your browser settings.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        alert("Location information is unavailable. Please try again.");
+                        break;
+                    case error.TIMEOUT:
+                        alert("The request to get your location timed out. Please try again.");
+                        break;
+                    default:
+                        alert("An unknown error occurred while fetching your location.");
+                        break;
+                }
             }
         }
+    });
+</script>
+@endif
 
-        function showPosition(position) {
-            currentLatitude.value = position.coords.latitude;
-            currentLongitude.value = position.coords.longitude;
-        }
-        getLocation();
-
-    </script>
-
-    @endif
 @endpush

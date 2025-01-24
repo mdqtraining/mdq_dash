@@ -10813,6 +10813,7 @@ h3 {
 .notification-dropdown .dropdown-item:hover {
   background-color: #fff;
 }
+
 @media (max-width: 767.98px) {
   .notification-dropdown {
     width: 300px !important;
