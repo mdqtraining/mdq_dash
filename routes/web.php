@@ -115,6 +115,9 @@ use App\Http\Controllers\KnowledgeBaseCategoryController;
 use App\Http\Controllers\ProjectTemplateMemberController;
 use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
+use App\Http\Controllers\IndicatorController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OfflinePaymentSettingController;
 
 Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('image/upload', [ImageController::class, 'store'])->name('image.store');
@@ -754,6 +757,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('estimate-template/download/{id}', [EstimateTemplateController::class, 'download'])->name('estimate-template.download');
 
     Route::get('quickbooks/{hash}/callback', [QuickbookController::class, 'callback'])->name('quickbooks.callback');
+    // Route::get('indicator', [HomeController::class, 'indicator'])->name('indicator.index');
     Route::get('quickbooks', [QuickbookController::class, 'index'])->name('quickbooks.index');
+    // Route::get('indicator', [HomeController::class, 'indicator'])->name('indicator.index');
 
+    Route::get('indicator', [OfflinePaymentSettingController::class, 'indicator'])->name('indicator.index');
+    Route::get('appraisal', [OfflinePaymentSettingController::class, 'appraisal'])->name('appraisal.index');
+    Route::get('goaltracking', [OfflinePaymentSettingController::class, 'goaltracking'])->name('goaltracking.index');
+    // Route::resource('indicator', IndicatorController::class);
+    // 
 });

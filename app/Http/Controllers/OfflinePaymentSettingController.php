@@ -6,6 +6,7 @@ use App\Helper\Reply;
 use App\Http\Requests\OfflinePaymentSetting\StoreRequest;
 use App\Http\Requests\OfflinePaymentSetting\UpdateRequest;
 use App\Models\OfflinePaymentMethod;
+use App\DataTables\AppraisalDataTable;
 
 class OfflinePaymentSettingController extends AccountBaseController
 {
@@ -27,7 +28,15 @@ class OfflinePaymentSettingController extends AccountBaseController
         $this->offlineMethods = OfflinePaymentMethod::all();
         return view('payment-gateway-credentials.index', $this->data);
     }
+    public function index1 (AppraisalDataTable $dataTable)
+    {
+        $this->viewLeadPermission = $viewPermission = user()->permission('view_lead');
 
+        abort_403(!in_array($viewPermission, ['all', 'added', 'both', 'owned']));
+
+        return $dataTable->render('appraisal.index', $this->data);
+
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -94,5 +103,23 @@ class OfflinePaymentSettingController extends AccountBaseController
         OfflinePaymentMethod::destroy($id);
         return Reply::success(__('messages.deleteSuccess'));
     }
-
+    
+    public function indicator()
+    {
+        $this->pageTitle = 'app.menu.indicator';
+        abort_403(!in_array('employee', user_roles()));
+        return view('indicator.index', $this->data);
+    }
+    public function appraisal()
+    {
+        $this->pageTitle = 'app.menu.appraisal';
+        abort_403(!in_array('employee', user_roles()));
+        return view('appraisal.index', $this->data);
+    } 
+    public function goaltracking()
+    {
+        $this->pageTitle = 'app.menu.goaltracking';
+        abort_403(!in_array('employee', user_roles()));
+        return view('goaltracking.index', $this->data);
+    }    
 }

@@ -91,60 +91,64 @@ class   TicketDataTable extends BaseDataTable
         });
 
         $datatables->addColumn('status', function ($row) {
+            // Check if user has permission to edit the ticket
             if (
                 $this->editTicketPermission == 'all'
                 || ($this->editTicketPermission == 'added' && user()->id == $row->added_by)
                 || ($this->editTicketPermission == 'owned' && (user()->id == $row->user_id || $row->agent_id == user()->id))
                 || ($this->editTicketPermission == 'both' && (user()->id == $row->user_id || $row->agent_id == user()->id || $row->added_by == user()->id))
             ) {
+                // Generate the select dropdown with ticket statuses
                 $status = '<select class="form-control select-picker change-status bg-orangecolor" data-ticket-id="' . $row->id . '">';
                 $status .= '<option ';
-
+        
                 if ($row->status == 'open') {
                     $status .= 'selected';
                 }
-
-                $status .= '  data-content="<i class=\'  mr-2 \'></i> ' . __('app.open') . '" value="open">' . __('app.open') . '</option>';
-                $status .= '<option ';
-
+        
+                $status .= '  data-content="<span class=\'text-red f-w-600\'>'. __('app.open') .'</span>" value="open">' . __('app.open') . '</option>';
+                $status .= '<option  ';
+        
                 if ($row->status == 'pending') {
                     $status .= 'selected';
                 }
-
-                $status .= '  data-content="<i class=\' mr-2 \'></i> ' . __('app.pending') . '" value="pending">' . __('app.pending') . '</option>';
+        
+                $status .= '  data-content="<span class=\'text-orange f-w-600\'>' . __('app.pending') . '</span>" value="pending">' . __('app.pending') . '</option>';
                 $status .= '<option ';
-
+        
                 if ($row->status == 'resolved') {
                     $status .= 'selected';
                 }
-
-                $status .= '  data-content="<i class=\'mr-2 \'></i> ' . __('app.resolved') . '" value="resolved">' . __('app.resolved') . '</option>';
+        
+                $status .= '  data-content="<span class=\'text-light-green f-w-600\'> ' . __('app.resolved') . ' </span> " value="resolved">' . __('app.resolved') . '</option>';
                 $status .= '<option ';
-
+        
                 if ($row->status == 'closed') {
                     $status .= 'selected';
                 }
-
-                $status .= '  data-content="<i class=\' mr-2 \'></i> ' . __('app.closed') . '" value="closed">' . __('app.closed') . '</option>';
-
+        
+                $status .= '  data-content="<span class=\'text-blue f-w-600\'>  ' . __('app.closed') . ' </span>" value="closed">' . __('app.closed') . '</option>';
+        
                 $status .= '</select>';
-
+        
                 return $status;
             }
-
+        
+            // Define the colors for each status
             $statuses = [
-                'open' => ['red', __('app.open')],
-                'pending' => ['warning', __('app.pending')],
-                'resolved' => ['dark-green', __('app.resolved')],
-                'closed' => ['blue', __('app.closed')],
+                'open' => ['text-danger', __('app.open')], // red
+                'pending' => ['text-warning', __('app.pending')], // yellow
+                'resolved' => ['text-success', __('app.resolved')], // green
+                'closed' => ['text-primary', __('app.closed')], // blue
             ];
-
+        
+            // Get the status and corresponding color class
             $status = $statuses[$row->status] ?? $statuses['closed'];
-
-            return '<i class=" mr-2 text-' . $status[0] . '"></i>' . $status[1];
-
-            /* status end */
+        
+            // Return the status with the correct color class
+            return '<span class="' . $status[0] . ';">' . $status[1] . '</span>';
         });
+        
         $datatables->editColumn('ticket_status', function ($row) {
             return $row->status;
         });

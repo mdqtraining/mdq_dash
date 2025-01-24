@@ -98,10 +98,10 @@ class ProductsDataTable extends BaseDataTable
         $datatables->editColumn('allow_purchase', function ($row) {
 
             if ($row->allow_purchase == 1) {
-                $status = '<i class="fa fa-circle mr-1 text-dark-green f-10"></i>' . __('app.allowed') . '</label>';
+                $status = '<span style="background:#6fd943; color:#FFF; padding:5px; border-radius:5px;">' . __('app.allowed') .  '</span> ';
             }
             else {
-                $status = '<i class="fa fa-circle mr-1 text-red f-10"></i>' . __('app.notAllowed') . '</label>';
+                $status = '<span style="background:#ff3a6e; color:#FFF; padding:5px; border-radius:5px;">' . __('app.notAllowed') . '</span>';
             }
 
             return $status;

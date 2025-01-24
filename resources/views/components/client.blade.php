@@ -18,7 +18,7 @@ if (!is_null($user) && $user->session) {
                 <span class="text-light-green position-absolute f-8 user-online"
                     title="@lang('modules.client.online')"><i class="fa fa-circle"></i></span>
             @endif
-            <img src="{{ $user->image_url }}" class="mr-2 taskEmployeeImg rounded-circle"
+            <img src="{{ $user->image_url }}" class="mr-2 taskEmployeeImg rounded-circle " style="border: 1.5px solid #3ec9d6;"
                 alt="{{ ucfirst($user->name) }}" title="{{ ucfirst($user->name) }}">
         </a>
         <div class="media-body">

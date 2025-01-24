@@ -23,9 +23,10 @@
                                 {{ Lang::has($langKey) ? __($langKey) : ucwords(str_replace('-', ' ', Request::segment($i)))}}
                 </a> &bull;
                         @endif
-                    @else
-                        {{ $pageTitle }}
-                    @endif
+                        @else
+                            <span class="text-dark">{{ $pageTitle }}</span>
+                        @endif
+
                 @endfor
             </span>
         </h2>

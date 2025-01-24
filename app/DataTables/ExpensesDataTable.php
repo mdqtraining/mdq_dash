@@ -155,7 +155,7 @@ class ExpensesDataTable extends BaseDataTable
                     $status = __('app.rejected');
                 }
 
-                $status = '<i class="fa fa-circle mr-1 ' . $class . ' f-10"></i> ' . $status;
+                $status = '<span style=\'color:' . $class . '; font-weight:600\'>'  . $status . '</span>';
             }
 
             return $status;

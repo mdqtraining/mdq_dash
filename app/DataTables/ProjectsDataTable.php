@@ -269,7 +269,7 @@ class ProjectsDataTable extends BaseDataTable
                             if ($item->status_name == $row->status) {
                                 $status .= 'selected';
                             }
-                            $status .= ' data-content="<span style=\'color: ' . $item->color . '\'; font-weight=500;> ' . ucfirst($item->status_name) . '</span>" value="' . $item->status_name . '">';
+                            $status .= ' data-content="<span class=\'f-w-600\' style=\'color: ' . $item->color . ';\'> ' . ucfirst($item->status_name) . '</span>" value="' . $item->status_name . '">';
                             $status .= ucfirst($item->status_name);
                             $status .= '</option>';
                         }
@@ -280,7 +280,7 @@ class ProjectsDataTable extends BaseDataTable
                     } else {
                         foreach ($projectStatus as $item) {
                             if ($row->status == $item->status_name) {
-                                return '<span style="color: ' . $item->color . ';">' . ucfirst($item->status_name) . '</span>';
+                                return '<span class="f-w-600" style="color: ' . $item->color . '; " >' . ucfirst($item->status_name) . '</span>';
                             }
                             
                         }
@@ -297,12 +297,14 @@ class ProjectsDataTable extends BaseDataTable
                     $statusColor = 'warning';
                 }
                 else {
-                    $statusColor = 'success';
+                    $statusColor = 'lowgreen';
                 }
 
-                return '<div class="progress" style="height: 15px;">
-                <div class="progress-bar f-12 bg-' . $statusColor . '" role="progressbar" style="width: ' . $row->completion_percent . '%;" aria-valuenow="' . $row->completion_percent . '" aria-valuemin="0" aria-valuemax="100">' . $row->completion_percent . '%</div>
-              </div>';
+                return '<div>
+                <div class="text-'.$statusColor.'">' . $row->completion_percent . '%</div>
+                <div class="progress" style="height: 6px;">
+                <div class="progress-bar f-12 bg-' . $statusColor . '" role="progressbar" style="width: ' . $row->completion_percent . '%;" aria-valuenow="' . $row->completion_percent . '" aria-valuemin="0" aria-valuemax="100"></div>
+              </div> </div>';
             }
         );
         $datatables->addColumn(

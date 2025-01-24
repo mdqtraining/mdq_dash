@@ -16,7 +16,7 @@ $changeStatusPermission = user()->permission('change_lead_status');
                      <i class="fa fa-chevron-left"></i>
                  </a>
 
-                 <p class="mb-3 mx-0 f-15 text-white font-weight-bold" style="padding:5px; border-radius: 5px ;background-color: {{ $column->label_color }}">{{ mb_ucwords($column->type) }}
+                 <p class="mb-3 mx-0 f-15 text-white font-weight-bold" style="background-color: {{ $column->label_color }}; border-radius: 5px; padding: 5px;">{{ mb_ucwords($column->type) }}
                 </p>
 
                  <span class="b-p-badge bg-grey f-13 px-2 py-2 text-lightest font-weight-bold rounded d-inline-block" id="lead-column-count-{{ $column->id }}">{{ $column->leads_count }}</span>

@@ -20,7 +20,7 @@
                 <span class="text-light-green position-absolute f-8 user-online"
                       title="@lang('modules.client.online')"><i class="fa fa-circle"></i></span>
             @endif
-            <img src="{{ $user->image_url }}" class="mr-2 taskEmployeeImg rounded-circle"
+            <img src="{{ $user->image_url }}" class="mr-2 taskEmployeeImg rounded-circle" style="border: 1.5px solid #3ec9d6;"
                  alt="{{ mb_ucfirst($user->name) }}" title="{{ $user->userBadge() }}">
         </a>
         <div class="media-body {{$user->status}}">

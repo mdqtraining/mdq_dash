@@ -10,9 +10,7 @@
                 <i class="fa fa-chevron-left"></i>
             </a>
 
-            <p class="mb-3 mx-0 f-15 text-dark-grey font-weight-bold"><i class="fa fa-circle mb-2 text-red"
-                    style="color: {{ $column->label_color }}"></i>{{ $column->slug == 'completed' || $column->slug == 'incomplete' ? __('app.' . $column->slug) : mb_ucwords($column->column_name) }}</p>
-
+            <p class="mb-3 mx-0 f-15 text-dark-grey font-weight-bold" style="background-color: {{ $column->label_color }}; padding: 5px; border-radius: 5px">{{ $column->slug == 'completed' || $column->slug == 'incomplete' ? __('app.' . $column->slug) : mb_ucwords($column->column_name) }}</p>
             <span
                 class="b-p-badge bg-grey f-13 px-2 py-2 text-lightest font-weight-bold rounded d-inline-block">{{ $column->tasks_count }}</span>
 
@@ -26,8 +24,7 @@
     <div class="board-panel rounded bg-additional-grey border-grey mr-3 column-max-{{ $column->id }}">
         <!-- TASK BOARD HEADER START -->
         <div class="d-flex m-3 b-p-header">
-            <p class="mb-0 f-15 mr-3 text-dark-grey font-weight-bold"><i class="fa fa-circle mr-2 text-yellow"
-                    style="color: {{ $column->label_color }}"></i>{{ $column->slug == 'completed' || $column->slug == 'incomplete' ? __('app.' . $column->slug) : mb_ucwords($column->column_name) }}
+            <p class="mb-0 f-15 mr-3 text-dark-grey font-weight-bold" style="color: {{ $column->label_color }};padding: 5px; border-radius: 5px;">{{ $column->slug == 'completed' || $column->slug == 'incomplete' ? __('app.' . $column->slug) : mb_ucwords($column->column_name) }}
             </p>
 
             <span

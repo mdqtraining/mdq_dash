@@ -47,12 +47,13 @@ class FinanceReportDataTable extends BaseDataTable
                     return '--';
                 }
             })
+            
             ->editColumn('status', function ($row) {
                 if ($row->status == 'pending') {
-                    return '<i class="fa fa-circle mr-1 text-yellow f-10"></i>' . __('app.' . $row->status);
+                    return '<span class="text-white bg-urgentred " style="padding:5px; border-radius:5px" >' . __('app.' . $row->status) .'</span>';
                 }
                 else {
-                    return '<i class="fa fa-circle mr-1 text-dark-green f-10"></i>' . __('app.' . $row->status);
+                    return '<span class="text-white bg-lowgreen " style="padding:5px; border-radius:5px" >' . __('app.' . $row->status) .'</span>';;
                 }
             })
             ->editColumn('amount', function ($row) {

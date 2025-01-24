@@ -185,7 +185,7 @@ class LeadsDataTable extends BaseDataTable
                             $backgroundColor = '#ffa21d'; // Yellow
                         }
     
-                        $statusLi .= '<option data-content="<span style=\'color: ' . $st->label_color . ';font-weight: 650;\'> ' . ucfirst($st->type) . ' </span> "' . $selected . ' value="' . $st->id . '">' . ucfirst($st->type) . '</option>';
+                        $statusLi .= '<option data-content="<span style=\'color: ' . $st->label_color . '; font-weight:700; font-size: 15px;\'> ' . ucfirst($st->type) . ' </span> "' . $selected . ' value="' . $st->id . '">' . ucfirst($st->type) . '</option>';
                     }
     
                     $action = '<select class="form-control statusChange" name="statusChange" onchange="changeStatus( ' . $row->id . ', this.value)">

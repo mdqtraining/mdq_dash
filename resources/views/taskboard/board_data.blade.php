@@ -16,8 +16,7 @@ $changeStatusPermission = user()->permission('change_status');
                     <i class="fa fa-chevron-left"></i>
                 </a>
 
-                <p class="mb-3 mx-0 f-15 text-dark-grey font-weight-bold"><i class="fa fa-circle mb-2 text-red"
-                        style="color: {{ $column->label_color }}"></i>{{ $column->slug == 'completed' || $column->slug == 'incomplete' ? __('app.' . $column->slug) : mb_ucwords($column->column_name) }}</p>
+                <p class="mb-3 mx-0 f-15 text-dark-grey font-weight-bold text-white" style="background-color: {{ $column->label_color }}; border-radius: 5px; padding: 5px;">{{ $column->slug == 'completed' || $column->slug == 'incomplete' ? __('app.' . $column->slug) : mb_ucwords($column->column_name) }}</p>
 
                 <span class="b-p-badge bg-grey f-13 px-2 py-2 text-lightest font-weight-bold rounded d-inline-block" id="task-column-count-{{ $column->id }}">{{ $column->tasks_count }}</span>
 
@@ -31,8 +30,8 @@ $changeStatusPermission = user()->permission('change_status');
         <div class="board-panel rounded bg-additional-grey border-grey mr-3">
             <!-- TASK BOARD HEADER START -->
             <div class="d-flex m-3 b-p-header">
-                <p class="mb-0 f-15 mr-3 text-dark-grey font-weight-bold"><i class="fa fa-circle mr-2 text-yellow"
-                        style="color: {{ $column->label_color }}"></i>{{ mb_ucwords($column->column_name) }}
+            <p class="mb-0 f-15 mr-3 text-white font-weight-bold " style="background-color: {{ $column->label_color }};border-radius: 5px;padding:5px;">
+                {{ mb_ucwords($column->column_name) }}
                 </p>
 
                 <span

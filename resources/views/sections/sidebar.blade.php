@@ -40,7 +40,7 @@
                     </div>
                     <!-- SIDEBAR BRAND NAME END -->
                     <!-- SIDEBAR BRAND LOGO START -->
-                    <div class="sidebar-brand-logo text-blue f-12">
+                    <div class="sidebar-brand-logo text-dark-gray f-12">
                         <i class="icon-arrow-down icons pl-2"></i>
                     </div>
                     <!-- SIDEBAR BRAND LOGO END -->

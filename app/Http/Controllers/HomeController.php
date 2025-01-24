@@ -1157,5 +1157,7 @@ class HomeController extends Controller
 
         return Reply::success(__('messages.updateSuccess'));
     }
-
+    
+     
+    
 }

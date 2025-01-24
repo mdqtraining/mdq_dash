@@ -176,19 +176,19 @@ class TasksDataTable extends BaseDataTable
                     return '--';
                 }
 
-                $members = '<div class="position-relative">';
+                $members = '<div class="position-relative " >';
 
                 foreach ($row->users as $key => $member) {
                     if ($key < 4) {
                         $img = '<img data-toggle="tooltip" data-original-title="' . mb_ucwords($member->name) . '" src="' . $member->image_url . '">';
                         $position = $key > 0 ? 'position-absolute' : '';
 
-                        $members .= '<div class="taskEmployeeImg rounded-circle ' . $position . '" style="left:  ' . ($key * 13) . 'px"><a href="' . route('employees.show', $member->id) . '">' . $img . '</a></div> ';
+                        $members .= '<div  class="taskEmployeeImg rounded-circle ' . $position . '" style="left:  ' . ($key * 13) . 'px; border: 1.5px solid #3ec9d6;"><a href="' . route('employees.show', $member->id) . '">' . $img . '</a></div> ';
                     }
                 }
 
                 if (count($row->users) > 4 && $key) {
-                    $members .= '<div class="taskEmployeeImg more-user-count text-center rounded-circle border bg-amt-grey position-absolute" style="left:  ' . (($key - 1) * 13) . 'px"><a href="' . route('tasks.show', [$row->id]) . '" class="text-dark f-10">+' . (count($row->users) - 4) . '</a></div> ';
+                    $members .= '<div class="taskEmployeeImg more-user-count text-center rounded-circle border bg-amt-grey position-absolute" style="left:  ' . (($key - 1) * 13) . 'px; border: 1.5px solid #3ec9d6;"><a href="' . route('tasks.show', [$row->id]) . '" class="text-dark f-10">+' . (count($row->users) - 4) . '</a></div> ';
                 }
 
                 $members .= '</div>';
@@ -350,7 +350,7 @@ class TasksDataTable extends BaseDataTable
                             $status .= 'selected';
                         }
 
-                        $status .= '  data-content="<span style=\'color: ' . $item->label_color . '\'>  ' . $item->column_name . ' </span>" value="' . $item->slug . '">' . $item->column_name . '</option>';
+                        $status .= '  data-content="<span class=\'f-w-600\' style=\'color: ' . $item->label_color . '\'>  ' . $item->column_name . ' </span>" value="' . $item->slug . '">' . $item->column_name . '</option>';
                     }
 
                     $status .= '</select>';
@@ -359,7 +359,7 @@ class TasksDataTable extends BaseDataTable
 
                 }
                 else {
-                    return '<span  style="color: ' . $row->boardColumn->label_color . '">' . $row->boardColumn->column_name.'</span>';
+                    return '<span class=\'f-w-600\' style="color: ' . $row->boardColumn->label_color . '">' . $row->boardColumn->column_name.'</span>';
                 }
             }
         );

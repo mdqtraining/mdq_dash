@@ -101,8 +101,8 @@ class RecurringExpensesDataTable extends BaseDataTable
 
                 $role = '<select class="form-control select-picker change-expense-status" data-expense-id="' . $row->id . '">';
 
-                $role .= '<option data-content="<i class=\'fa fa-circle mr-2 text-light-green\'></i> ' . __('app.active') . '" value="active" ' . $selectActive . '> ' . __('app.active') . ' </option>';
-                $role .= '<option data-content="<i class=\'fa fa-circle mr-2 text-red\'></i> ' . __('app.inactive') . '" value="inactive" ' . $selectInactive . '> ' . __('app.inactive') . ' </option>';
+                $role .= '<option data-content="<span class=\'text-light-green f-w-600 \'> ' . __('app.active') . '</span>" value="active" ' . $selectActive . '> ' . __('app.active') . ' </option>';
+                $role .= '<option data-content="<span class=\'text-red f-w-600\'>'. __('app.inactive') . '</span>" value="inactive" ' . $selectInactive . '> ' . __('app.inactive') . ' </option>';
 
                 $role .= '</select>';
 

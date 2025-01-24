@@ -1,5 +1,5 @@
 <!-- HEADER START -->
-<header class="main-header clearfix bg-white " id="header">
+<header class="main-header bg-white clearfix " id="header">
 
 
     <!-- NAVBAR LEFT(MOBILE MENU COLLAPSE) START-->
@@ -45,7 +45,7 @@
             <!-- SEARCH START -->
             <li data-toggle="tooltip" data-placement="top" title="{{__('app.search')}}" class="d-none d-sm-block">
                 <div class="d-flex align-items-center ">
-                    <a href="javascript:;" class="d-block header-icon-box open-search bg-gray">
+                    <a href="javascript:;" class="d-block header-icon-box open-search bg-whitelogo">
                         <i class="fa fa-search f-16 " style=" color:#6fd943;"></i>
                     </a>
                 </div>
@@ -54,7 +54,7 @@
             <!-- Sticky Note START -->
             <li data-toggle="tooltip" data-placement="top" title="{{__('app.menu.stickyNotes')}}" class="d-none d-sm-block">
                 <div class="d-flex align-items-center">
-                    <a href="{{ route('sticky-notes.index') }}" class="d-block header-icon-box openRightModal bg-gray">
+                    <a href="{{ route('sticky-notes.index') }}" class="d-block header-icon-box openRightModal bg-whitelogo">
                         <i class="fa fa-sticky-note f-16 whitebg-blue"></i>
                     </a>
                 </div>
@@ -67,7 +67,7 @@
                 <!-- START TIMER -->
                     <li data-toggle="tooltip" data-placement="top" title="{{__('modules.timeLogs.startTimer')}}">
                         <div class="add_box dropdown">
-                            <a class="d-block dropdown-toggle header-icon-box bg-gray" type="link" id="show-active-timer"
+                            <a class="d-block dropdown-toggle header-icon-box bg-whitelogo" type="link" id="show-active-timer"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-clock f-16 " style=" color:#3ec9d6;"></i>
                                     <span
@@ -92,7 +92,7 @@
             <!-- ADD START -->
                 <li data-toggle="tooltip" data-placement="top" title="{{__('app.createNew')}}">
                     <div class="add_box dropdown">
-                        <a class="d-block dropdown-toggle header-icon-box bg-gray" type="link" data-toggle="dropdown"
+                        <a class="d-block dropdown-toggle header-icon-box bg-whitelogo" type="link" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-plus-circle f-16" style=" color:#51459d;"></i>
                         </a>
@@ -154,7 +154,7 @@
         <!-- NOTIFICATIONS START -->
             <li title="{{__('app.newNotifications')}}">
                 <div class="notification_box dropdown">
-                    <a class="d-block dropdown-toggle header-icon-box show-user-notifications bg-gray" type="link"
+                    <a class="d-block dropdown-toggle header-icon-box show-user-notifications bg-whitelogo" type="link"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-bell f-16" style="color:#ff3a6e;"></i>
                         @if ($unreadNotificationCount > 0)
@@ -197,9 +197,9 @@
             <!-- LOGOUT START -->
             <li data-toggle="tooltip" data-placement="top" title="{{__('app.logout')}}">
                 <div class="logout_box">
-                    <a class="d-block header-icon-box bg-gray" href="javascript:;" onclick="event.preventDefault();
+                    <a class="d-block header-icon-box bg-whitelogo" href="javascript:;" onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">
-                        <i class="fa fa-power-off f-16 text-dark-grey" style="color:rgb(255,162,29);"></i>
+                        <i class="fa fa-power-off f-16" style="color:rgb(255,162,29);"></i>
                     </a>
                 </div>
             </li>

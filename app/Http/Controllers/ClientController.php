@@ -238,7 +238,7 @@ class ClientController extends AccountBaseController
 
                 $teamData .= '<div class=\'media align-items-center mw-250\'>';
 
-                $teamData .= '<div class=\'position-relative\'><img src='.$team->image_url.' class=\'mr-2 taskEmployeeImg rounded-circle\'></div>';
+                $teamData .= '<div class=\'position-relative\'><img src='.$team->image_url.' class=\'mr-2 taskEmployeeImg rounded-circle\' style="border: 1.5px solid #3ec9d6;"></div>';
                 $teamData .= '<div class=\'media-body\'>';
                 $teamData .= '<h5 class=\'mb-0 f-13\'>'.ucfirst($team->name).'</h5>';
                 $teamData .= '<p class=\'my-0 f-11 text-dark-grey\'>'.$team->email.'</p>';
@@ -900,7 +900,7 @@ class ClientController extends AccountBaseController
 
                 $teamData .= '<div class=\'media align-items-center mw-250\'>';
 
-                $teamData .= '<div class=\'position-relative\'><img src='.$client->image_url.' class=\'mr-2 taskEmployeeImg rounded-circle\'></div>';
+                $teamData .= '<div class=\'position-relative\'><img src='.$client->image_url.' class=\'mr-2 taskEmployeeImg rounded-circle\' style="border: 1.5px solid #3ec9d6;"></div>';
                 $teamData .= '<div class=\'media-body\'>';
                 $teamData .= '<h5 class=\'mb-0 f-13\'>'.ucfirst($client->name).'</h5>';
                 $teamData .= '<p class=\'my-0 f-11 text-dark-grey\'>'.$client->email.'</p>';
@@ -924,7 +924,7 @@ class ClientController extends AccountBaseController
 
                 $teamData .= '<div class=\'media align-items-center mw-250\'>';
 
-                $teamData .= '<div class=\'position-relative\'><img src='.$project->client->image_url.' class=\'mr-2 taskEmployeeImg rounded-circle\'></div>';
+                $teamData .= '<div class=\'position-relative\'><img src='.$project->client->image_url.' class=\'mr-2 taskEmployeeImg rounded-circle\' style="border: 1.5px solid #3ec9d6;"></div>' ;
                 $teamData .= '<div class=\'media-body\'>';
                 $teamData .= '<h5 class=\'mb-0 f-13\'>'.ucfirst($project->client->name).'</h5>';
                 $teamData .= '<p class=\'my-0 f-11 text-dark-grey\'>'.$project->client->email.'</p>';

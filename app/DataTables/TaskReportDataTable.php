@@ -96,7 +96,7 @@ class TaskReportDataTable extends BaseDataTable
                   </div>';
             })
             ->editColumn('board_column', function ($row) {
-                return '<i class="fa fa-circle mr-2" style="color: ' . $row->label_color . '"></i>' . $row->board_column;
+                return '<span class="text-white" style="background-color: ' . $row->label_color . '; border-radius: 5px; padding: 5px">'  . $row->board_column . '</span>';
             })
             ->addColumn('status', function ($row) {
                 return ucfirst($row->board_column);

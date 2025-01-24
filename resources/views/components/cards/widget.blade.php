@@ -24,8 +24,12 @@
         'Days Present' => 'padding: 10px; border-radius:10px; background-color:  #6FD943;',
         'Late' => 'padding: 10px; border-radius:10px; background-color: rgb(255,162,29);',
         'Half Day' => 'padding: 10px; border-radius:10px; background-color: rgb(255,162,29);',
-        'Absent' => 'padding: 10px; border-radius:10px; background-color:  #ff3a6e;'
-        
+        'Absent' => 'padding: 10px; border-radius:10px; background-color:  #ff3a6e;',
+        'Total Earnings' => 'padding: 10px; border-radius:10px; background-color:  #6FD943;',
+        'Total Expenses' => 'padding: 10px; border-radius:10px; background-color:  #ff3a6e;',
+        'Earned' => 'padding: 10px; border-radius:10px; background-color:  #6FD943;',
+        'Sick' => 'padding: 10px; border-radius:10px; background-color: rgb(255,162,29);',
+        'Casual' => 'padding: 10px; border-radius:10px; background-color:  #ff3a6e;'
     ];
     $style = $styles[$title] ?? 'padding: 10px; border-radius:10px; background-color:rgb(62,201,214);';
     $styles1 = [
@@ -53,7 +57,12 @@
         'Days Present' => 'color:  #6FD943;',
         'Late' => 'color: rgb(255,162,29);',
         'Half Day' => 'color: rgb(255,162,29);',
-        'Absent' => 'color:  #ff3a6e;'
+        'Absent' => 'color:  #ff3a6e;',
+        'Total Earnings' => 'color:  #6FD943;',
+        'Total Expenses' => 'color:  #ff3a6e;',
+        'Earned' => 'color:  #6FD943;',
+        'Sick' => 'color: rgb(255,162,29);',
+        'Casual' => 'color:  #ff3a6e;'
     ];
     $style1 = $styles1[$title] ?? 'color:rgb(62,201,214);';
 @endphp

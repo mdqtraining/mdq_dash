@@ -60,7 +60,7 @@ class ExpenseReportDataTable extends BaseDataTable
                 return !is_null($row->bill) ? $row->bill : '--';
             })
             ->addColumn('status', function ($row) {
-                return '<i class="fa fa-circle mr-1 text-dark-green f-10"></i>' . __('app.' . $row->status);
+                return '<span style="background-color:#6fd943; padding: 5px; border-radius: 5px; color: #fff">'  . __('app.' . $row->status). '</span>';
             })
             ->editColumn(
                 'purchase_date',

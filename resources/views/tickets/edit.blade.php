@@ -100,19 +100,19 @@ $manageGroupPermission = user()->permission('manage_ticket_groups');
                     <span id="ticketStatusBadge">
                         @if ($ticket->status == 'open')
                             @php
-                                $statusColor = 'red';
+                                $statusColor = 'urgentred';
                             @endphp
                         @elseif($ticket->status == 'pending')
                             @php
-                                $statusColor = 'yellow';
+                                $statusColor = 'highorange';
                             @endphp
                         @elseif($ticket->status == 'resolved')
                             @php
-                                $statusColor = 'dark-green';
+                                $statusColor = 'lowgreen';
                             @endphp
                         @elseif($ticket->status == 'closed')
                             @php
-                                $statusColor = 'blue';
+                                $statusColor = 'mediumblue';
                             @endphp
                         @endif
                         <p class="mb-0 text-capitalize ticket-status">
@@ -306,7 +306,7 @@ $manageGroupPermission = user()->permission('manage_ticket_groups');
                                     <x-forms.select fieldId="priority" :fieldLabel="__('modules.tasks.priority')"
                                         fieldName="priority" data-container="body">
                                         <option @if ($ticket->priority == 'low') selected @endif value="low"
-                                            data-content="<i class='fa fa-circle mr-2 text-dark-green'></i> {{ __('app.low')}}"
+                                            data-content="'<span style="background:#ff3a6e; color:#FFF; padding:5px; border-radius:5px;"> {{ __('app.low')}}</span>'"
                                             >@lang('app.low')</option>
                                         <option @if ($ticket->priority == 'medium') selected @endif value="medium"
                                             data-content="<i class='fa fa-circle mr-2 text-blue'></i> {{ __('app.medium')}}"
@@ -366,17 +366,17 @@ $manageGroupPermission = user()->permission('manage_ticket_groups');
                                     <x-forms.select fieldId="ticket-status" :fieldLabel="__('app.status')"
                                         fieldName="status" data-container="body">
                                         <option @if ($ticket->status == 'open') selected @endif value="open"
-                                            data-content="<i class='fa fa-circle mr-2 text-red'></i>{{ __('app.open') }}">
+                                            data-content="<span class='f-w-600 text-red'>{{ __('app.open') }}</span>">
                                             @lang('app.open')
                                         </option>
                                         <option @if ($ticket->status == 'pending') selected @endif value="pending"
-                                            data-content="<i class='fa fa-circle mr-2 text-yellow'></i>{{ __('app.pending') }}">
+                                            data-content="<span class='f-w-600 text-yellow'>{{ __('app.pending') }}</span>">
                                             @lang('app.pending')</option>
                                         <option @if ($ticket->status == 'resolved') selected @endif value="resolved"
-                                            data-content="<i class='fa fa-circle mr-2 text-dark-green'></i>{{ __('app.resolved') }}">
+                                            data-content="<span class='f-w-600 text-light-green'>{{ __('app.resolved') }}</span>">
                                             @lang("app.resolved")</option>
                                         <option @if ($ticket->status == 'closed') selected @endif value="closed"
-                                            data-content="<i class='fa fa-circle mr-2 text-blue'></i>{{ __('app.closed') }}">
+                                            data-content="<span class='f-w-600 text-blue'>{{ __('app.closed') }}</span>">
                                             @lang('app.closed')</option>
                                     </x-forms.select>
                                 </div>

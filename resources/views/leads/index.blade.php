@@ -8,9 +8,9 @@
 
     @include('leads.filters')
 
-@endsection
+@endsection 
 
-@php
+ @php
 $addLeadPermission = user()->permission('add_lead');
 $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 @endphp
