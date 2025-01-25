@@ -15770,9 +15770,9 @@ ul.thumbnails.image_picker_selector li .thumbnail.selected {
 .sidebar-light .sidebar-menu {
   background-color: unset;
 }
-.sidebar-light .sidebar-menu li {
+/* .sidebar-light .sidebar-menu li {
   box-shadow: 0 1px 0 0 #e8eef3;
-}
+} */
 .sidebar-light .sidebar-menu li .nav-item {
   color: #616e80;
 }
@@ -16698,7 +16698,7 @@ button.disabled, button:disabled {
   }
 .btn-primary:hover {
   background-color: #008a00 !important;
-  border: 1px solid black !important;
+  scale: 1.05;
   color: #fff !important;
 }
 
@@ -16721,7 +16721,7 @@ button.disabled, button:disabled {
 }
 .btn-secondary:hover {
   background-color: #35b6c0 !important;
-  border: solid 1px #000 !important;
+  scale: 1.05!important;
   color: #fff !important;
 }
 
@@ -16742,7 +16742,7 @@ button.disabled, button:disabled {
 }
 .btn-cancel:hover {
   background-color: black !important;
-  border: solid 1px #000 !important;
+  scale: 1.05 !important;
   color: #fff !important;
 }
 

@@ -118,6 +118,7 @@ use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\IndicatorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OfflinePaymentSettingController;
+use App\Http\Controllers\PerformanceController;
 
 Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('image/upload', [ImageController::class, 'store'])->name('image.store');
@@ -761,9 +762,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('quickbooks', [QuickbookController::class, 'index'])->name('quickbooks.index');
     // Route::get('indicator', [HomeController::class, 'indicator'])->name('indicator.index');
 
-    Route::get('indicator', [OfflinePaymentSettingController::class, 'indicator'])->name('indicator.index');
-    Route::get('appraisal', [OfflinePaymentSettingController::class, 'appraisal'])->name('appraisal.index');
-    Route::get('goaltracking', [OfflinePaymentSettingController::class, 'goaltracking'])->name('goaltracking.index');
+    Route::get('indicator', [PerformanceController::class, 'indicator'])->name('indicator.index');
+    Route::get('appraisal', [PerformanceController::class, 'appraisal'])->name('appraisal.index');
+    Route::get('goaltracking', [PerformanceController::class, 'goaltracking'])->name('goaltracking.index');
     // Route::resource('indicator', IndicatorController::class);
     // 
 });
