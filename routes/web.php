@@ -763,8 +763,21 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // Route::get('indicator', [HomeController::class, 'indicator'])->name('indicator.index');
 
     Route::get('indicator', [PerformanceController::class, 'indicator'])->name('indicator.index');
+    Route::get('indicator-create', [PerformanceController::class, 'indicatorCreate'])->name('indicator.create');
+        Route::get('indicator-edit', [PerformanceController::class, 'indicatorEdit'])->name('indicator.edit');
+        Route::post('indicator/store', [PerformanceController::class, 'store'])->name('indicator.store');
+    Route::delete('indicator/delete/{id}', [PerformanceController::class, 'destroy'])->name('indicator.destroy');
+    
+
+    // Route::get('indicator', [PerformanceController::class, 'indicator'])->name('indicator.index');
     Route::get('appraisal', [PerformanceController::class, 'appraisal'])->name('appraisal.index');
+    Route::get('appraisal-create', [PerformanceController::class, 'appraisalCreate'])->name('appraisal.create');
     Route::get('goaltracking', [PerformanceController::class, 'goaltracking'])->name('goaltracking.index');
+    Route::get('goaltracking-create', [PerformanceController::class, 'goaltrackingCreate'])->name('goaltracking.create');
+    
     // Route::resource('indicator', IndicatorController::class);
     // 
 });
+
+Route::post('indicator/store', [PerformanceController::class, 'store'])->name('indicator.store');
+    

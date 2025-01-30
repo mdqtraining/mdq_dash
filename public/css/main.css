@@ -11313,7 +11313,7 @@ h6 a {
 /* Star Rating Styles */
 .star-rating {
     display: inline-flex;
-    font-size: 15px;
+    font-size: 16px;
     color: #ccc; /* Default inactive star color */
     direction: row;
 }
@@ -15761,8 +15761,8 @@ ul.thumbnails.image_picker_selector li .thumbnail.selected {
     
   } 
 .sidebar-light .main-sidebar {
-  background-color: #f7faff ;
-  border-right: 1px solid #e8eef3;
+  background-color: #fbfcfc ;
+
 }
 .sidebar-light .sidebar-brand-box {
   background-color: unset;
@@ -16412,8 +16412,8 @@ input[type=number] {
   height: auto;
 }
 .form-control:focus, .form-control:hover {
-  border-color: #28313C;
-  box-shadow: none;
+    border-color:var(--blue);
+    box-shadow: 0 0 0 0.2rem rgba(0, 142, 204, 0.25);
 }
 
 :focus::-webkit-input-placeholder { /* Chrome/Opera/Safari */
@@ -16731,6 +16731,11 @@ button.disabled, button:disabled {
   color: #616e80 !important;
   cursor: not-allowed;
 }
+.add-page{
+    box-shadow: 0 6px 30px rgba(182, 186, 203, 0.3);
+ border-radius: 10px !important;
+  background: #ffffff;
+}
 
 .btn-cancel {
   text-transform: capitalize;
@@ -16741,7 +16746,7 @@ button.disabled, button:disabled {
   position: relative;
 }
 .btn-cancel:hover {
-  background-color: black !important;
+  background-color: #ff3a6e!important;
   scale: 1.05 !important;
   color: #fff !important;
 }
@@ -17174,10 +17179,6 @@ button.disabled, button:disabled {
   box-sizing: border-box;
 }
 
-.accordionItem a.active {
-  color: #f7faff;
-}
-
 .sidebar-menu {
   height: calc(100% - 111px);
   z-index: 0;
@@ -17211,15 +17212,17 @@ button.disabled, button:disabled {
   padding: 10px 20px 10px 10px;
 }
 .sidebar-menu li .nav-item:focus, .sidebar-menu li .nav-item:hover {
-  color: #0163B8 !important;
+  color: #ffffff !important;
 }
 .sidebar-menu li .nav-item.active {
-    color: #0163B8 !important;
+    color: #ffffff !important;
+    background-color: #0163B8 !important;
   }
-.sidebar-menu li .nav-item.active {
-    color: #0163B8 !important;
+.sidebar-menu li .nav-item.active ~ {
+    color: #ffffff !important;
+    background-color: #0163B8 !important;
 }
-.sidebar-menu li . {
+.sidebar-menu li  {
     color: #0163B8 !important;
   }
 .side

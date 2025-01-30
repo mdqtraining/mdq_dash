@@ -18,7 +18,7 @@
     <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
         <div id="table-actions" class="flex-grow-1 align-items-center">
 
-            <x-forms.link-primary :link="route('leads.create')" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
+            <x-forms.link-primary :link="route('appraisal.create')" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
                 Add Appraisal
             </x-forms.link-primary>
             <x-forms.link-secondary :link="route('leads.import')" class="mr-3 openRightModal float-left mb-2 mb-lg-0 mb-md-0" icon="file-upload">

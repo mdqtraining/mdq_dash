@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Indicator extends BaseModel
+class GoalTracking extends BaseModel
 {
-    protected $fillable = [
-        'indicator_name',
-        'description',      
-    ];
     use HasFactory;
+    
+    
+
+
 }

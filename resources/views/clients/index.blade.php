@@ -47,7 +47,7 @@
             </form>
         </div>
         <!-- SEARCH BY TASK END -->
-z
+
         <!-- RESET START -->
         <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
             <x-forms.button-secondary class="btn-xs d-none" id="reset-filters" icon="times-circle">
