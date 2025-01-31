@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appraisal;
+use App\Models\Designation;
 use App\Models\GoalTracking;
 use App\Models\Indicator;
 use Illuminate\Http\Request;
@@ -79,85 +80,88 @@ class PerformanceController extends AccountBaseController
         // Ensure user has the required role
         abort_403(!in_array('employee', user_roles()));
     
-        // Fetch all indicators
-        $indicators = Indicator::select('*')->get();
-    
-        // Pass data to the view
-        // return view('indicator.index', compact($this->data, ['indicators' => $indicators]));
-        return view('indicator.create', array_merge($this->data, ['indicators' => $indicators]));
-    }
-    public function indicatorEdit()
+        $designation = Designation::pluck('name'); // Extract only names
+        return view('indicator.create', array_merge($this->data, ['designation' => $designation]));
+         }
+         public function indicatorEdit($id)
+         {
+             $this->pageTitle = 'Edit Indicator';
+         
+             // Ensure user has the required role
+             abort_403(!in_array('employee', user_roles()));
+         
+             // Fetch the specific indicator
+             $indicators = Indicator::findOrFail($id);
+         
+             // Fetch all designations (only name column)
+             $designations = Designation::pluck('name');
+         
+             return view('indicator.edit', array_merge($this->data, [
+                 'indicators' => $indicators,
+                 'designations' => $designations
+             ]));
+         }
+         public function indicatorUpdate($id)
+         {
+             $this->pageTitle = 'Edit Indicator';
+         
+             // Ensure user has the required role
+             abort_403(!in_array('employee', user_roles()));
+         
+             // Fetch the specific indicator
+             $indicators = Indicator::findOrFail($id);
+         
+             // Fetch all designations (only name column)
+             $designations = Designation::pluck('name');
+         
+             return view('indicator.edit', array_merge($this->data, [
+                 'indicators' => $indicators,
+                 'designations' => $designations
+             ]));
+         }
+         
+         
+  
+    public function store(Request $request)
     {
-        $this->pageTitle = 'Edit Indicator';
+        
+        $request->validate([
+            'branch' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            // 'designation' => 'required|string|max:255',
+            'leadership' => 'required|numeric|min:1|max:5',
+            'project_management' => 'required|numeric|min:1|max:5',
+            'allocating_resources' => 'required|numeric|min:1|max:5',
+            'business_process' => 'required|numeric|min:1|max:5',
+            'oralcommunication' => 'required|numeric|min:1|max:5',
+        ], [
+            'branch.required' => 'Please enter the branch.',
+            'department.required' => 'Please enter the department.',
+            'designation.required' => 'Please enter the designation.',
+            'leadership.required' => 'Leadership score is required.',
+            'project_management.required' => 'Project Management score is required.',
+            'allocating_resources.required' => 'Allocating Resources score is required.',
+            'business_process.required' => 'Business Process score is required.',
+            'oralcommunication.required' => 'Oral Communication score is required.',
+        ]);
+        
     
-        // Ensure user has the required role
-        abort_403(!in_array('employee', user_roles()));
-    $id = '1';
-        // Fetch all indicators
-        $indicators = Indicator::select('*')->get()->where('id',$id);
+        // Create a new indicator in the database
+        $data = new Indicator();
+        $data->branch = $request['branch'];
+        $data->department = $request['department'];
+        $data->designation = $request['designation'];
+        $data->leadership = $request['leadership'] ?? null;
+        $data->project_management = $request['project_management'] ?? null;
+        $data->allocating_resources = $request['allocating_resources'] ?? null;
+        $data->business_process = $request['business_process'] ?? null;
+        $data->oralcommunication = $request['oralcommunication'] ?? null;
+        $data->save();
     
-        // Pass data to the view
-        // return view('indicator.index', compact($this->data, ['indicators' => $indicators]));
-        return view('indicator.eidt', array_merge($this->data, ['indicators' => $indicators]));
+        // Flash success message and return
+        return redirect()->route('indicator.success')->with('success', 'Indicator saved successfully');
     }
-    // public function store(Request $request)
-    // {
-    //     // Validate the incoming data
-    //     $data = $request->validate([
-    //         'indicator_name' => 'required|string|max:255',
-    //         'description' => 'nullable|string',
-    //     ]);
-
-    //     // Save the data in the database
-    //     Indicator::create($data);
-
-    //     // Redirect with a success message
-    //     return redirect()->route('indicator.create')->with('success', 'Indicator added successfully!');
-    // }
-//     public function store(Request $request)
-// {
-//     // Validate the incoming data
-//     $data = $request->validate([
-       
-//         'branch' => 'required|string|max:255',
-//         'department' => 'required|string|max:255',
-//         'designation' => 'required|string|max:255', // Assuming this is the user ID
-//         'leadership' => 'nullable|numeric',
-//         'project_management' => 'nullable|numeric',
-//         'allocating_resources' => 'nullable|numeric',
-//         'business_process' => 'nullable|numeric',
-//         'oralcommunication' => 'nullable|numeric',
-//     ]);
-
-//     // Create a new indicator in the database
-//     Indicator::create([
-//         'branch' => $data['branch'],
-//         'department' => $data['department'],
-//         'designation' => $data['designation'],  
-//         'leadership' => $data['leadership'] ?? null,
-//         'project_management' => $data['project_management'] ?? null,
-//         'allocating_resources' => $data['allocating_resources'] ?? null,
-//         'business_process' => $data['business_process'] ?? null,
-//         'oralcommunication' => $data['oralcommunication'] ?? null,
-//     ]);
-
-//     // Redirect with a success message
-//     return redirect()->with('success', 'Indicator added successfully!');
-// }
-
-public function store(Request $request)
-{
-    // Your logic for storing the indicator, e.g.:
-    $indicator = new Indicator();
-    $indicator->branch = $request->input('branch_name');
-    $indicator->save();
-
-    // Flash the success message to the session
-    session()->flash('success', 'Indicator added successfully!');
-
-    // Return the current view with the flashed message
-    return view('indicator.create', compact('indicator'));
-}
+    
 
 
     public function destroy($id)

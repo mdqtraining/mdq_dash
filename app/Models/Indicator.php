@@ -1,15 +1,24 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Indicator extends BaseModel
+class Indicator extends Model
 {
-    protected $fillable = [
-        'indicator_name',
-        'description',      
-    ];
     use HasFactory;
+
+    protected $table = "indicators";
+
+    protected $fillable = [
+        'branch',
+        'department',
+        'designation',
+        'leadership',
+        'project_management',
+        'allocating_resources',
+        'business_process',
+        'oralcommunication',
+    ];
+    
 }

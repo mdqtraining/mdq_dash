@@ -764,8 +764,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::get('indicator', [PerformanceController::class, 'indicator'])->name('indicator.index');
     Route::get('indicator-create', [PerformanceController::class, 'indicatorCreate'])->name('indicator.create');
-        Route::get('indicator-edit', [PerformanceController::class, 'indicatorEdit'])->name('indicator.edit');
-        Route::post('indicator/store', [PerformanceController::class, 'store'])->name('indicator.store');
+    Route::get('indicator/edit/{id}', [PerformanceController::class, 'indicatorEdit'])->name('indicator.edit');
+    Route::get('indicator/update/{id}', [PerformanceController::class, 'indicatorUpdate'])->name('indicator.update');
+        Route::post('indicator/store', [PerformanceController::class, 'indicatorstore'])->name('indicator.store');
+
     Route::delete('indicator/delete/{id}', [PerformanceController::class, 'destroy'])->name('indicator.destroy');
     
 

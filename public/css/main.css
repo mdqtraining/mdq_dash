@@ -15713,8 +15713,8 @@ ul.thumbnails.image_picker_selector li .thumbnail.selected {
     font-size:19px;
 } */
   .sidebar-dark .sidebar-menu ul li a:hover, .sidebar-dark .sidebar-menu ul li a.active {
-    background-color:#0163B8 !important;
-    color: #ffffff !important;
+    background-color:#ffffff !important;
+    color: #0163B8 !important;
     box-shadow: 0 5px 7px -1px rgba(89, 80, 193, 0.3);
     border-radius: 10px;
   }
@@ -17215,8 +17215,8 @@ button.disabled, button:disabled {
   color: #ffffff !important;
 }
 .sidebar-menu li .nav-item.active {
-    color: #ffffff !important;
-    background-color: #0163B8 !important;
+    color: #0163B8 !important;
+
   }
 .sidebar-menu li .nav-item.active ~ {
     color: #ffffff !important;

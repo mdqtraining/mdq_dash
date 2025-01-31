@@ -1,3 +1,6 @@
+@php
+    use Carbon\Carbon;
+@endphp
 <div class="d-flex flex-column w-tables rounded mt-3 bg-white table-responsive">
     <div class="dataTables_wrapper dt-bootstrap4 no-footer">
         <div class="row">
@@ -32,7 +35,8 @@
                                 <div class="text-dark f-13">({{ $indicator->rating }} / 5)</div>
                             </td>
                             <td>{{ $indicator->added_by }}</td>
-                            <td>{{ $indicator->created_at->format('d-m-Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($indicator->created_at)->format('d-m-Y') }}</td>
+
                             <td class="text-right pr-20">
                                 <div class="task_view">
                                     <div class="dropdown">
@@ -41,7 +45,12 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" tabindex="0">
                                             <a href="" class="dropdown-item">View</a>
-                                            <a class="dropdown-item openRightModal" href="indicator.edit" >Edit</a>
+                                            <a class="dropdown-item" href="{{ route('indicator.edit', $indicator->id) }}">
+
+                                <i class="fa fa-edit mr-2"></i>
+                                 Edit
+                            </a>
+                            
                                             <a class="dropdown-item delete-table-row" href="#" onclick="event.preventDefault(); confirmDelete({{ $indicator->id }});">Delete</a>
                                         </div>
                                     </div>
