@@ -765,15 +765,18 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('indicator', [PerformanceController::class, 'indicator'])->name('indicator.index');
     Route::get('indicator-create', [PerformanceController::class, 'indicatorCreate'])->name('indicator.create');
     Route::get('indicator/edit/{id}', [PerformanceController::class, 'indicatorEdit'])->name('indicator.edit');
-    Route::get('indicator/update/{id}', [PerformanceController::class, 'indicatorUpdate'])->name('indicator.update');
-        Route::post('indicator/store', [PerformanceController::class, 'indicatorstore'])->name('indicator.store');
-
-    Route::delete('indicator/delete/{id}', [PerformanceController::class, 'destroy'])->name('indicator.destroy');
+    Route::get('indicator/view/{id}', [PerformanceController::class, 'indicatorview'])->name('indicator.view');
+    Route::put('indicator/update/{id}', [PerformanceController::class, 'indicatorUpdate'])->name('indicator.update');
+    Route::post('indicator/store', [PerformanceController::class, 'indicatorstore'])->name('indicator.store');
+    Route::post('indicator/delete/{id}', [PerformanceController::class, 'indicatorDestroy'])->name('indicator.destroy');
+    Route::delete('indicator/delete/{id}', [PerformanceController::class, 'indicatorDestroy'])->name('indicator.destroy');
     
 
     // Route::get('indicator', [PerformanceController::class, 'indicator'])->name('indicator.index');
     Route::get('appraisal', [PerformanceController::class, 'appraisal'])->name('appraisal.index');
     Route::get('appraisal-create', [PerformanceController::class, 'appraisalCreate'])->name('appraisal.create');
+    Route::post('appraisal/store', [PerformanceController::class, 'appraisalstore'])->name('appraisal.store');
+    Route::get('/get-employee-indicator-data', [EmployeeController::class, 'getEmployeeIndicatorData'])->name('getEmployeeIndicatorData');
     Route::get('goaltracking', [PerformanceController::class, 'goaltracking'])->name('goaltracking.index');
     Route::get('goaltracking-create', [PerformanceController::class, 'goaltrackingCreate'])->name('goaltracking.create');
     
@@ -781,5 +784,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // 
 });
 
-Route::post('indicator/store', [PerformanceController::class, 'store'])->name('indicator.store');
+
     

@@ -117,16 +117,16 @@ class EmployeesDataTable extends BaseDataTable
                             id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="icon-options-vertical icons"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right" style="background-color:transparent;  border: radious 5px !important;" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
 
-            $action .= '<a href="' . route('employees.show', [$row->id]) . '" class="dropdown-item view-bg text-white" style=" border-top-left-radius: 5px; border-top-right-radius: 5px;"><i class="fa fa-eye mr-2"></i>'. __('app.view') . '</a>';
+            $action .= '<a href="' . route('employees.show', [$row->id]) . '" class="dropdown-item" style=" border-top-left-radius: 5px; border-top-right-radius: 5px;"><i class="fa fa-eye mr-2"></i>'. __('app.view') . '</a>';
 
             if ($this->editEmployeePermission == 'all'
                 || ($this->editEmployeePermission == 'added' && user()->id == $row->added_by)
                 || ($this->editEmployeePermission == 'owned' && user()->id == $row->id)
                 || ($this->editEmployeePermission == 'both' && (user()->id == $row->id || user()->id == $row->added_by))) {
                 if (!in_array('admin', $userRole) || (in_array('admin', $userRole) && in_array('admin', user_roles()))) {
-                    $action .= '<a class="dropdown-item openRightModal edite-bg text-white" href="' . route('employees.edit', [$row->id]) . '">
+                    $action .= '<a class="dropdown-item openRightModal" href="' . route('employees.edit', [$row->id]) . '">
                                 <i class="fa fa-edit "></i>
                                 '. trans('app.edit') . '
                             </a>';
@@ -135,35 +135,12 @@ class EmployeesDataTable extends BaseDataTable
 
             if ($this->deleteEmployeePermission == 'all' || ($this->deleteEmployeePermission == 'added' && user()->id == $row->added_by)) {
                 if ((!in_array('admin', $userRole) && user()->id !== $row->id) || (user()->id !== $row->id && in_array('admin', $userRole) && in_array('admin', user_roles()))) {
-                    $action .= '<a class="dropdown-item delete-table-row delete-bg text-white" style=" border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;" href="javascript:;" data-user-id="' . $row->id . '">
+                    $action .= '<a class="dropdown-item delete-table-row "  href="javascript:;" data-user-id="' . $row->id . '">
                                 <i class="fa fa-trash mr-2 "></i>
                                 ' .trans('app.delete') . '
                             </a>';
                 }
             }
-
-            // $action .= '<a href="' . route('employees.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2" style="color: #6777ef!important;"></i>' . __('app.view') . '</a>';
-
-            // if ($this->editEmployeePermission == 'all'
-            //     || ($this->editEmployeePermission == 'added' && user()->id == $row->added_by)
-            //     || ($this->editEmployeePermission == 'owned' && user()->id == $row->id)
-            //     || ($this->editEmployeePermission == 'both' && (user()->id == $row->id || user()->id == $row->added_by))) {
-            //     if (!in_array('admin', $userRole) || (in_array('admin', $userRole) && in_array('admin', user_roles()))) {
-            //         $action .= '<a class="dropdown-item openRightModal" href="' . route('employees.edit', [$row->id]) . '">
-            //                     <i class="fa fa-edit mr-2"></i>
-            //                     ' . trans('app.edit') . '
-            //                 </a>';
-            //     }
-            // }
-
-            // if ($this->deleteEmployeePermission == 'all' || ($this->deleteEmployeePermission == 'added' && user()->id == $row->added_by)) {
-            //     if ((!in_array('admin', $userRole) && user()->id !== $row->id) || (user()->id !== $row->id && in_array('admin', $userRole) && in_array('admin', user_roles()))) {
-            //         $action .= '<a class="dropdown-item delete-table-row" href="javascript:;" data-user-id="' . $row->id . '">
-            //                     <i class="fa fa-trash mr-2"></i>
-            //                     ' . trans('app.delete') . '
-            //                 </a>';
-            //     }
-            // }
 
             $action .= '</div>
                     </div>

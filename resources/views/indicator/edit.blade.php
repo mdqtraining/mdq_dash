@@ -10,9 +10,9 @@
 @endpush
 
 @section('content')
-<form action="{{ route('indicator.update',$indicator->id)) }}" method="POST" id="indicatorForm">
+<form action="{{ route('indicator.update', $indicators->id) }}" method="POST">
     @csrf
-    @method('GET')
+    @method('PUT') 
     <div class="content-wrapper">
         <div class="add-page">
             <div class="p-20">
@@ -51,7 +51,7 @@
         <label class="f-14 text-dark-grey mb-12">Designation &nbsp;<sup class="f-14 mr-1">*</sup></label>
         
         <select class="form-control height-35 f-14" name="designation" id="designation" value={{$indicators->designation}} required>
-            <option  disabled selected>Select Designation</option> 
+           
             @foreach($designations as $item)
                 <option value="{{ $item }}">{{ $item }}</option>
             @endforeach
