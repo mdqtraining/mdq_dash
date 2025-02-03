@@ -61,9 +61,8 @@
                             @enderror
                         </div>
                     </div>
-
                 </div>
-
+ 
                 <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Organizational Competencies</h4> 
                 <div class="p-20">
                     <!-- Leadership Field -->
