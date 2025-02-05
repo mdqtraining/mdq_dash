@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @push('styles')
@@ -14,6 +15,7 @@
 @include('indicator.filters')
 
 @endsection
+
 
 @section('content')
 <div class="content-wrapper">

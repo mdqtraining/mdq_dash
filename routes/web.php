@@ -116,6 +116,7 @@ use App\Http\Controllers\ProjectTemplateMemberController;
 use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\IndicatorController;
+use App\Http\Controllers\GoalTrackingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OfflinePaymentSettingController;
 use App\Http\Controllers\PerformanceController;
@@ -762,24 +763,28 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('quickbooks', [QuickbookController::class, 'index'])->name('quickbooks.index');
     // Route::get('indicator', [HomeController::class, 'indicator'])->name('indicator.index');
 
-    Route::get('indicator', [PerformanceController::class, 'indicator'])->name('indicator.index');
-    Route::get('indicator-create', [PerformanceController::class, 'indicatorCreate'])->name('indicator.create');
-    Route::get('indicator/edit/{id}', [PerformanceController::class, 'indicatorEdit'])->name('indicator.edit');
-    Route::get('indicator/view/{id}', [PerformanceController::class, 'indicatorview'])->name('indicator.view');
-    Route::put('indicator/update/{id}', [PerformanceController::class, 'indicatorUpdate'])->name('indicator.update');
-    Route::post('indicator/store', [PerformanceController::class, 'indicatorstore'])->name('indicator.store');
-    Route::post('indicator/delete/{id}', [PerformanceController::class, 'indicatorDestroy'])->name('indicator.destroy');
-    Route::delete('indicator/delete/{id}', [PerformanceController::class, 'indicatorDestroy'])->name('indicator.destroy');
+ 
     
-
-    // Route::get('indicator', [PerformanceController::class, 'indicator'])->name('indicator.index');
-    Route::get('appraisal', [PerformanceController::class, 'appraisal'])->name('appraisal.index');
-    Route::get('appraisal-create', [PerformanceController::class, 'appraisalCreate'])->name('appraisal.create');
-    Route::post('appraisal/store', [PerformanceController::class, 'appraisalstore'])->name('appraisal.store');
+    Route::get('indicator', [IndicatorController::class, 'indicator'])->name('indicator.index');
+    Route::get('indicator-create', [IndicatorController::class, 'indicatorCreate'])->name('indicator.create');
+    Route::get('indicator/edit/{id}', [IndicatorController::class, 'indicatorEdit'])->name('indicator.edit');
+    Route::get('indicator/view/{id}', [IndicatorController::class, 'indicatorview'])->name('indicator.view');
+    Route::put('indicator/update/{id}', [IndicatorController::class, 'indicatorUpdate'])->name('indicator.update');
+    Route::post('indicator/store', [IndicatorController::class, 'indicatorstore'])->name('indicator.store');
+    Route::post('indicator/delete/{id}', [IndicatorController::class, 'indicatorDestroy'])->name('indicator.destroy');
+    Route::delete('indicator/delete/{id}', [IndicatorController::class, 'indicatorDestroy'])->name('indicator.destroy');
+    Route::get('/get-employee-indicator-data', [IndicatorController::class, 'getEmployeeIndicatorData'])->name('getEmployeeIndicatorData');
+    
+    Route::get('appraisal', [AppraisalController::class, 'appraisal'])->name('appraisal.index');
+    Route::get('appraisal-create', [AppraisalController::class, 'appraisalCreate'])->name('appraisal.create');
+    Route::post('appraisal/store', [AppraisalController::class, 'appraisalstore'])->name('appraisal.store');
+    
+    
+    Route::get('goaltracking', [GoalTrackingController::class, 'goaltracking'])->name('goaltracking.index');
+    Route::get('goaltracking-create', [GoalTrackingController::class, 'goaltrackingCreate'])->name('goaltracking.create');
+    Route::get('goaltracking/edit/{id}', [GoalTrackingController::class, 'goaltrackingedit'])->name('goaltracking.edit');
     Route::get('/get-employee-indicator-data', [EmployeeController::class, 'getEmployeeIndicatorData'])->name('getEmployeeIndicatorData');
-    Route::get('goaltracking', [PerformanceController::class, 'goaltracking'])->name('goaltracking.index');
-    Route::get('goaltracking-create', [PerformanceController::class, 'goaltrackingCreate'])->name('goaltracking.create');
-    
+
     // Route::resource('indicator', IndicatorController::class);
     // 
 });

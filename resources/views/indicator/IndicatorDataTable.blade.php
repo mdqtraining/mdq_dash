@@ -18,6 +18,7 @@
                         </tr>
                     </thead>
                     <tbody>
+    
                         @if($indicators->count() > 0)
                             @foreach ($indicators as $indicator)
                                 <tr>

@@ -70,8 +70,8 @@
                                                 <a href="" class="dropdown-item">
                                                     <i class="fa fa-eye mr-2"></i> View
                                                 </a>
-                                                <a class="dropdown-item openRightModal" href="{{ route('projects.edit', $goaltrackings->id) }}">
-                                                    <i class="fa fa-edit mr-2"></i> Edit
+                                                <a class="dropdown-item openRightModal" href="{{ route('goaltracking.edit', $goaltrackings->id) }}">
+                                                <i class="fa fa-edit mr-2"></i> Edit
                                                 </a>
                                                 <a class="dropdown-item delete-table-row" href="{{ route('projects.destroy', $goaltrackings->id) }}" 
                                                    data-user-id="{{ $goaltrackings->id }}">
