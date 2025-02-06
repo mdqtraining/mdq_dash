@@ -19,12 +19,13 @@
                     @lang('app.menu.indicatorDetials')
                 </h4>
                 <div class="row p-20">
+                    
                     <!-- Branch Field -->
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Branch &nbsp;<sup class="f-14 mr-1">*</sup></label>
                             <select class="form-control height-35 f-14" name="branch" id="branch" required>
-                                <option value="" disabled selected>Select Branch</option> 
+                                <option value="" disabled selected>Select Branch</option>
                                 @foreach($branchname as $item)
                                     <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
@@ -38,9 +39,10 @@
                     <!-- Department Field -->
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Department &nbsp;<sup class="f-14 mr-1">*</sup></label>
-                            <input type="text" class="form-control height-35 f-14" placeholder="Department" name="department" id="department" required>
-                             
+                            <label class="f-14 text-dark-grey mb-12">Department &nbsp;<sup
+                                    class="f-14 mr-1">*</sup></label>
+                            <input type="text" class="form-control height-35 f-14" placeholder="Department"
+                                name="department" id="department" required>
                             @error('department')
                                 <div class="error-message">{{ $message }}</div>
                             @enderror
@@ -50,9 +52,10 @@
                     <!-- Designation Field -->
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Designation &nbsp;<sup class="f-14 mr-1">*</sup></label>
+                            <label class="f-14 text-dark-grey mb-12">Designation &nbsp;<sup
+                                    class="f-14 mr-1">*</sup></label>
                             <select class="form-control height-35 f-14" name="designation" id="designation" required>
-                                <option value="" disabled selected>Select Designation</option> 
+                                <option value="" disabled selected>Select Designation</option>
                                 @foreach($designation as $item)
                                     <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
@@ -62,9 +65,24 @@
                             @enderror
                         </div>
                     </div>
+                    
+                        @if (session('error'))
+                        <div class="col-lg-4 col-md-6">
+                        <div class="form-group my-3">
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                        @if (session('indicator'))
+                            <a class="btn btn-primary" href="{{ route('indicator.edit', session('indicator')) }}">Edit</a>
+                        @endif
+                        </div>
+                    </div>
+                    @endif
+                        
                 </div>
- 
-                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Organizational Competencies</h4> 
+
+                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Organizational
+                    Competencies</h4>
                 <div class="p-20">
                     <!-- Leadership Field -->
                     <div class="d-flex p-20 align-items-center">
@@ -83,7 +101,7 @@
                             @enderror
                         </div>
                     </div>
-                    
+
 
                     <!-- Project Management Field -->
                     <div class="d-flex p-20 align-items-center">
@@ -102,11 +120,12 @@
                             @enderror
                         </div>
                     </div>
-                                
-                                    
+
+
                 </div>
 
-                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Technical Competencies</h4>
+                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Technical Competencies
+                </h4>
                 <div class="p-20">
                     <!-- Allocating Resources Field -->
                     <div class="d-flex p-20 align-items-center">
@@ -127,7 +146,8 @@
                     </div>
                 </div>
 
-                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Behavioural Competencies</h4>
+                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Behavioural
+                    Competencies</h4>
                 <div class="p-20">
                     <!-- Business Process Field -->
                     <div class="d-flex p-20 align-items-center">
@@ -169,6 +189,8 @@
                     <i class="fa fa-check mr-1"></i>Save
                 </button>
                 <a href="{{route('indicator.index') }}" class="btn-cancel rounded f-14 p-2">cancel</a>
+                <!-- In your create view -->
+
             </div>
         </div>
     </div>

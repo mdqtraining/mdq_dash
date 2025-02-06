@@ -19,6 +19,7 @@ class Indicator extends Model
         'allocating_resources',
         'business_process',
         'oralcommunication',
+        'rating',
+        'added_by'
     ];
-    
 }

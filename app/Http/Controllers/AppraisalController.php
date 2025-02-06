@@ -30,7 +30,7 @@ class AppraisalController extends AccountBaseController
     }
     public function appraisalCreate()
     {
-        $this->pageTitle = 'app.menu.appraisal';
+        $this->pageTitle = 'Add Appraisal';
         abort_403(!in_array('employee', user_roles()));
         $employee=User::pluck('name');
         return view('appraisal.create', array_merge($this->data, [ 'employee' => $employee]));

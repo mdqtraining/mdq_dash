@@ -117,6 +117,7 @@ use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\IndicatorController;
 use App\Http\Controllers\GoalTrackingController;
+use App\Http\Controllers\AppraisalController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OfflinePaymentSettingController;
 use App\Http\Controllers\PerformanceController;
@@ -766,7 +767,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
  
     
     Route::get('indicator', [IndicatorController::class, 'indicator'])->name('indicator.index');
-    Route::get('indicator-create', [IndicatorController::class, 'indicatorCreate'])->name('indicator.create');
+    Route::get('indicator/add', [IndicatorController::class, 'indicatorCreate'])->name('indicator.create');
     Route::get('indicator/edit/{id}', [IndicatorController::class, 'indicatorEdit'])->name('indicator.edit');
     Route::get('indicator/view/{id}', [IndicatorController::class, 'indicatorview'])->name('indicator.view');
     Route::put('indicator/update/{id}', [IndicatorController::class, 'indicatorUpdate'])->name('indicator.update');
@@ -776,12 +777,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/get-employee-indicator-data', [IndicatorController::class, 'getEmployeeIndicatorData'])->name('getEmployeeIndicatorData');
     
     Route::get('appraisal', [AppraisalController::class, 'appraisal'])->name('appraisal.index');
-    Route::get('appraisal-create', [AppraisalController::class, 'appraisalCreate'])->name('appraisal.create');
+    Route::get('appraisal/add', [AppraisalController::class, 'appraisalCreate'])->name('appraisal.create');
     Route::post('appraisal/store', [AppraisalController::class, 'appraisalstore'])->name('appraisal.store');
     
     
     Route::get('goaltracking', [GoalTrackingController::class, 'goaltracking'])->name('goaltracking.index');
-    Route::get('goaltracking-create', [GoalTrackingController::class, 'goaltrackingCreate'])->name('goaltracking.create');
+    Route::get('goaltracking/add', [GoalTrackingController::class, 'goaltrackingCreate'])->name('goaltracking.create');
+    Route::post('goaltracking/store', [GoalTrackingController::class, 'goaltrackingstore'])->name('goaltracking.store');
     Route::get('goaltracking/edit/{id}', [GoalTrackingController::class, 'goaltrackingedit'])->name('goaltracking.edit');
     Route::get('/get-employee-indicator-data', [EmployeeController::class, 'getEmployeeIndicatorData'])->name('getEmployeeIndicatorData');
 

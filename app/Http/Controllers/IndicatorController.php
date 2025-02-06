@@ -6,7 +6,10 @@ use App\Models\Indicator;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Designation;
+use App\Models\IndicatorfieldName;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class IndicatorController extends AccountBaseController
 {
@@ -42,11 +45,11 @@ class IndicatorController extends AccountBaseController
     {
         $this->pageTitle = 'app.menu.addIndicator';
         abort_403(!in_array('employee', user_roles()));
-
         $branchname = Company::pluck('company_name');
         $designation = Designation::pluck('name');
-
-        return view('indicator.create', array_merge($this->data, ['designation' => $designation, 'branchname' => $branchname]));
+        $indicatorheaders = IndicatorfieldName::pluck('name')->unique();
+        
+        return view('indicator.create', array_merge($this->data, ['designation' => $designation, 'branchname' => $branchname, 'indicatorheaders' => $indicatorheaders]));
     }
 
     public function indicatorEdit($id)
@@ -149,7 +152,12 @@ class IndicatorController extends AccountBaseController
             $request->allocating_resources +
             $request->business_process
         ) / 5;
-
+        $dataAlready = Indicator::where('branch', $request->branch)->where('department', $request->department)->where('designation', $request->designation)->first();
+    
+if($dataAlready != ""){
+    $indicator= $dataAlready->id; 
+    return redirect()->back()->with('error', 'Indicator already exists')->with('indicator', $indicator);
+}else{
         Indicator::create([
             'branch' => $request->branch,
             'department' => $request->department,
@@ -159,10 +167,13 @@ class IndicatorController extends AccountBaseController
             'allocating_resources' => $request->allocating_resources,
             'business_process' => $request->business_process,
             'oralcommunication' => $request->oralcommunication,
-            'rating' => $rating
+            'rating' => $rating,
+            'added_by' =>Auth::user()->name
+
         ]);
 
         return redirect()->route('indicator.index')->with('success', 'Indicator saved successfully');
+    }
     }
 
     public function indicatorDestroy($id)

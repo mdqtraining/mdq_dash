@@ -58,7 +58,7 @@
                                                     <a href="" class="dropdown-item">
                                                         <i class="fa fa-eye mr-2"></i> View
                                                     </a>
-                                                    <a class="dropdown-item openRightModal" href="{{route('appraisal.edit', $appraisal->id)}}">
+                                                    <a class="dropdown-item openRightModal" href="">
                                                         <i class="fa fa-edit mr-2"></i> Edit
                                                     </a>
                                                     <a class="dropdown-item delete-table-row" href="javascript:;">
