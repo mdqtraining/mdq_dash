@@ -23,304 +23,144 @@
                     <!-- Branch Field -->
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Branch &nbsp;<sup class="f-14 mr-1">*</sup></label>
+                            <label class="f-14 text-dark-grey mb-12">Branch <sup class="f-14 mr-1">*</sup></label>
                             <select class="form-control height-35 f-14" name="branch" id="branch" required>
                                 <option value="" disabled selected>Select Branch</option>
                                 @foreach($branchname as $item)
                                     <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
                             </select>
-                            @error('branch.required')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
                         </div>
                     </div>
 
                     <!-- Department Field -->
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Department &nbsp;<sup
-                                    class="f-14 mr-1">*</sup></label>
-                            <input type="text" class="form-control height-35 f-14" placeholder="Department"
-                                name="department" id="department" required>
-                            @error('department')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
+                            <label class="f-14 text-dark-grey mb-12">Department <sup class="f-14 mr-1">*</sup></label>
+                            <input type="text" class="form-control height-35 f-14" name="department" id="department" fieldname="department" required>
                         </div>
                     </div>
 
                     <!-- Designation Field -->
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Designation &nbsp;<sup
-                                    class="f-14 mr-1">*</sup></label>
+                            <label class="f-14 text-dark-grey mb-12">Designation <sup class="f-14 mr-1">*</sup></label>
                             <select class="form-control height-35 f-14" name="designation" id="designation" required>
                                 <option value="" disabled selected>Select Designation</option>
                                 @foreach($designation as $item)
                                     <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
                             </select>
-                            @error('designation')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
                         </div>
                     </div>
                     
-                        @if (session('error'))
-                        <div class="col-lg-4 col-md-6">
+                    @if (session('error'))
+                    <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                        @if (session('indicator'))
-                            <a class="btn btn-primary" href="{{ route('indicator.edit', session('indicator')) }}">Edit</a>
-                        @endif
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                            @if (session('indicator'))
+                                <a class="btn btn-primary" href="{{ route('indicator.edit', session('indicator')) }}">Edit</a>
+                            @endif
                         </div>
                     </div>
                     @endif
                         
                 </div>
 
-                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Organizational
-                    Competencies</h4>
-                <div class="p-20">
-                    <!-- Leadership Field -->
-                    <div class="d-flex p-20 align-items-center">
-                        <div class="col-6 text-dark-grey">Leadership</div>
-                        <div class="f-21 col-6">
-                            <div class="rating" data-rating="0">
-                                <span data-value="1">&#9733;</span>
-                                <span data-value="2">&#9733;</span>
-                                <span data-value="3">&#9733;</span>
-                                <span data-value="4">&#9733;</span>
-                                <span data-value="5">&#9733;</span>
+                @foreach ($indicatorheaders as $category => $fields)
+                    <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">{{ $category }}</h4>        
+                    <div class="p-20">
+                        @foreach ($fields as $field)
+                            <div class="d-flex p-20 align-items-center">
+                                <div class="col-6 text-dark-grey">{{ $field->field_name }}</div>
+                                <div class="f-21 col-6">
+                                    <div class="rating" data-rating="0">
+                                        <span data-value="1">&#9733;</span>
+                                        <span data-value="2">&#9733;</span>
+                                        <span data-value="3">&#9733;</span>
+                                        <span data-value="4">&#9733;</span>
+                                        <span data-value="5">&#9733;</span>
+                                    </div>
+                                    <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" required>
+                                </div>
                             </div>
-                            <input type="hidden" name="leadership" id="leadership" required>
-                            @error('leadership')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        @endforeach
                     </div>
+                @endforeach
 
-
-                    <!-- Project Management Field -->
-                    <div class="d-flex p-20 align-items-center">
-                        <div class="col-6 text-dark-grey">Project Management</div>
-                        <div class="f-21 col-6">
-                            <div class="rating" data-rating="0">
-                                <span data-value="1">&#9733;</span>
-                                <span data-value="2">&#9733;</span>
-                                <span data-value="3">&#9733;</span>
-                                <span data-value="4">&#9733;</span>
-                                <span data-value="5">&#9733;</span>
-                            </div>
-                            <input type="hidden" name="project_management" id="project_management" required>
-                            @error('project_management')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Technical Competencies
-                </h4>
-                <div class="p-20">
-                    <!-- Allocating Resources Field -->
-                    <div class="d-flex p-20 align-items-center">
-                        <div class="col-6 text-dark-grey">Allocating Resources</div>
-                        <div class="f-21 col-6">
-                            <div class="rating" data-rating="0">
-                                <span data-value="1">&#9733;</span>
-                                <span data-value="2">&#9733;</span>
-                                <span data-value="3">&#9733;</span>
-                                <span data-value="4">&#9733;</span>
-                                <span data-value="5">&#9733;</span>
-                            </div>
-                            <input type="hidden" name="allocating_resources" id="allocating_resources" required>
-                            @error('allocating_resources')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Behavioural
-                    Competencies</h4>
-                <div class="p-20">
-                    <!-- Business Process Field -->
-                    <div class="d-flex p-20 align-items-center">
-                        <div class="col-6 text-dark-grey">Business Process</div>
-                        <div class="f-21 col-6">
-                            <div class="rating" data-rating="0">
-                                <span data-value="1">&#9733;</span>
-                                <span data-value="2">&#9733;</span>
-                                <span data-value="3">&#9733;</span>
-                                <span data-value="4">&#9733;</span>
-                                <span data-value="5">&#9733;</span>
-                            </div>
-                            <input type="hidden" name="business_process" id="business_process" required>
-                            @error('business_process')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Oral Communication Field -->
-                    <div class="d-flex p-20 align-items-center">
-                        <div class="col-6 text-dark-grey">Oral Communication</div>
-                        <div class="f-21 col-6">
-                            <div class="rating" data-rating="0">
-                                <span data-value="1">&#9733;</span>
-                                <span data-value="2">&#9733;</span>
-                                <span data-value="3">&#9733;</span>
-                                <span data-value="4">&#9733;</span>
-                                <span data-value="5">&#9733;</span>
-                            </div>
-                            <input type="hidden" name="oralcommunication" id="oralcommunication" required>
-                            @error('oralcommunication')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
                 <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
                     <i class="fa fa-check mr-1"></i>Save
                 </button>
-                <a href="{{route('indicator.index') }}" class="btn-cancel rounded f-14 p-2">cancel</a>
-                <!-- In your create view -->
-
+                <a href="{{ route('indicator.index') }}" class="btn-cancel rounded f-14 p-2">Cancel</a>
             </div>
         </div>
     </div>
 </form>
 @endsection
 
-<!-- Custom Styles and Scripts -->
-<style>
-    .error-message {
-        background-color: #ff3a6e;
-        color: white;
-        padding: 10px;
-        border-radius: 5px;
-        position: relative;
-        margin-top: 10px;
-        max-width: 50%;
-        transform: translateX(100%);
-        animation: slideIn 0.5s forwards, disappear .5s 3.5s forwards;
-    }
-
-    @keyframes slideIn {
-        to {
-            transform: translateX(0);
-        }
-    }
-
-    @keyframes disappear {
-        to {
-            opacity: 0;
-            transform: translateX(100%);
-        }
-    }
-
-    .rating span {
-        font-size: 24px;
-        cursor: pointer;
-        color: #ccc;
-        transition: color 0.3s;
-    }
-
-    .rating {
-        cursor: pointer;
-    }
-
-    .rating span.selected {
-        color: #ffd700;
-    }
-</style>
-
+@push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Prevent special characters in text fields
         document.querySelectorAll("input[type='text']").forEach((input) => {
             input.addEventListener("keypress", function (e) {
-                let regex = /^[a-zA-Z0-9\s]$/; // Allow only letters, numbers, and spaces
+                let regex = /^[a-zA-Z0-9\s]+$/; // Allow only letters, numbers, and spaces
                 let key = String.fromCharCode(e.keyCode || e.which);
-
                 if (!regex.test(key)) {
-                    e.preventDefault(); // Block the key press
+                    e.preventDefault();
                 }
             });
         });
 
         // Star rating functionality
-        const ratingContainers = document.querySelectorAll(".rating");
-
-        ratingContainers.forEach((ratingContainer) => {
+        document.querySelectorAll(".rating").forEach(ratingContainer => {
             const stars = ratingContainer.querySelectorAll("span");
             const hiddenInput = ratingContainer.nextElementSibling;
 
-            stars.forEach((star) => {
+            stars.forEach(star => {
                 star.addEventListener("click", function () {
                     const value = this.getAttribute("data-value");
                     ratingContainer.setAttribute("data-rating", value);
                     hiddenInput.value = value;
-                    stars.forEach((s) => {
-                        s.classList.toggle("selected", s.getAttribute("data-value") <= value);
-                    });
+                    stars.forEach(s => s.classList.toggle("selected", s.getAttribute("data-value") <= value));
                 });
 
                 star.addEventListener("mouseover", function () {
                     const value = this.getAttribute("data-value");
-                    stars.forEach((s) => {
-                        s.classList.toggle("selected", s.getAttribute("data-value") <= value);
-                    });
+                    stars.forEach(s => s.classList.toggle("selected", s.getAttribute("data-value") <= value));
                 });
 
                 star.addEventListener("mouseout", function () {
                     const currentRating = ratingContainer.getAttribute("data-rating");
-                    stars.forEach((s) => {
-                        s.classList.toggle("selected", s.getAttribute("data-value") <= currentRating);
-                    });
+                    stars.forEach(s => s.classList.toggle("selected", s.getAttribute("data-value") <= currentRating));
                 });
             });
         });
 
-        // Error message fade out
-        const errorMessages = document.querySelectorAll('.error-message');
-        errorMessages.forEach((errorMessage) => {
-            setTimeout(() => {
-                errorMessage.style.opacity = '0';
-                errorMessage.style.transform = 'translateX(100%)';
-            }, 3000); // Remove error messages after 3 seconds
-        });
-
-        // 💡 Live validation for required fields
+        // Live validation
         function showValidationMessage(field, message) {
-            let errorDiv = field.nextElementSibling; // Find the existing error div
+            let errorDiv = field.nextElementSibling;
             if (!errorDiv || !errorDiv.classList.contains("error-message")) {
                 errorDiv = document.createElement("div");
                 errorDiv.classList.add("error-message");
                 field.parentNode.appendChild(errorDiv);
             }
             errorDiv.textContent = message;
-            errorDiv.style.opacity = "1";
-            errorDiv.style.transform = "translateX(0)";
         }
 
         function removeValidationMessage(field) {
             let errorDiv = field.nextElementSibling;
             if (errorDiv && errorDiv.classList.contains("error-message")) {
-                errorDiv.style.opacity = "0";
-                setTimeout(() => errorDiv.remove(), 500);
+                errorDiv.remove();
             }
         }
 
         document.querySelector("#indicatorForm").addEventListener("submit", function (event) {
             let isValid = true;
-            // Check required fields (including text, select, and rating inputs)
-            document.querySelectorAll("input[required], select[required], input[type='hidden'][required]").forEach((field) => {
+
+            document.querySelectorAll("input[required], select[required]").forEach(field => {
                 if (!field.value.trim()) {
                     showValidationMessage(field, "This field is required");
                     isValid = false;
@@ -330,8 +170,32 @@
             });
 
             if (!isValid) {
-                event.preventDefault(); // Stop form submission
+                event.preventDefault();
             }
         });
     });
 </script>
+@endpush
+
+<style>
+    .error-message {
+        background-color: #ff3a6e;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        max-width: 50%;
+        opacity: 1;
+        transition: opacity 0.5s;
+    }
+
+    .rating span {
+        font-size: 24px;
+        cursor: pointer;
+        color: #ccc;
+    }
+
+    .rating span.selected {
+        color: #ffd700;
+    }
+</style>

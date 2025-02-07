@@ -14,11 +14,7 @@ class Indicator extends Model
         'branch',
         'department',
         'designation',
-        'leadership',
-        'project_management',
-        'allocating_resources',
-        'business_process',
-        'oralcommunication',
+        'field_ratings',
         'rating',
         'added_by'
     ];

@@ -1,4 +1,6 @@
+<header><meta name="csrf-token" content="{{ csrf_token() }}"></header>
 @extends('layouts.app')
+
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('vendor/full-calendar/main.min.css') }}">
@@ -21,13 +23,14 @@
                 </h4>
                 <div class="row p-20">
                     <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
+                    <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Branch <sup class="f-14 mr-1">*</sup></label>
-                            <input type="text" class="form-control height-35 f-14" placeholder="Branch" name="branch"
-                                id="branch" required>
-                            @error('branch')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
+                            <select class="form-control height-35 f-14" name="branch" id="branch" required>
+                                <option value="" disabled selected>Select Branch</option>
+                                @foreach($branchname as $item)
+                                    <option value="{{ $item }}">{{ $item }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
@@ -58,93 +61,36 @@
                             placeholder="Enter your remarks here..." rows="1" oninput="autoResize(this)"></textarea>
                     </div>
                 </div>
-                <div id="employee-details" style="display:none;">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Branch <sup class="f-14 mr-1">*</sup></label>
-                            <input type="text" class="form-control height-35 f-14" placeholder="Branch" name="branch"
-                                id="branch" required>
-                            @error('branch')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Branch <sup class="f-14 mr-1">*</sup></label>
-                            <input type="text" class="form-control height-35 f-14" placeholder="Branch" name="branch"
-                                id="branch" required>
-                            @error('branch')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Branch <sup class="f-14 mr-1">*</sup></label>
-                            <input type="text" class="form-control height-35 f-14" placeholder="Branch" name="branch"
-                                id="branch" required>
-                            @error('branch')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                    <script>
-                        $(document).ready(function () {
-                            $('#employee').on('change', function () {
-                                var employeeId = $(this).val(); // Get selected employee ID
+                @foreach ($indicatorheaders as $category => $fields)
+                    <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">{{ $category }}</h4>
+                    <div class="p-20">
+                        @foreach ($fields as $field)
+                            <div class="d-flex p-20 align-items-center">
+                                <div class="col-lg-4 col-md-6 text-dark-grey" >{{ $field->field_name }}</div>
 
-                                if (employeeId) {
-                                    $.ajax({
-                                        url: '{{ route("getEmployeeIndicatorData") }}', // Route to fetch employee details and indicator data
-                                        type: 'GET',
-                                        data: { id: employeeId },
-                                        success: function (response) {
-                                            if (response.error) {
-                                                alert(response.error);
-                                                return;
-                                            }
-
-                                            // Display employee details and indicators below
-                                            $('#employee-details').html(`
-                            <div class="card p-3 mt-3">
-                                <h5>Employee Details</h5>
-                                <p><strong>Name:</strong> ${response.name}</p>
-                                <p><strong>Email:</strong> ${response.email}</p>
-                                <p><strong>Role:</strong> ${response.role}</p>
-
-                                <h6>Indicator Data:</h6>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Indicator Name</th>
-                                            <th>Value</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${response.indicators.map(indicator => `
-                                            <tr>
-                                                <td>${indicator.name}</td>
-                                                <td>${indicator.value}</td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
+                                <div class="f-21 col-6">
+                                <div class="d-flex" style="justify-content: space-between;">
+                                  <div class="rating rating-field" id="{{ $field->field_name }}" data-rating="0">
+                                        <span data-value="1">&#9733;</span>
+                                        <span data-value="2">&#9733;</span>
+                                        <span data-value="3">&#9733;</span>
+                                        <span data-value="4">&#9733;</span>
+                                        <span data-value="5">&#9733;</span>
+                                    </div>
+                                    <div class="rating_appraisal"  data-rating="0">
+                                        <span data-value="1">&#9733;</span>
+                                        <span data-value="2">&#9733;</span>
+                                        <span data-value="3">&#9733;</span>
+                                        <span data-value="4">&#9733;</span>
+                                        <span data-value="5">&#9733;</span>
+                                    </div>
+                                    <!-- <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" required> -->
+                                    </div>
+                                </div>
                             </div>
-                        `);
-                                            $('#employee-details').show();
-                                        },
-                                        error: function (error) {
-                                            console.error('Error fetching data:', error);
-                                        }
-                                    });
-                                } else {
-                                    $('#employee-details').hide();
-                                }
-                            });
-                        });
-                    </script>
-                </div>
+                        @endforeach
+                    </div>
+                @endforeach
                 <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
                     <i class="fa fa-check mr-1"></i>Save
                 </button>
@@ -158,34 +104,208 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        $(document).ready(function () {
-            flatpickr("#monthYearPicker", {
-                enableTime: false,
-                dateFormat: "m/Y",
-                minDate: "today",
-                mode: "single",
-                monthSelectorType: "static",
-                onChange: function (selectedDates) {
-                    let date = selectedDates[0];
-                    let month = ("0" + (date.getMonth() + 1)).slice(-2);
-                    let year = date.getFullYear();
-                    let formattedDate = `${month}/${year}`;
-                    document.getElementById("monthYearPicker").value = formattedDate;
-                }
-            });
+    var designation = "{{ route('getDesignation') }}";
+</script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let branchElement = document.getElementById("branch");
+    let employeeElement = document.getElementById("employee");
+
+    async function getDesignation() {
+    try {
+        if (typeof designation !== "string" || !designation.trim()) {
+            console.error("Error: 'designation' variable is not defined or is not a valid URL.");
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        if (!csrfToken) {
+            console.error("Error: CSRF token not found.");
+            return;
+        }
+
+        const branchValue = branchElement?.value?.trim() || "";
+        const employeeValue = employeeElement?.value?.trim() || "";
+
+        if (!branchValue || !employeeValue) {
+            console.warn("Warning: Branch or Employee is missing. Skipping API call.");
+            return;
+        }
+
+        const response = await fetch(designation, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({ branch: branchValue, employee: employeeValue })
         });
 
-        function autoResize(textarea) {
-            textarea.style.height = "auto";
-            textarea.style.height = textarea.scrollHeight + "px";
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}. Server response: ${errorText}`);
         }
+
+        const data = await response.json();
+
+        if (!data.designation || !Array.isArray(data.designation) || data.designation.length === 0) {
+            console.warn("No valid designation data found in response.");
+            return;
+        }
+
+        const designationData = data.designation[0];
+
+        if (designationData.field_ratings) {
+            try {
+                const fieldRatings = JSON.parse(designationData.field_ratings);
+
+                console.log("Field Ratings:", fieldRatings);
+
+                // Loop through all elements and assign data-rating
+                document.querySelectorAll(".rating-field").forEach(field => {
+                    let fieldName = field.id; // Get field name from ID
+
+                    if (fieldRatings.hasOwnProperty(fieldName)) {
+                        field.setAttribute("data-rating", fieldRatings[fieldName]);
+                    } else {
+                        console.warn(`No rating found for ${fieldName}`);
+                    }
+                });
+
+            } catch (parseError) {
+                console.error("Error parsing field_ratings JSON:", parseError);
+            }
+        } else {
+            console.warn("No field_ratings data available.");
+        }
+
+    } catch (error) {
+        console.error("Error fetching designation:", error);
+    }
+}
+
+
+    function fetchDesignations() {
+        if (branchElement?.value && employeeElement?.value) {
+            getDesignation();
+        } else {
+            console.error("Branch or Employee is missing or empty.");
+        }
+    }
+
+    if (branchElement && employeeElement) {
+        branchElement.addEventListener("change", fetchDesignations);
+        employeeElement.addEventListener("change", fetchDesignations);
+    } else {
+        console.error("Branch or Employee element not found.");
+    }
+    if (typeof fieldRatings !== "undefined") {
+        document.querySelectorAll(".rating").forEach((element) => {
+            const fieldName = element.getAttribute("data-field");
+
+            if (fieldRatings[fieldName] !== undefined) {
+                const ratingValue = fieldRatings[fieldName]; // Get rating from JSON
+                element.setAttribute("data-rating", ratingValue);
+
+                // Highlight the correct number of stars
+                highlightStars(element, ratingValue);
+            }
+        });
+    }
+});
+ 
     </script>
+<script>document.addEventListener("DOMContentLoaded", function () {
+    function setupRatings(selector, interactive) {
+        document.querySelectorAll(selector).forEach((ratingContainer) => {
+            const stars = ratingContainer.querySelectorAll("span");
+            const hiddenInput = ratingContainer.nextElementSibling; // Get the next input field
+
+            function updateStars(value) {
+                stars.forEach((s) => {
+                    s.classList.toggle("selected", s.getAttribute("data-value") <= value);
+                });
+            }
+
+            // Set initial state
+            const currentRating = ratingContainer.getAttribute("data-rating") || 0;
+            updateStars(currentRating);
+            if (hiddenInput) hiddenInput.value = currentRating;
+
+            if (interactive) {
+                stars.forEach((star) => {
+                    star.addEventListener("click", function () {
+                        const value = this.getAttribute("data-value");
+                        ratingContainer.setAttribute("data-rating", value);
+                        if (hiddenInput) hiddenInput.value = value;
+                        updateStars(value);
+                    });
+
+                    star.addEventListener("mouseover", function () {
+                        updateStars(this.getAttribute("data-value"));
+                    });
+
+                    star.addEventListener("mouseout", function () {
+                        updateStars(ratingContainer.getAttribute("data-rating"));
+                    });
+                });
+            }
+        });
+    }
+
+    // Apply static ratings (read-only display)
+    setupRatings(".rating", false);
+
+    // Apply interactive ratings (clickable & hover effects)
+    setupRatings(".rating_appraisal", true);
+});
+</script>
+
 @endpush
 
 @push('styles')
     <style>
-        #remarkInput {
-            border: 1px solid #ced4da;
+    .error-message {
+        background-color: #ff3a6e;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        position: relative;
+        margin-top: 10px;
+        max-width: 50%;
+        transform: translateX(100%);
+        animation: slideIn 0.5s forwards, disappear .5s 3.5s forwards;
+    }
+
+    @keyframes slideIn {
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes disappear {
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+
+    .rating span ,.rating_appraisal span {
+        font-size: 24px;
+        cursor: pointer;
+        color: #ccc;
+        transition: color 0.3s;
+    }
+
+    .rating,.rating_appraisal {
+        cursor: pointer;
+    }
+
+    .rating span.selected ,.rating_appraisal span.selected {
+        color: #ffd700;
+    }
+    #remarkInput {
+        border: 1px solid #ced4da;
             border-radius: 5px;
             padding: 10px;
             color: #000;

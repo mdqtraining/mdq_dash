@@ -24,9 +24,9 @@
                                 <td>{{ $goaltrackings->goal_type }}</td>
                                 <td>{{ $goaltrackings->subject }}</td>
                                 <td>{{ $goaltrackings->branch }}</td>
-                                <td>{{ $goaltrackings->target_achievement }}</td>
-                                <td>{{ $goaltrackings->start_date }}</td>
-                                <td>{{ $goaltrackings->end_date }}</td>
+                                <td>{{ $goaltrackings->target }}</td>
+                                <td>{{ \Carbon\Carbon::parse($goaltrackings->start_date)->format('d-m-Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($goaltrackings->end_date)->format('d-m-Y') }}</td>
                                 <td>
                                     <div class="star-rating" data-rating="{{ $goaltrackings->rating }}">
                                         @for ($i = 1; $i <= 5; $i++)
@@ -70,10 +70,11 @@
                                                 <a href="" class="dropdown-item">
                                                     <i class="fa fa-eye mr-2"></i> View
                                                 </a>
-                                                <a class="dropdown-item openRightModal" href="{{ route('goaltracking.edit', $goaltrackings->id) }}">
+                                                <a class="dropdown-item" href="{{ route('goaltracking.edit', $goaltrackings->id) }}">
                                                 <i class="fa fa-edit mr-2"></i> Edit
                                                 </a>
-                                                <a class="dropdown-item delete-table-row" href="{{ route('projects.destroy', $goaltrackings->id) }}" 
+                                                
+                                                <a class="dropdown-item delete-table-row" href="{{ route('goaltracking.destroy', $goaltrackings->id) }}" 
                                                    data-user-id="{{ $goaltrackings->id }}">
                                                     <i class="fa fa-trash mr-2"></i> Delete
                                                 </a>

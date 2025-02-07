@@ -6,6 +6,7 @@ use App\Models\Indicator;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Designation;
+use Illuminate\Support\Str;
 use App\Models\IndicatorfieldName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,12 +46,26 @@ class IndicatorController extends AccountBaseController
     {
         $this->pageTitle = 'app.menu.addIndicator';
         abort_403(!in_array('employee', user_roles()));
+    
+        // Fetch branch names
         $branchname = Company::pluck('company_name');
+    
+        // Fetch designations
         $designation = Designation::pluck('name');
-        $indicatorheaders = IndicatorfieldName::pluck('name')->unique();
-        
-        return view('indicator.create', array_merge($this->data, ['designation' => $designation, 'branchname' => $branchname, 'indicatorheaders' => $indicatorheaders]));
+    
+        // Fetch indicator headers grouped by category (name)
+        $indicatorheaders = IndicatorfieldName::select('name', 'field_name')
+            ->distinct()
+            ->get()
+            ->groupBy('name');
+    
+        return view('indicator.create', array_merge($this->data, [
+            'designation' => $designation,
+            'branchname' => $branchname,
+            'indicatorheaders' => $indicatorheaders
+        ]));
     }
+    
 
     public function indicatorEdit($id)
     {
@@ -59,10 +74,16 @@ class IndicatorController extends AccountBaseController
 
         $indicators = Indicator::findOrFail($id);
         $designations = Designation::pluck('name');
-
+        $branchname = Company::pluck('company_name');
+        $indicatorheaders = IndicatorfieldName::select('name', 'field_name')
+            ->distinct()
+            ->get()
+            ->groupBy('name');
         return view('indicator.edit', array_merge($this->data, [
             'indicators' => $indicators,
             'designations' => $designations
+            , 'branchname' => $branchname
+            , 'indicatorheaders' => $indicatorheaders
         ]));
     }
 
@@ -70,111 +91,130 @@ class IndicatorController extends AccountBaseController
     {
         $this->pageTitle = 'View Indicator';
         abort_403(!in_array('employee', user_roles()));
-
         $indicators = Indicator::findOrFail($id);
-
-        return view('indicator.view', array_merge($this->data, ['indicators' => $indicators]));
+        $indicatorheaders = IndicatorfieldName::select('name', 'field_name')
+            ->distinct()
+            ->get()
+            ->groupBy('name');
+        return view('indicator.view', array_merge($this->data, ['indicators' => $indicators,
+            'indicatorheaders' => $indicatorheaders]));
     }
 
+    
     public function indicatorUpdate(Request $request, $id)
-    {
-        $request->validate([
-            'branch' => 'required|string|max:255',
-            'department' => 'required|string|max:255',
-            'designation' => 'required|string|max:255',
-            'leadership' => 'required|numeric|min:1|max:5',
-            'project_management' => 'required|numeric|min:1|max:5',
-            'allocating_resources' => 'required|numeric|min:1|max:5',
-            'business_process' => 'required|numeric|min:1|max:5',
-            'oralcommunication' => 'required|numeric|min:1|max:5',
-        ], [
-            'branch.required' => 'Please enter the branch.',
-            'department.required' => 'Please enter the department.',
-            'designation.required' => 'Please enter the designation.',
-            'leadership.required' => 'Leadership score is required.',
-            'project_management.required' => 'Project Management score is required.',
-            'allocating_resources.required' => 'Allocating Resources score is required.',
-            'business_process.required' => 'Business Process score is required.',
-            'oralcommunication.required' => 'Oral Communication score is required.',
-        ]);
+{
+    // Validate incoming request
+    $request->validate([
+        'branch' => 'required|string|max:255',
+        'department' => 'required|string|max:255',
+        'designation' => 'required|string|max:255',
+    ]);
 
-        $indicator = Indicator::findOrFail($id);
+    // Fetch field names dynamically from IndicatorfieldName table
+    $fieldNames = IndicatorfieldName::select('field_name')->distinct()->pluck('field_name');
 
-        $rating = (
-            $request->oralcommunication +
-            $request->leadership +
-            $request->project_management +
-            $request->allocating_resources +
-            $request->business_process
-        ) / 5;
+    // Prepare the ratings array from the submitted form
+    $ratings = [];
 
-        $indicator->update([
-            'branch' => $request->branch,
-            'department' => $request->department,
-            'designation' => $request->designation,
-            'leadership' => $request->leadership,
-            'project_management' => $request->project_management,
-            'allocating_resources' => $request->allocating_resources,
-            'business_process' => $request->business_process,
-            'oralcommunication' => $request->oralcommunication,
-            'rating' => $rating
-        ]);
-
-        return redirect()->route('indicator.index')->with('success', 'Indicator updated successfully!');
+    // Generate custom validation rules for the ratings
+    $validationRules = [];
+    foreach ($fieldNames as $fieldName) {
+        $fieldSlug = Str::slug($fieldName, '_');
+        // Add validation rule for each rating field
+        $validationRules['ratings.' . $fieldSlug] = 'required|numeric|min:1|max:5';
+        
+        // Fetch the rating value from the form using the slug of field_name as the key
+        $ratings[$fieldName] = $request->input('ratings.' . $fieldSlug);
     }
+
+    // Validate the ratings array dynamically
+    $request->validate($validationRules);
+
+    // Calculate the average rating if needed
+    $rating = array_sum($ratings) / count($ratings);
+
+    // Find the indicator entry by its ID
+    $indicator = Indicator::find($id);
+
+    if (!$indicator) {
+        // If the indicator doesn't exist, redirect back with an error
+        return redirect()->back()->with('error', 'Indicator not found');
+    }
+
+    // Update the indicator with new data
+    $indicator->update([
+        'branch' => $request->branch,
+        'department' => $request->department,
+        'designation' => $request->designation,
+        'field_names' => json_encode($fieldNames->toArray()), // Store field names as JSON
+        'field_ratings' => json_encode($ratings), // Store ratings as JSON
+        'rating' => $rating, // Store the average rating if you need it
+        'updated_by' => Auth::user()->name, // Store who updated the record
+    ]);
+
+    // Redirect to the indicator list page with a success message
+    return redirect()->route('indicator.index')->with('success', 'Indicator updated successfully');
+}
 
     public function indicatorStore(Request $request)
-    {
-        $request->validate([
-            'branch' => 'required|string|max:255',
-            'department' => 'required|string|max:255',
-            'designation' => 'required|string|max:255',
-            'leadership' => 'required|numeric|min:1|max:5',
-            'project_management' => 'required|numeric|min:1|max:5',
-            'allocating_resources' => 'required|numeric|min:1|max:5',
-            'business_process' => 'required|numeric|min:1|max:5',
-            'oralcommunication' => 'required|numeric|min:1|max:5',
-        ], [
-            'branch.required' => 'Please enter the branch.',
-            'department.required' => 'Please enter the department.',
-            'designation.required' => 'Please enter the designation.',
-            'leadership.required' => 'Leadership score is required.',
-            'project_management.required' => 'Project Management score is required.',
-            'allocating_resources.required' => 'Allocating Resources score is required.',
-            'business_process.required' => 'Business Process score is required.',
-            'oralcommunication.required' => 'Oral Communication score is required.',
-        ]);
+{
+    // Validate incoming request
+    $request->validate([
+        'branch' => 'required|string|max:255',
+        'department' => 'required|string|max:255',
+        'designation' => 'required|string|max:255',
+    ]);
 
-        $rating = (
-            $request->oralcommunication +
-            $request->leadership +
-            $request->project_management +
-            $request->allocating_resources +
-            $request->business_process
-        ) / 5;
-        $dataAlready = Indicator::where('branch', $request->branch)->where('department', $request->department)->where('designation', $request->designation)->first();
+    // Fetch field names dynamically from IndicatorfieldName table
+    $fieldNames = IndicatorfieldName::select('field_name')->distinct()->pluck('field_name');
+
+    // Prepare the ratings array from the submitted form
+    $ratings = [];
     
-if($dataAlready != ""){
-    $indicator= $dataAlready->id; 
-    return redirect()->back()->with('error', 'Indicator already exists')->with('indicator', $indicator);
-}else{
+    // Generate custom validation rules for the ratings
+    $validationRules = [];
+    foreach ($fieldNames as $fieldName) {
+        $fieldSlug = Str::slug($fieldName, '_');
+        // Add validation rule for each rating field
+        $validationRules['ratings.' . $fieldSlug] = 'required|numeric|min:1|max:5';
+        
+        // Fetch the rating value from the form using the slug of field_name as the key
+        $ratings[$fieldName] = $request->input('ratings.' . $fieldSlug);
+    }
+
+    // Validate the ratings array dynamically
+    $request->validate($validationRules);
+
+    // Calculate the average rating if needed
+    $rating = array_sum($ratings) / count($ratings);
+
+
+    // Check if the data already exists in the database
+    $dataAlready = Indicator::where('branch', $request->branch)
+                            ->where('department', $request->department)
+                            ->where('designation', $request->designation)
+                            ->first();
+
+    if ($dataAlready) {
+        // If data exists, redirect with an error
+        $indicator = $dataAlready->id;
+        return redirect()->back()->with('error', 'Indicator already exists')->with('indicator', $indicator);
+    } else {
+        // Save new indicator along with ratings as JSON arrays
         Indicator::create([
             'branch' => $request->branch,
             'department' => $request->department,
             'designation' => $request->designation,
-            'leadership' => $request->leadership,
-            'project_management' => $request->project_management,
-            'allocating_resources' => $request->allocating_resources,
-            'business_process' => $request->business_process,
-            'oralcommunication' => $request->oralcommunication,
-            'rating' => $rating,
-            'added_by' =>Auth::user()->name
-
+            'field_names' => json_encode($fieldNames->toArray()), // Store field names as JSON
+            'field_ratings' => json_encode($ratings), // Store ratings as JSON
+            'rating' => $rating, // Store the average rating if you need it
+            'added_by' => Auth::user()->name,
         ]);
 
         return redirect()->route('indicator.index')->with('success', 'Indicator saved successfully');
     }
-    }
+}
+
 
     public function indicatorDestroy($id)
     {

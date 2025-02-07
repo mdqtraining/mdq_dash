@@ -17,7 +17,7 @@
         <div class="add-page">
             <div class="p-20">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
-                    @lang('app.menu.indicatorDetials')
+                    Goal Tracking Detials
                 </h4>
                 <div class="row p-20">
                     <div class="col-md-12 col-lg-6">
@@ -52,22 +52,19 @@
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-6">
-                        <div class="form-group my-3">
-                            <label for="startDatePicker" class="f-14 text-dark-grey mb-12">Start Date <sup
-                                    class="f-14 mr-1">*</sup></label>
-                            <input type="text" id="startDatePicker" name="date"
-                                class="form-control height-35 f-14 bg-white" placeholder="Select Date" required>
-                        </div>
-                    </div>
+    <div class="form-group my-3">
+        <label for="startDatePicker" class="f-14 text-dark-grey mb-12">Start Date <sup class="f-14 mr-1">*</sup></label>
+        <input type="text" id="startDatePicker" name="start_date" class="form-control height-35 f-14 bg-white" placeholder="Select Date" required>
+    </div>
+</div>
 
-                    <div class="col-md-12 col-lg-6">
-                        <div class="form-group my-3">
-                            <label for="endDatePicker" class="f-14 text-dark-grey mb-12">End Date <sup
-                                    class="f-14 mr-1">*</sup></label>
-                            <input type="text" id="endDatePicker" name="date"
-                                class="form-control height-35 f-14 bg-white" placeholder="Select Date" required>
-                        </div>
-                    </div>
+<div class="col-md-12 col-lg-6">
+    <div class="form-group my-3">
+        <label for="endDatePicker" class="f-14 text-dark-grey mb-12">End Date <sup class="f-14 mr-1">*</sup></label>
+        <input type="text" id="endDatePicker" name="end_date" class="form-control height-35 f-14 bg-white" placeholder="Select Date" required>
+    </div>
+</div>
+
 
 
                     <div class="col-md-12 col-lg-6">
@@ -91,14 +88,15 @@
                             <label for="endDatePicker" class="f-14 text-dark-grey mb-12">Description</label>
                             <textarea id="description" name="description" class="form-control height-35 f-14 bg-white"
                                 placeholder="Enter your Description here..." rows="1" oninput="autoResize(this)"
-                                pattern="[A-Za-z0-9\s-]+"></textarea>
+                            ></textarea>
                         </div>
                     </div>
-                    <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
+                    
+                </div>
+                <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
                         <i class="fa fa-check mr-1"></i>Save
                     </button>
                     <a href="{{route('goaltracking.index') }}" class="btn-cancel rounded f-14 p-2">cancel</a>
-                </div>
             </div>
         </div>
     </form>
@@ -115,13 +113,15 @@
                 event.preventDefault();
             }
         }
+
         function restrictNumberInput(event) {
             const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
             if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
                 event.preventDefault();
             }
         }
-        // Restrict date input to only numbers and hyphen (-)
+
+        // Restrict manual input for date fields
         function restrictDateInput(event) {
             const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
             if (!/^[0-9-]$/.test(event.key) && !allowedKeys.includes(event.key)) {
@@ -140,6 +140,7 @@
                 });
             }
         });
+
         let targetField = document.getElementById("target");
         if (targetField) {
             targetField.addEventListener("keydown", restrictNumberInput);
@@ -147,6 +148,7 @@
                 this.value = this.value.replace(/[^0-9]/g, ""); // Allow only numbers (remove spaces)
             });
         }
+
         // Restrict manual input for date fields
         let dateFields = ["startDatePicker", "endDatePicker"];
         dateFields.forEach(function (id) {
@@ -159,47 +161,37 @@
             }
         });
 
-        flatpickr("#startDatePicker", {
-            dateFormat: "d-m-Y",
+        // Initialize Flatpickr for start date
+        let startDatePicker = flatpickr("#startDatePicker", {
+            dateFormat: "Y-m-d",
             allowInput: true,
             disableMobile: true,
             onChange: function (selectedDates, dateStr, instance) {
-                const startDate = selectedDates[0];
-                const endDate = document.getElementById("endDatePicker").value;
-                if (endDate) {
-                    const end = flatpickr.parseDate(endDate, "d-m-Y");
-                    if (end && startDate > end) {
-                        alert("Start date must be before or on the end date.");
-                        instance.setDate(endDate, true); // Reset start date
-                    }
-                }
+                // Update end date's minDate whenever start date changes
+                endDatePicker.set('minDate', dateStr);
             }
         });
 
-        // Initialize Flatpickr for end date with validation
-        flatpickr("#endDatePicker", {
-            dateFormat: "d-m-Y",
+        // Initialize Flatpickr for end date
+        let endDatePicker = flatpickr("#endDatePicker", {
+            dateFormat: "Y-m-d",
             allowInput: true,
             disableMobile: true,
             onChange: function (selectedDates, dateStr, instance) {
-                const endDate = selectedDates[0];
-                const startDate = document.getElementById("startDatePicker").value;
-                if (startDate) {
-                    const start = flatpickr.parseDate(startDate, "d-m-Y");
-                    if (endDate && endDate < start) {
-                        alert("End date must be after or on the start date.");
-                        instance.setDate(startDate, true); // Reset end date
-                    }
-                }
+                // Update start date's maxDate whenever end date changes
+                startDatePicker.set('maxDate', dateStr);
             }
         });
+
         // Auto resize textarea
         function autoResize(textarea) {
             textarea.style.height = "auto";
             textarea.style.height = textarea.scrollHeight + "px";
         }
+
         document.querySelector("#goaltrackingForm").addEventListener("submit", function (event) {
             let isValid = true;
+            
             // Check required fields (including text, select, and rating inputs)
             document.querySelectorAll("input[required], select[required], input[type='hidden'][required]").forEach((field) => {
                 if (!field.value.trim()) {
@@ -210,12 +202,18 @@
                 }
             });
 
+            console.log("Form validation status: " + isValid); // Log validation status
+
             if (!isValid) {
                 event.preventDefault(); // Stop form submission
+                console.log("Form is invalid, submission prevented"); // Log when submission is prevented
+            } else {
+                console.log("Form is valid, submitting..."); // Log successful validation
             }
         });
     });
 </script>
+
 <style>
     #remarkInput {
         border: 1px solid #ced4da;

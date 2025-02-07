@@ -42,37 +42,59 @@ class GoalTrackingController extends AccountBaseController
     {
         $this->pageTitle = 'app.menu.goaltracking';
         abort_403(!in_array('employee', user_roles()));
-        
         $request->validate([
             'branch' => 'required|string|max:255',
             'goal_type' => 'required|string|max:255',
             'start_date' => 'required|date|before_or_equal:end_date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'subject' => 'required|string|max:255',
-            'target_achievement' => 'required|numeric',
+            'target' => 'required|numeric',
             'description' => 'nullable|string|max:1000', // Validate description
         ]);
-
         // Store data in GoalTracking model
         GoalTracking::create([
             'goal_type' => $request->goal_type,
             'subject' => $request->subject,
             'branch' => $request->branch,
-            'target_achievement' => $request->target,
+            'target' => $request->target,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'description' => $request->description, // Store description
         ]);
-       
         // Redirect to a specific page with a success message
         return redirect()->route('goaltracking.index')->with('success', 'Goal Tracking Data Saved Successfully!');
     }  
+    public function goaltrackingdestroy($id)
+  {
+    $this->pageTitle = 'app.menu.goaltracking';
+    
+    // Ensure the user has the right role (if needed)
+    abort_403(!in_array('employee', user_roles()));
+
+    // Find the goal tracking record by ID
+    $goalTracking = GoalTracking::find($id);
+    
+    // Check if the record exists
+    if (!$goalTracking) {
+        return redirect()->route('goaltracking.index')->with('error', 'Goal Tracking data not found!');
+    }
+
+    // Delete the goal tracking record
+    $goalTracking->delete();
+
+    // Redirect with a success message
+    return redirect()->route('goaltracking.index')->with('success', 'Goal Tracking Data Deleted Successfully!');
+   }
+
     public function goaltrackingedit($id)
     {
         $this->pageTitle = 'edit goal tracking';
         abort_403(!in_array('employee', user_roles()));
-        $goaltracking = GoalTracking::select('*')->get();
-        return view('goaltracking.edit', array_merge($this->data,  ['goaltracking' => $goaltracking]));    
+        $goaltracking = GoalTracking::findOrFail($id);
+        $designation = Designation::pluck('name');
+        $goals= Goal::pluck('name');
+        $branchname = Company::pluck('company_name');
+        return view('goaltracking.edit', array_merge($this->data,  ['goaltracking' => $goaltracking ,'designation' => $designation,'branchname' => $branchname,'goals' => $goals]));    
     }
     
 }

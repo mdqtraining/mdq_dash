@@ -24,21 +24,23 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Branch &nbsp;<sup class="f-14 mr-1">*</sup></label>
-                            <input type="text" class="form-control height-35 f-14" placeholder="Branch" name="branch"
-                                id="branch" value={{$indicators->branch}} required>
-                                @error('branch.required')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
+                            <select class="form-control height-35 f-14" name="branch" id="branch" required>
+                                @foreach($branchname as $item)
+                                    <option value="{{ $item }}" 
+                                        {{ $indicators->branch == $item ? 'selected' : '' }}>
+                                        {{ $item }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
-
                     <!-- Department Field -->
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Department &nbsp;<sup
                                     class="f-14 mr-1">*</sup></label>
                             <input type="text" class="form-control height-35 f-14" placeholder="Department"
-                                name="department" id="department" value={{$indicators->department}} required>
+                                name="department" id="department" value="{{ $indicators->department }}" required>
                             @error('department')
                                 <div class="error-message">{{ $message }}</div>
                             @enderror
@@ -47,132 +49,56 @@
 
                     <!-- Designation Field -->
                     <div class="col-lg-4 col-md-6">
-    <div class="form-group my-3">
-        <label class="f-14 text-dark-grey mb-12">Designation &nbsp;<sup class="f-14 mr-1">*</sup></label>
-        
-        <select class="form-control height-35 f-14" name="designation" id="designation" value={{$indicators->designation}} required>
-           
-            @foreach($designations as $item)
-                <option value="{{ $item }}">{{ $item }}</option>
-            @endforeach
-        </select>
-
-        @error('designation')
-            <div class="error-message">{{ $message }}</div>
-        @enderror
-    </div>
-</div>
-
-                </div>
-
-                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Organizational
-                    Competencies</h4>
-                <div class="p-20">
-                    <!-- Leadership Field -->
-                    <div class="d-flex p-20 align-items-center">
-                        <div class="col-6 text-dark-grey">Leadership</div>
-                        <div class="f-21 col-6">
-                            <div class="rating" data-rating={{$indicators->leadership}}>
-                                <span data-value="1">&#9733;</span>
-                                <span data-value="2">&#9733;</span>
-                                <span data-value="3">&#9733;</span>
-                                <span data-value="4">&#9733;</span>
-                                <span data-value="5">&#9733;</span>
-                            </div>
-                            <input type="hidden" name="leadership" id="leadership" required>
-                            @error('leadership')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Project Management Field -->
-                    <div class="d-flex p-20 align-items-center">
-                        <div class="col-6 text-dark-grey">Project Management</div>
-                        <div class="f-21 col-6">
-                            <div class="rating" data-rating={{$indicators->project_management}}>
-                                <span data-value="1">&#9733;</span>
-                                <span data-value="2">&#9733;</span>
-                                <span data-value="3">&#9733;</span>
-                                <span data-value="4">&#9733;</span>
-                                <span data-value="5">&#9733;</span>
-                            </div>
-                            <input type="hidden" name="project_management" id="project_management" required>
-                            @error('project_management')
+                        <div class="form-group my-3">
+                            <label class="f-14 text-dark-grey mb-12">Designation &nbsp;<sup class="f-14 mr-1">*</sup></label>
+                            <select class="form-control height-35 f-14" name="designation" id="designation" required>
+                                @foreach($designations as $item)
+                                    <option value="{{ $item }}" 
+                                        {{ $indicators->designation == $item ? 'selected' : '' }}>
+                                        {{ $item }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('designation')
                                 <div class="error-message">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
                 </div>
 
-                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Technical Competencies
-                </h4>
-                <div class="p-20">
-                    <!-- Allocating Resources Field -->
-                    <div class="d-flex p-20 align-items-center">
-                        <div class="col-6 text-dark-grey">Allocating Resources</div>
-                        <div class="f-21 col-6">
-                            <div class="rating" data-rating={{$indicators->allocating_resources}}>
-                                <span data-value="1">&#9733;</span>
-                                <span data-value="2">&#9733;</span>
-                                <span data-value="3">&#9733;</span>
-                                <span data-value="4">&#9733;</span>
-                                <span data-value="5">&#9733;</span>
-                            </div>
-                            <input type="hidden" name="allocating_resources" id="allocating_resources" required>
-                            @error('allocating_resources')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
+                @php 
+                    $field_ratings = json_decode($indicators->field_ratings, true);
+                @endphp
 
-                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">Behavioural
-                    Competencies</h4>
-                <div class="p-20">
-                    <!-- Business Process Field -->
-                    <div class="d-flex p-20 align-items-center">
-                        <div class="col-6 text-dark-grey">Business Process</div>
-                        <div class="f-21 col-6">
-                            <div class="rating" data-rating={{$indicators->business_process}}>
-                                <span data-value="1">&#9733;</span>
-                                <span data-value="2">&#9733;</span>
-                                <span data-value="3">&#9733;</span>
-                                <span data-value="4">&#9733;</span>
-                                <span data-value="5">&#9733;</span>
+                @foreach ($indicatorheaders as $category => $fields)
+                    <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">{{ $category }}</h4>
+                    <div class="p-20">
+                        @foreach ($fields as $field)
+                            <div class="d-flex p-20 align-items-center">
+                                <div class="col-6 text-dark-grey">{{ $field->field_name }}</div>
+                                @php
+                                    $rating = $field_ratings[$field->field_name] ?? 0;
+                                @endphp
+                                <div class="f-21 col-6">
+                                  <div class="rating" data-rating="{{ $rating }}">
+                                        <span data-value="1">&#9733;</span>
+                                        <span data-value="2">&#9733;</span>
+                                        <span data-value="3">&#9733;</span>
+                                        <span data-value="4">&#9733;</span>
+                                        <span data-value="5">&#9733;</span>
+                                    </div>
+                                    <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" value="{{ $rating }}" required>
+                                </div>
                             </div>
-                            <input type="hidden" name="business_process" id="business_process" required>
-                            @error('business_process')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        @endforeach
                     </div>
-
-                    <!-- Oral Communication Field -->
-                    <div class="d-flex p-20 align-items-center">
-                        <div class="col-6 text-dark-grey">Oral Communication</div>
-                        <div class="f-21 col-6">
-                            <div class="rating" data-rating={{$indicators->oralcommunication}}>
-                                <span data-value="1">&#9733;</span>
-                                <span data-value="2">&#9733;</span>
-                                <span data-value="3">&#9733;</span>
-                                <span data-value="4">&#9733;</span>
-                                <span data-value="5">&#9733;</span>
-                            </div>
-                            <input type="hidden" name="oralcommunication" id="oralcommunication" required>
-                            @error('oralcommunication')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
+                @endforeach 
 
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
 </form>
-
 @endsection
 
 <!-- Custom Styles and Scripts -->

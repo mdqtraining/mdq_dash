@@ -770,7 +770,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('indicator/add', [IndicatorController::class, 'indicatorCreate'])->name('indicator.create');
     Route::get('indicator/edit/{id}', [IndicatorController::class, 'indicatorEdit'])->name('indicator.edit');
     Route::get('indicator/view/{id}', [IndicatorController::class, 'indicatorview'])->name('indicator.view');
-    Route::put('indicator/update/{id}', [IndicatorController::class, 'indicatorUpdate'])->name('indicator.update');
+    Route::put('indicator-update/{id}', [IndicatorController::class, 'indicatorUpdate'])->name('indicator.update');
     Route::post('indicator/store', [IndicatorController::class, 'indicatorstore'])->name('indicator.store');
     Route::post('indicator/delete/{id}', [IndicatorController::class, 'indicatorDestroy'])->name('indicator.destroy');
     Route::delete('indicator/delete/{id}', [IndicatorController::class, 'indicatorDestroy'])->name('indicator.destroy');
@@ -779,12 +779,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('appraisal', [AppraisalController::class, 'appraisal'])->name('appraisal.index');
     Route::get('appraisal/add', [AppraisalController::class, 'appraisalCreate'])->name('appraisal.create');
     Route::post('appraisal/store', [AppraisalController::class, 'appraisalstore'])->name('appraisal.store');
-    
-    
+    Route::post('/account/get-designation', [AppraisalController::class, 'getDesignation'])->name('getDesignation');
+
     Route::get('goaltracking', [GoalTrackingController::class, 'goaltracking'])->name('goaltracking.index');
     Route::get('goaltracking/add', [GoalTrackingController::class, 'goaltrackingCreate'])->name('goaltracking.create');
     Route::post('goaltracking/store', [GoalTrackingController::class, 'goaltrackingstore'])->name('goaltracking.store');
     Route::get('goaltracking/edit/{id}', [GoalTrackingController::class, 'goaltrackingedit'])->name('goaltracking.edit');
+    Route::get('goaltracking/delete/{id}', [GoalTrackingController::class, 'goaltrackingdestroy'])->name('goaltracking.destroy');
+    
     Route::get('/get-employee-indicator-data', [EmployeeController::class, 'getEmployeeIndicatorData'])->name('getEmployeeIndicatorData');
 
     // Route::resource('indicator', IndicatorController::class);
