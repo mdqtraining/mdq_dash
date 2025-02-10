@@ -113,6 +113,7 @@
                 }
             });
         });
+       
 
         // Star rating functionality
         document.querySelectorAll(".rating").forEach(ratingContainer => {

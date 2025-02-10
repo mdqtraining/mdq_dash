@@ -11,11 +11,13 @@ class Appraisal extends BaseModel
     protected $table = 'appraisals';
     protected $fillable = [
         'branch',
-        'department',
         'designation',
         'employee_name',
         'target_rating',
         'overall_rating',
         'appraisal_date',
+        'remark',
+        'created_at',
+        'updated_at',
     ];
 }
