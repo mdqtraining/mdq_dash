@@ -780,13 +780,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('appraisal/add', [AppraisalController::class, 'appraisalCreate'])->name('appraisal.create');
     Route::post('appraisal/store', [AppraisalController::class, 'appraisalstore'])->name('appraisal.store');
     Route::post('/account/get-designation', [AppraisalController::class, 'getDesignation'])->name('getDesignation');
-
+    Route::get('appraisal/delete/{id}', [AppraisalController::class, 'appraisalDestroy'])->name('appraisal.destroy');
+    Route::get('appraisal/view/{id}',[AppraisalController::class, 'appraisalview'])->name('appraisal.view');
+    
     Route::get('goaltracking', [GoalTrackingController::class, 'goaltracking'])->name('goaltracking.index');
     Route::get('goaltracking/add', [GoalTrackingController::class, 'goaltrackingCreate'])->name('goaltracking.create');
     Route::post('goaltracking/store', [GoalTrackingController::class, 'goaltrackingstore'])->name('goaltracking.store');
     Route::get('goaltracking/edit/{id}', [GoalTrackingController::class, 'goaltrackingedit'])->name('goaltracking.edit');
+    Route::post('goaltracking/update/{id}', [GoalTrackingController::class, 'goaltrackingupdate'])->name('goaltracking.update');
     Route::get('goaltracking/delete/{id}', [GoalTrackingController::class, 'goaltrackingdestroy'])->name('goaltracking.destroy');
-    
+    Route::get('goaltracking/view/{id}', [GoalTrackingController::class, 'goaltrackingview'])->name('goaltracking.show');
     Route::get('/get-employee-indicator-data', [EmployeeController::class, 'getEmployeeIndicatorData'])->name('getEmployeeIndicatorData');
 
     // Route::resource('indicator', IndicatorController::class);

@@ -45,30 +45,30 @@ class ClientsDataTable extends BaseDataTable
         });
         $datatables->addColumn('action', function ($row) {
 
-            $action = '<div class="task_view">
+            $action = '<div class="task_view ">
 
                     <div class="dropdown">
                         <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
                             id="dropdownMenuLink-' . $row->id . '"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="icon-options-vertical icons"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right" style="background-color:transparent; border: radious 5px !important; " aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
+                        <div class="dropdown-menu dropdown-menu-right"  aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
 
-            $action .= '<a href="' . route('clients.show', [$row->id]) . '" class="dropdown-item text-white view-bg"  style=" border-top-left-radius: 5px;  border-top-right-radius: 5px;"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
+            $action .= '<a href="' . route('clients.show', [$row->id]) . '" class="dropdown-item"  style=" border-top-left-radius: 5px;  border-top-right-radius: 5px;"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
 
             if (in_array('admin', user_roles()) && !$row->admin_approval) {
                 $action .= '<a href="javascript:;" class="dropdown-item verify-user " data-user-id="' . $row->id . '"><i class="fa fa-check mr-2"></i>' . __('app.approve') . '</a>';
             }
 
             if ($this->editClientPermission == 'all' || ($this->editClientPermission == 'added' && user()->id == $row->added_by) || ($this->editClientPermission == 'both' && user()->id == $row->added_by)) {
-                $action .= '<a class="dropdown-item openRightModal edite-bg text-white" href="' . route('clients.edit', [$row->id]) . '">
+                $action .= '<a class="dropdown-item openRightModal " href="' . route('clients.edit', [$row->id]) . '">
                                 <i class="fa fa-edit"></i>
                                 ' . trans('app.edit') . '
                             </a>';
             }
 
             if ($this->deleteClientPermission == 'all' || ($this->deleteClientPermission == 'added' && user()->id == $row->added_by) || ($this->deleteClientPermission == 'both' && user()->id == $row->added_by)) {
-                $action .= '<a class="dropdown-item delete-table-row delete-bg text-white"  style=" border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;" href="javascript:;" data-user-id="' . $row->id . '">
+                $action .= '<a class="dropdown-item delete-table-row"  style=" border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;" href="javascript:;" data-user-id="' . $row->id . '">
                                 <i class="fa fa-trash mr-2" ></i>
                                 ' . trans('app.delete') . '
                             </a>';

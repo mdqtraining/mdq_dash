@@ -12,8 +12,6 @@
 
 @section('content')
 <div class="content-wrapper">
-    <form action="{{ route('goaltracking.update', $goaltracking->id) }}" method="POST">
-        @csrf
         <div class="add-page">
             <div class="p-20">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
@@ -40,10 +38,8 @@
                     <div class="col-md-12 col-lg-6">
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Branch &nbsp;<sup class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="branch" id="branch" required >
-                                @foreach($branchname as $item)
-                                    <option value="{{$goaltracking->branch}}" {{ $goaltracking->branch == $item ? 'selected' : '' }}>{{ $item }}</option>
-                                @endforeach
+                            <select class="form-control height-35 f-14" name="branch" id="branch" required readonly >
+                                    <option value="{{$goaltracking->branch}}" selected>{{ $goaltracking->branch }}</option>
                             </select>
                         </div>
                     </div>
@@ -51,10 +47,8 @@
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Goal Type &nbsp;<sup
                                     class="f-14 mr-1">*</sup></label>
-                                <select class="form-control height-35 f-14" name="goal_type" id="goal_type"  required>
-                                    @foreach($goals as $item)
-                                        <option value="{{ $goaltracking->goal_type }}" {{ $goaltracking->goal_type == $item ? 'selected' : '' }}>{{ $item }}</option>
-                                    @endforeach
+                                <select class="form-control height-35 f-14" name="goal_type" id="goal_type"  required readonly>
+                                        <option value="{{ $goaltracking->goal_type }}" selected>{{ $goaltracking->goal_type }}</option>
                                 </select>
                         </div>
                     </div>
@@ -62,14 +56,14 @@
                     <div class="col-md-12 col-lg-6">
     <div class="form-group my-3">
         <label for="startDatePicker" class="f-14 text-dark-grey mb-12">Start Date <sup class="f-14 mr-1">*</sup></label>
-        <input type="text" id="startDatePicker" name="start_date" class="form-control height-35 f-14 bg-white" placeholder="Select Date" value="{{$goaltracking->start_date}}" required>
+        <input type="text" id="startDatePicker" name="start_date" class="form-control height-35 f-14 bg-white" placeholder="Select Date" value="{{$goaltracking->start_date}}" required readonly>
     </div>
 </div>
 
 <div class="col-md-12 col-lg-6">
     <div class="form-group my-3">
         <label for="endDatePicker" class="f-14 text-dark-grey mb-12">End Date <sup class="f-14 mr-1">*</sup></label>
-        <input type="text" id="endDatePicker" name="end_date" class="form-control height-35 f-14 bg-white" placeholder="Select Date" value="{{$goaltracking->end_date}}" required>
+        <input type="text" id="endDatePicker" name="end_date" class="form-control height-35 f-14 bg-white" placeholder="Select Date" value="{{$goaltracking->end_date}}" required readonly >
     </div>
 </div>
                     <div class="col-md-12 col-lg-6">
@@ -77,7 +71,7 @@
                             <label for="endDatePicker" class="f-14 text-dark-grey mb-12">Subject<sup
                                     class="f-14 mr-1">*</sup></label>
                             <input type="text" class="form-control height-35 f-14" placeholder="Enter goal subject"
-                                name="subject" id="subject" value="{{$goaltracking->subject}}" required>
+                                name="subject" id="subject" value="{{$goaltracking->subject}}" required readonly>
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-6">
@@ -85,14 +79,14 @@
                             <label for="endDatePicker" class="f-14 text-dark-grey mb-12">Target Achievement<sup
                                     class="f-14 mr-1">*</sup></label>
                             <input type="text" class="form-control height-35 f-14"
-                                placeholder="Enter target achievement" name="target" id="target" value="{{$goaltracking->target}}" required>
+                                placeholder="Enter target achievement" name="target" id="target" value="{{$goaltracking->target}}" required readonly>
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-6">
                         <div class="form-group my-3">
                             <label for="description" class="f-14 text-dark-grey mb-12">Description</label>
                             <textarea id="description" name="description" class="form-control height-35 f-14"
-                            placeholder="Enter your Description here..."  >{{$goaltracking->description}}
+                            placeholder="Enter your Description here..." readonly >{{$goaltracking->description}}
                         </textarea>
                         </div>
                     </div>
@@ -104,10 +98,8 @@
                         <div class="col-md-12 col-lg-6">
                             <div class="form-group my-3">
                                 <label for="status" class="f-14 text-dark-grey mb-12">Status&nbsp;<sup class="f-14 mr-1">*</sup></label>
-                                <select class="form-control height-35 f-14" name="status" id="status">
-                                    <option value="not started" {{ $goaltracking->status == 'not started' ? 'selected' : '' }}>Not Started</option>
-                                    <option value="in progress" {{ $goaltracking->status == 'in progress' ? 'selected' : '' }}>In Progress</option>
-                                    <option value="completed" {{ $goaltracking->status == 'completed' ? 'selected' : '' }}>Completed</option>
+                                <select class="form-control height-35 f-14" name="status" id="status" readonly>
+                                    <option value="{{$goaltracking->status}}" selected >{{$goaltracking->status}}</option>  
                                 </select>
                             </div>
                         </div>
@@ -121,7 +113,7 @@
         <span data-value="5">&#9733;</span>
     </div>
 
-    <input type="hidden" name="rating" id="rating" value="{{$goaltracking->rating}}">
+    <input type="hidden" name="rating" id="rating" value="{{$goaltracking->rating}}" readonly>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -149,13 +141,6 @@
                 star.addEventListener("mouseleave", function () {
                     fillStars(currentRating); // Reset to selected rating on mouse out
                 });
-
-                // Click to set rating
-                star.addEventListener("click", function () {
-                    currentRating = this.dataset.value;
-                    ratingInput.value = currentRating;
-                    fillStars(currentRating);
-                });
             });
         });
     </script></div>
@@ -168,41 +153,30 @@
     </div>
     <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let progressContainer = document.getElementById("progressContainer");
-        let progressBar = document.getElementById("progressBar");
-        let progressValue = document.getElementById("progressValue");
-        let progressInput = document.getElementById("progress");
+    let progressBar = document.getElementById("progressBar");
+    let progressValue = document.getElementById("progressValue");
+    let progressInput = document.getElementById("progress");
 
-        // Get initial progress from backend
-        let initialProgress = parseInt(progressInput.value) || 0;
+    // Get initial progress from backend
+    let initialProgress = parseInt(progressInput.value) || 0;
 
-        // Set progress on page load
-        function setProgress(value) {
-            progressBar.style.width = value + "%";
-            progressValue.innerText = value + "%";
-        }
+    // Set progress on page load
+    function setProgress(value) {
+        progressBar.style.width = value + "%";
+        progressValue.innerText = value + "%";
+    }
 
-        setProgress(initialProgress); // Initialize
+    setProgress(initialProgress); // Initialize progress display
 
-        // Click event to update progress
-        progressContainer.addEventListener("click", function (event) {
-            let containerWidth = progressContainer.offsetWidth;
-            let clickX = event.clientX - progressContainer.getBoundingClientRect().left;
-            let newProgress = Math.round((clickX / containerWidth) * 100);
+    // Remove click event listener to prevent changes
+});
 
-            setProgress(newProgress);
-            progressInput.value = newProgress; // Update hidden input for form submission
-        });
-    });
 </script>
                 </div>
-                <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
-                        <i class="fa fa-check mr-1"></i>Save
-                    </button>
+                    <a href="{{route('goaltracking.edit',$goaltracking->id) }}" class="rounded f-14 p-2 edit-a-btn" style="background-color:#6FD943; color:white ;">Edit</a>
                     <a href="{{route('goaltracking.index') }}" class="btn-cancel rounded f-14 p-2">cancel</a>
             </div>
         </div>
-    </form>
 </div>
 @endsection
 <!-- Include Flatpickr JS -->

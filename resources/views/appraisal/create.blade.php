@@ -20,9 +20,30 @@
     <div class="content-wrapper">
         <div class="add-page">
             <div class="p-20">
+                <div id="alertMessage" class="alert" style="display: none;"></div>
+
+                @if (session('success'))
+                    <div class="alert alert-success mt-4" >
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger mt-4 "  >
+                        {{ session('error') }}
+                    </div>
+                @endif
+               
+                <script>
+                    setTimeout(() => {
+                        document.querySelectorAll('.alert').forEach(alert => alert.remove());
+                    }, 5000); // Message disappears after 5 seconds
+                </script>
+
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
-                    @lang('app.menu.indicatorDetials')
+                    Appraisal Detials
                 </h4>
+
                 <div class="row p-20">
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
@@ -35,6 +56,7 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Employee <sup class="f-14 mr-1">*</sup></label>
@@ -45,62 +67,68 @@
                                 @endforeach
                             </select>
                             @error('employee')
-                                <div class="error-message">{{ $message }}</div>
+                                <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-6 col-lg-4" id="deadlineBox">
-                    <label for="monthYearPicker" class="f-14 text-dark-grey mb-12">Select Month and Year <sup
-                            class="f-14 mr-1">*</sup></label>
-                    <input type="text" id="monthYearPicker" class="form-control height-35 f-14 bg-white"
-                        placeholder="MM/YYYY" readonly required>
+                    <label for="monthYearPicker" class="f-14 text-dark-grey mb-12">Select Month and Year <sup class="f-14 mr-1">*</sup></label>
+                    <input type="text" id="monthYearPicker" name="month_year" class="form-control height-35 f-14 bg-white"
+                        placeholder="MM/YYYY" required>
                 </div>
+
                 <div class="col-md-12 col-lg-6" id="remarkBox">
                     <div class="form-group my-3">
                         <label class="f-14 text-dark-grey mb-12" for="remarkInput">Remark</label>
-                        <textarea id="remarkInput" class="form-control height-35 f-14 bg-white"
-                            placeholder="Enter your remarks here..." rows="1" oninput="autoResize(this)"></textarea>
+                        <textarea id="remarkInput" name="remark" class="form-control height-35 f-14 bg-white"
+                            placeholder="Enter your remarks here..." rows="1" oninput="autoResize(this)" required></textarea>
                     </div>
                 </div>
-                @foreach ($indicatorheaders as $category => $fields)
-                    <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">{{ $category }}</h4>
-                    <div class="p-20">
-                        @foreach ($fields as $field)
-                            <div class="d-flex p-20 align-items-center">
-                                <div class="col-lg-4 col-md-6 text-dark-grey">{{ $field->field_name }}</div>
 
-                                <div class="f-21 col-6">
-                                    <div class="d-flex" style="justify-content: space-between;">
-                                        <div class="rating" id="{{ $field->field_name }}" data-rating="0">
-                                            <span data-value="1">&#9733;</span>
-                                            <span data-value="2">&#9733;</span>
-                                            <span data-value="3">&#9733;</span>
-                                            <span data-value="4">&#9733;</span>
-                                            <span data-value="5">&#9733;</span>
+                <div id="hidden" style="display: none">
+                    @foreach ($indicatorheaders as $category => $fields)
+                        <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">{{ $category }}</h4>
+                        <div class="p-20">
+                            @foreach ($fields as $field)
+                                <div class="d-flex p-20 align-items-center">
+                                    <div class="col-lg-4 col-md-6 text-dark-grey">{{ $field->field_name }}</div>
+
+                                    <div class="f-21 col-6">
+                                        <div class="d-flex" style="justify-content: space-between;">
+                                            <div class="rating" id="{{ $field->field_name }}" data-rating="0">
+                                                <span data-value="1">&#9733;</span>
+                                                <span data-value="2">&#9733;</span>
+                                                <span data-value="3">&#9733;</span>
+                                                <span data-value="4">&#9733;</span>
+                                                <span data-value="5">&#9733;</span>
+                                            </div>
+                                            <div class="rating_appraisal" data-rating="0">
+                                                <span data-value="1">&#9733;</span>
+                                                <span data-value="2">&#9733;</span>
+                                                <span data-value="3">&#9733;</span>
+                                                <span data-value="4">&#9733;</span>
+                                                <span data-value="5">&#9733;</span>
+                                            </div>
+                                            <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" value="0">
                                         </div>
-                                        <div class="rating_appraisal" data-rating="0">
-                                            <span data-value="1">&#9733;</span>
-                                            <span data-value="2">&#9733;</span>
-                                            <span data-value="3">&#9733;</span>
-                                            <span data-value="4">&#9733;</span>
-                                            <span data-value="5">&#9733;</span>
-                                        </div>
-                                        <!-- <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" required> -->
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endforeach
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
+
                 <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
-                    <i class="fa fa-check mr-1"></i>Save
+                    <i class="fa fa-check mr-1"></i> Save
                 </button>
                 <a href="{{ route('appraisal.index') }}" class="btn-cancel rounded f-14 p-2">Cancel</a>
             </div>
         </div>
     </div>
 </form>
+
 @endsection
 
 @push('scripts')
@@ -109,7 +137,6 @@
         var designation = "{{ route('getDesignation') }}";
     </script>
     <script>document.addEventListener("DOMContentLoaded", function () {
-
             function updateStars(ratingContainer) {
                 const stars = ratingContainer.querySelectorAll("span");
                 const ratingValue = parseInt(ratingContainer.getAttribute("data-rating")) || 0;
@@ -119,24 +146,20 @@
                     star.style.color = starValue <= ratingValue ? "#ffd700" : "#ccc";
                 });
             }
-
             function refreshRatings() {
                 document.querySelectorAll(".rating").forEach(updateStars);
             }
-
             async function getDesignation() {
                 try {
                     if (!designation.trim()) {
                         console.error("Error: 'designation' variable is not a valid URL.");
                         return;
                     }
-
                     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
                     if (!csrfToken) {
                         console.error("Error: CSRF token not found.");
                         return;
                     }
-
                     const branchValue = document.getElementById("branch")?.value?.trim() || "";
                     const employeeValue = document.getElementById("employee")?.value?.trim() || "";
 
@@ -177,7 +200,7 @@
                     if (designationData.field_ratings) {
                         try {
                             const fieldRatings = JSON.parse(designationData.field_ratings);
-
+                            document.getElementById("hidden").style.display = "block";
                             document.querySelectorAll(".rating").forEach((field) => {
                                 let fieldName = field.id;
                                 if (fieldRatings.hasOwnProperty(fieldName)) {
@@ -195,10 +218,9 @@
                     refreshRatings(); // Ensure stars update after API response
 
                 } catch (error) {
-                    console.error("Error fetching designation:", error);
+                    console.error("Error fetching Indicators:", error);
                 }
             }
-
             function fetchDesignations() {
                 if (document.getElementById("branch")?.value && document.getElementById("employee")?.value) {
                     getDesignation();

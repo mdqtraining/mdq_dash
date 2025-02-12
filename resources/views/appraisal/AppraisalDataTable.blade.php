@@ -55,13 +55,13 @@
                                                     <i class="icon-options-vertical icons"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-55" tabindex="0">
-                                                    <a href="" class="dropdown-item">
+                                                    <a href="{{ route('appraisal.view',$appraisal->id)}}" class="dropdown-item">
                                                         <i class="fa fa-eye mr-2"></i> View
                                                     </a>
                                                     <a class="dropdown-item openRightModal" href="">
                                                         <i class="fa fa-edit mr-2"></i> Edit
                                                     </a>
-                                                    <a class="dropdown-item delete-table-row" href="javascript:;">
+                                                    <a class="dropdown-item delete-table-row" href="{{ route('appraisal.destroy', $appraisal->id) }}">
                                                         <i class="fa fa-trash mr-2"></i> Delete
                                                     </a>
                                                 </div>

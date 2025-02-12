@@ -38,10 +38,28 @@
             <a href="{{ route('indicator.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip" data-original-title="@lang('modules.leaves.tableView')">
                 <i class="side-icon bi bi-list-ul"></i>
             </a>
-            <a href="{{ route('indicator.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="@lang('modules.lead.kanbanboard')">
-                <i class="side-icon bi bi-kanban"></i></a>
+            <!-- <a href="{{ route('indicator.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="@lang('modules.lead.kanbanboard')">
+                <i class="side-icon bi bi-kanban"></i></a> -->
         </div>
     </div>
+    @if (session('success'))
+        <div class="alert alert-success mt-4" >
+           {{ session('success') }}
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger mt-4">
+            {{ session('error') }}
+        </div>
+        @endif
         @include('indicator.IndicatorDataTable')
     </div>
 @endsection
+@push('scripts')
+<script>
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => alert.remove());
+    },10000); // Message disappears after 3 seconds
+</script>
+@endpush

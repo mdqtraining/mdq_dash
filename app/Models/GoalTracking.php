@@ -14,6 +14,8 @@ class GoalTracking extends BaseModel
         'subject',
         'branch',
         'target',
+        'status',
+        'progress',
         'start_date',
         'end_date',
         'rating',

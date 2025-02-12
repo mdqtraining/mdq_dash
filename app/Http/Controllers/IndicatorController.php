@@ -6,6 +6,7 @@ use App\Models\Indicator;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Designation;
+use App\Models\Team;
 use Illuminate\Support\Str;
 use App\Models\IndicatorfieldName;
 use Illuminate\Http\Request;
@@ -14,15 +15,18 @@ use Illuminate\Support\Facades\Auth;
 
 class IndicatorController extends AccountBaseController
 {
-    public function indicator()
+    public function indicator(Request $request)
     {
         $this->pageTitle = 'app.menu.indicator';
         abort_403(!in_array('employee', user_roles()));
-
-        $indicators = Indicator::select('branch', 'department', 'designation', 'rating', 'added_by', 'created_at', 'id')->get();
-
+    
+        $perPage = $request->input('per_page', 10); // Get per_page from request, default to 10
+        $indicators = Indicator::select('branch', 'department', 'designation', 'rating', 'added_by', 'created_at', 'id')
+            ->paginate($perPage);
+    
         return view('indicator.index', array_merge($this->data, ['indicators' => $indicators]));
     }
+    
 
     public function getEmployeeIndicatorData(Request $request)
     {
@@ -52,6 +56,7 @@ class IndicatorController extends AccountBaseController
     
         // Fetch designations
         $designation = Designation::pluck('name');
+        $department= Team::pluck('team_name');
     
         // Fetch indicator headers grouped by category (name)
         $indicatorheaders = IndicatorfieldName::select('name', 'field_name')
@@ -62,7 +67,8 @@ class IndicatorController extends AccountBaseController
         return view('indicator.create', array_merge($this->data, [
             'designation' => $designation,
             'branchname' => $branchname,
-            'indicatorheaders' => $indicatorheaders
+            'indicatorheaders' => $indicatorheaders,
+            'department'=> $department
         ]));
     }
     
@@ -75,6 +81,7 @@ class IndicatorController extends AccountBaseController
         $indicators = Indicator::findOrFail($id);
         $designations = Designation::pluck('name');
         $branchname = Company::pluck('company_name');
+        $departments = Team::pluck('team_name');
         $indicatorheaders = IndicatorfieldName::select('name', 'field_name')
             ->distinct()
             ->get()
@@ -83,7 +90,8 @@ class IndicatorController extends AccountBaseController
             'indicators' => $indicators,
             'designations' => $designations
             , 'branchname' => $branchname
-            , 'indicatorheaders' => $indicatorheaders
+            , 'indicatorheaders' => $indicatorheaders,
+            'departments' => $departments
         ]));
     }
 
@@ -102,7 +110,7 @@ class IndicatorController extends AccountBaseController
 
     
     public function indicatorUpdate(Request $request, $id)
-{
+        {
     // Validate incoming request
     $request->validate([
         'branch' => 'required|string|max:255',
@@ -154,52 +162,52 @@ class IndicatorController extends AccountBaseController
 
     // Redirect to the indicator list page with a success message
     return redirect()->route('indicator.index')->with('success', 'Indicator updated successfully');
-}
+    }
 
     public function indicatorStore(Request $request)
-{
-    // Validate incoming request
-    $request->validate([
+    {
+     // Validate incoming request
+     $request->validate([
         'branch' => 'required|string|max:255',
         'department' => 'required|string|max:255',
         'designation' => 'required|string|max:255',
-    ]);
+        ]);
 
-    // Fetch field names dynamically from IndicatorfieldName table
-    $fieldNames = IndicatorfieldName::select('field_name')->distinct()->pluck('field_name');
+        // Fetch field names dynamically from IndicatorfieldName table
+        $fieldNames = IndicatorfieldName::select('field_name')->distinct()->pluck('field_name');
 
-    // Prepare the ratings array from the submitted form
-    $ratings = [];
+        // Prepare the ratings array from the submitted form
+        $ratings = [];
     
-    // Generate custom validation rules for the ratings
-    $validationRules = [];
-    foreach ($fieldNames as $fieldName) {
+        // Generate custom validation rules for the ratings
+        $validationRules = [];
+        foreach ($fieldNames as $fieldName) {
         $fieldSlug = Str::slug($fieldName, '_');
         // Add validation rule for each rating field
         $validationRules['ratings.' . $fieldSlug] = 'required|numeric|min:1|max:5';
         
         // Fetch the rating value from the form using the slug of field_name as the key
         $ratings[$fieldName] = $request->input('ratings.' . $fieldSlug);
-    }
+        }
 
-    // Validate the ratings array dynamically
-    $request->validate($validationRules);
+        // Validate the ratings array dynamically
+        $request->validate($validationRules);
 
-    // Calculate the average rating if needed
-    $rating = array_sum($ratings) / count($ratings);
+        // Calculate the average rating if needed
+        $rating = array_sum($ratings) / count($ratings);
 
 
-    // Check if the data already exists in the database
-    $dataAlready = Indicator::where('branch', $request->branch)
+        // Check if the data already exists in the database
+        $dataAlready = Indicator::where('branch', $request->branch)
                             ->where('department', $request->department)
                             ->where('designation', $request->designation)
                             ->first();
 
-    if ($dataAlready) {
+        if ($dataAlready) {
         // If data exists, redirect with an error
         $indicator = $dataAlready->id;
         return redirect()->back()->with('error', 'Indicator already exists')->with('indicator', $indicator);
-    } else {
+        } else {
         // Save new indicator along with ratings as JSON arrays
         Indicator::create([
             'branch' => $request->branch,
@@ -212,8 +220,8 @@ class IndicatorController extends AccountBaseController
         ]);
 
         return redirect()->route('indicator.index')->with('success', 'Indicator saved successfully');
+        }
     }
-}
 
 
     public function indicatorDestroy($id)

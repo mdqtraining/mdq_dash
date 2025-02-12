@@ -43,68 +43,89 @@ class AppraisalController extends AccountBaseController
             ->groupBy('name');
         return view('appraisal.create', array_merge($this->data, ['employee' => $employee, 'branchname' => $branchname, 'indicatorheaders' => $indicatorheaders,]));
     }
-    public function appraisalstore(Request $request)
+    public function appraisalview($id)
     {
-        $request->validate([
+        $this->pageTitle = 'view Appraisal';
+        abort_403(!in_array('employee', user_roles()));
+        $appraisal = Appraisal::findOrFail($id);
+        return view('appraisal.view', array_merge($this->data, ['appraisal' => $appraisal]));
+    }
+    public function appraisalstore(Request $request)
+    {   
+        $validated = $request->validate([
             'branch' => 'required|string',
             'employee' => 'required|string',
-            'monthYearPicker' => 'required|date_format:m/Y',
-            'remarkInput' => 'nullable|string',
+            'month_year' => 'required|string',
+            'remark' => 'nullable|string',
             'ratings' => 'required|array',
         ]);
     
-        // Get branch and employee
         $branch = $request->input('branch');
-        $employee = $request->input('employee');
-    
-        // Get company_id safely
         $company = Company::where('company_name', $branch)->first();
         if (!$company) {
-            return response()->json(['error' => 'Company not found'], 404);
+            return redirect()->back()->with('error', 'Company not found. Please select a valid branch.');
         }
         $company_id = $company->id;
     
-        // Get user_id safely
+        $employee = $request->input('employee');
         $user = User::where('name', $employee)->first();
         if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
+            return redirect()->back()->with('error', 'Employee not found. Please select a valid employee.');
         }
         $user_id = $user->id;
     
-        // Get employee details
+        // Fetch Employee Details
         $employee_details = EmployeeDetails::where('user_id', $user_id)
             ->where('company_id', $company_id)
             ->first();
         if (!$employee_details) {
-            return response()->json(['error' => 'Employee details not found'], 404);
+            return redirect()->back()->with('error', 'Employee details are missing for the selected branch.');
         }
-    
-        // Get designation
-        $designation = Designation::find($employee_details->designation_id);
+        
+        // Fetch Designation
+        $designation_id = $employee_details->designation_id;
+        $designation = Designation::where('id', $designation_id)->value('name');
         if (!$designation) {
-            return response()->json(['error' => 'Designation not found'], 404);
+            return redirect()->back()->with('error', 'Designation not found for the selected employee.');
         }
     
-        // Calculate overall rating
-        $overallRating = array_sum($request->ratings) / count($request->ratings);
+        // Fetch Indicators
+        $indicator = Indicator::where('designation', $designation)
+            ->where('branch', $branch)
+            ->first(); 
+        
+        if (!$indicator) {
+            return redirect()->back()->with('error', 'No performance indicator found for this designation and branch.');
+        }
+        
+        $targetRating = $indicator->rating; 
     
-        // Define target rating (make sure this is properly set)
-        $targetRating = 5; // Example value (update as needed)
+        // Calculate Ratings
+        $ratings = $request->input('ratings'); 
+        $overallRating = array_sum($ratings) / count($ratings); 
     
-        // Store appraisal
+        // Store Data
         $appraisal = new Appraisal();
         $appraisal->branch = $branch;
-        $appraisal->designation = $designation->name;
+        $appraisal->designation = $designation;
         $appraisal->employee_name = $employee;
         $appraisal->target_rating = $targetRating;
+        $appraisal->field_ratings = json_encode($ratings); // ✅ Save ratings correctly
         $appraisal->overall_rating = $overallRating;
-        $appraisal->appraisal_date = Carbon::createFromFormat('m/Y', $request->monthYearPicker)->format('Y-m');
-        $appraisal->remark = $request->remarkInput ?? null;
+        $appraisal->appraisal_date = Carbon::createFromFormat('m/Y', $request->month_year)->format('Y-m'); // ✅ Fixed
+        $appraisal->remark = $request->remark ?? null;
         $appraisal->created_at = now();
         $appraisal->updated_at = now();
         $appraisal->save();
     
         return redirect()->route('appraisal.index')->with('success', 'Appraisal saved successfully.');
+    }
+    
+    public function appraisalDestroy($id)
+    {
+        $appraisal = Appraisal::findOrFail($id);
+        $appraisal->delete();
+        return redirect()->route('appraisal.index')->with('success', 'Appraisal deleted successfully');
     }
     
     public function getDesignation(Request $request)

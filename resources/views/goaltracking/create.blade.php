@@ -16,6 +16,23 @@
         @csrf
         <div class="add-page">
             <div class="p-20">
+            @if (session('success'))
+        <div class="alert alert-success mt-4" >
+           {{ session('success') }}
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger mt-4">
+            {{ session('error') }}
+        </div>
+        @endif
+        <script>
+            
+            setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => alert.remove());
+        },10000);
+        </script>
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                     Goal Tracking Detials
                 </h4>

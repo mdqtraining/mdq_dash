@@ -17918,7 +17918,7 @@ div.dataTables_wrapper div.dataTables_info {
 }
 
 .task_view {
-  border: 1px solid #99A5B5;
+  border: 1px solid #99A5B5 !important;
   border-radius: 4px;
   display: inline-flex;
 }
@@ -17943,7 +17943,7 @@ div.dataTables_wrapper div.dataTables_info {
   content: none;
 }
 .task_view .dropdown-menu {
-  border: 0;
+    box-shadow: 0 6px 30px rgba(182, 186, 203, 0.3);
 }
 
 table.dataTable {
