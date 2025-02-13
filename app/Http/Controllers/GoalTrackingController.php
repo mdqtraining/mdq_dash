@@ -22,13 +22,50 @@ class GoalTrackingController extends AccountBaseController
         $this->pageTitle = 'app.menu.paymentGatewayCredential';
         $this->activeSettingMenu = 'payment_gateway_settings';
     }
-    public function goaltracking()
-    {
-        $this->pageTitle = 'app.menu.goaltracking';
-        abort_403(!in_array('employee', user_roles()));
-        $goaltracking = GoalTracking::select('*')->get();
-        return view('goaltracking.index', array_merge($this->data, ['goaltracking' => $goaltracking]));
+    public function goaltracking(Request $request)
+{
+    $this->pageTitle = 'app.menu.goaltracking';
+    abort_403(!in_array('employee', user_roles()));
+
+    // Get filters from request
+    $perPage = $request->input('per_page', 10);
+    $branch = $request->input('branch');
+    $goalType = $request->input('goal_type');
+    $status = $request->input('status');
+
+    // Initialize query
+    $goaltracking = GoalTracking::query();
+
+    if ($branch) {
+        $goaltracking->where('branch', $branch);
     }
+
+    if ($goalType) {
+        $goaltracking->where('goal_type', $goalType);
+    }
+
+    if ($status) {
+        $goaltracking->where('status', $status);
+    }
+
+    // Paginate results
+    $goaltracking = $goaltracking->paginate($perPage);
+
+    // Fetch related data for filters
+    $branches = Company::select('company_name')->distinct()->get();
+    $goalTypes = GoalTracking::select('goal_type')->distinct()->get();
+    $statusOptions = ['Pending', 'In Progress', 'Completed']; // Example statuses
+
+    return view('goaltracking.index', array_merge($this->data ?? [], [
+        'goaltracking' => $goaltracking,
+        'branches' => $branches,
+        'goalTypes' => $goalTypes,
+        'statusOptions' => $statusOptions
+    ]));
+}
+
+    
+
     public function goaltrackingCreate()
     {
         $this->pageTitle = 'Add goaltracking';
@@ -59,9 +96,9 @@ class GoalTrackingController extends AccountBaseController
             'target' => $request->target,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'description' => $request->description, // Store description
+            'description' => $request->description,
+            'created_at'=> now(),
         ]);
-        // Redirect to a specific page with a success message
         return redirect()->route('goaltracking.index')->with('success', 'Goal Tracking Data Saved Successfully!');
     }  
     public function goaltrackingview($id)

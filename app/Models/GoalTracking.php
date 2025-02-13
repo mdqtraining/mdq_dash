@@ -21,5 +21,9 @@ class GoalTracking extends BaseModel
         'rating',
         'description',  // Corrected typo here
     ];
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_name'); // Ensure 'company_id' exists in goal_trackings table
+    }
 }
 

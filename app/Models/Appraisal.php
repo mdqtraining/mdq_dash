@@ -15,6 +15,7 @@ class Appraisal extends BaseModel
         'employee_name',
         'target_rating',
         'overall_rating',
+        'department',
         'appraisal_date',
         'remark',
         'created_at',

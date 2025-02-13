@@ -17,117 +17,124 @@
                     </thead>
                     <tbody>
                         @if($appraisals->count() > 0)
-                            @foreach ($appraisals as $appraisal)
-                                <tr>
-                                    <td>{{ $appraisal->branch }}</td>
-                                    <td>{{ $appraisal->department }}</td>
-                                    <td>{{ $appraisal->designation }}</td>
-                                    <td>{{ $appraisal->employee_name }}</td>
+                        @foreach ($appraisals as $appraisal)
+                        <tr>
+                            <td>{{ $appraisal->branch }}</td>
+                            <td>{{ $appraisal->department }}</td>
+                            <td>{{ $appraisal->designation }}</td>
+                            <td>{{ $appraisal->employee_name }}</td>
 
-                                    <!-- Rating 1 -->
-                                    <td>
-                                        <div class="star-rating" data-rating="{{ $appraisal->target_rating }}">
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                <span class="star" data-value="{{ $i }}">&#9733;</span>
-                                            @endfor
+                            <!-- Rating 1 -->
+                            <td>
+                                <div class="star-rating" data-rating="{{ $appraisal->target_rating }}">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <span class="star" data-value="{{ $i }}">&#9733;</span>
+                                        @endfor
+                                </div>
+                                <div class="text-dark f-13">({{ $appraisal->target_rating }} / 5)</div>
+                            </td>
+
+                            <!-- Rating 2 -->
+                            <td>
+                                <div class="star-rating" data-rating="{{ $appraisal->overall_rating }}">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <span class="star" data-value="{{ $i }}">&#9733;</span>
+                                        @endfor
+                                </div>
+                                <div class="text-dark f-13">({{ $appraisal->overall_rating }} / 5)</div>
+                            </td>
+
+                            <!-- Appraisal Date -->
+                            <td>{{ $appraisal->appraisal_date }}</td>
+
+                            <!-- Action -->
+                            <td class="text-right pr-20">
+                                <div class="task_view">
+                                    <div class="dropdown">
+                                        <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link" id="dropdownMenuLink-55" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="icon-options-vertical icons"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-55" tabindex="0">
+                                            <a href="{{ route('appraisal.view',$appraisal->id)}}" class="dropdown-item">
+                                                <i class="fa fa-eye mr-2"></i> View
+                                            </a>
+                                            <a class="dropdown-item" href="{{ route('appraisal.edit', $appraisal->id) }}">
+                                                <i class="fa fa-edit mr-2"></i> Edit
+                                            </a>
+                                            <a class="dropdown-item delete-table-row" href="{{ route('appraisal.destroy', $appraisal->id) }}">
+                                                <i class="fa fa-trash mr-2"></i> Delete
+                                            </a>
                                         </div>
-                                        <div class="text-dark f-13">({{ $appraisal->target_rating }} / 5)</div>
-                                    </td>
-
-                                    <!-- Rating 2 -->
-                                    <td>
-                                        <div class="star-rating" data-rating="{{ $appraisal->overall_rating }}">
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                <span class="star" data-value="{{ $i }}">&#9733;</span>
-                                            @endfor
-                                        </div>
-                                        <div class="text-dark f-13">({{ $appraisal->overall_rating }} / 5)</div>
-                                    </td>
-
-                                    <!-- Appraisal Date -->
-                                    <td>{{ $appraisal->appraisal_date }}</td>
-
-                                    <!-- Action -->
-                                    <td class="text-right pr-20">
-                                        <div class="task_view">
-                                            <div class="dropdown">
-                                                <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link" id="dropdownMenuLink-55" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="icon-options-vertical icons"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-55" tabindex="0">
-                                                    <a href="{{ route('appraisal.view',$appraisal->id)}}" class="dropdown-item">
-                                                        <i class="fa fa-eye mr-2"></i> View
-                                                    </a>
-                                                    <a class="dropdown-item openRightModal" href="">
-                                                        <i class="fa fa-edit mr-2"></i> Edit
-                                                    </a>
-                                                    <a class="dropdown-item delete-table-row" href="{{ route('appraisal.destroy', $appraisal->id) }}">
-                                                        <i class="fa fa-trash mr-2"></i> Delete
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
                         @else
-                            <tr>
-                                <td colspan="8">No records found</td>
-                            </tr>
+                        <tr>
+                            <td colspan="8">No records found</td>
+                        </tr>
                         @endif
                     </tbody>
-                    
+
                 </table>
-                
+
             </div>
-            
+
         </div>
-        <div class="d-flex" style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
-            <div class="flex-grow-1" style="flex-grow: 1;">
-                <div class="dataTables_length" style="display: flex; align-items: center;">
-                    <label style="display: flex; align-items: center; gap: 10px; margin: 0;">
-                        <span>Show</span>
-                        <select class="custom-select custom-select-sm form-control form-control-sm" style="height: 35px; width: 70px;" onchange="window.location.href = '?per_page=' + this.value;">
-                            <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
-                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                            <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
-                        </select>
-                        <span>entries</span>
-                    </label>
-                </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <!-- Entries Per Page Dropdown -->
+            <div class="dataTables_length">
+                <label style="display:flex; align-items: center; gap: 10px; margin: 0;">
+                    <span>Show</span>
+                    <select class="custom-select custom-select-sm form-control form-control-sm"
+                        onchange="window.location.href = '?per_page=' + this.value;">
+                        <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                    </select>
+                    <span>entries</span>
+                </label>
             </div>
 
             <!-- Info Section -->
-            <div>
-                <div class="dataTables_info" id="leads-table_info" role="status" aria-live="polite" style="white-space: nowrap; padding: 0px !important;">
-                    Showing  1 to {{ $appraisal->count() }} of {{ $appraisal->count() }} entries
-                </div>
+            <div class="dataTables_info">
+                Showing {{ $appraisals->firstItem() }} to {{ $appraisals->lastItem() }} of {{ $appraisals->total() }} entries
             </div>
 
-            <!-- Pagination Section -->
-            <div>
-                <div class="dataTables_paginate paging_simple_numbers" id="leads-table_paginate" style="display: flex; align-items: center;">
-                    <ul class="pagination" style="margin: 0; display: flex; list-style: none; padding: 0;">
-                        <!-- Previous Button -->
-                        <li class="paginate_button page-item " id="leads-table_previous" style="margin-right: 5px;">
-                            <a href="#" class="page-link">Previous</a>
-                        </li>
-                        
+            <!-- Pagination Links -->
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    {{-- Previous Button --}}
+                    <li class="page-item {{ $appraisals->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link text-white {{ $appraisals->onFirstPage() ? 'bg-secondary' : 'bg-primary' }}"
+                            href="{{ $appraisals->onFirstPage() ? '#' : $appraisals->previousPageUrl() }}">
+                            &laquo; Previous
+                        </a>
+                    </li>
 
-                            <li class="paginate_button page-item active " style="margin-right: 5px;">
-                                <a href="#"class="page-link"> 1</a>
-                            </li>
-
-                        
-                        <!-- Next Button -->
-                        <li class="paginate_button page-item" id="leads-table_next">
-                            <a href="#" class="page-link">Next</a>
+                    {{-- Page Numbers --}}
+                    @for ($i = 1; $i <= $appraisals->lastPage(); $i++)
+                        <li class="page-item {{ ($appraisals->currentPage() == $i) ? 'active' : '' }}">
+                            <a class="page-link {{ ($appraisals->currentPage() == $i) ? 'bg-dark text-white border-dark' : '' }}"
+                                href="{{ $appraisals->url($i) }}">{{ $i }}</a>
                         </li>
-                    </ul>
-                </div>
+                        @endfor
+
+                        {{-- Next Button --}}
+                        <li class="page-item {{ $appraisals->hasMorePages() ? '' : 'disabled' }}">
+                            <a class="page-link text-white {{ $appraisals->hasMorePages() ? 'bg-primary' : 'bg-secondary' }}"
+                                href="{{ $appraisals->hasMorePages() ? $appraisals->nextPageUrl() : '#' }}">
+                                Next &raquo;
+                            </a>
+                        </li>
+                </ul>
             </div>
+
         </div>
+    </div>
+</div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const starContainers = document.querySelectorAll(".star-rating");

@@ -3,13 +3,13 @@
 @section('content')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('vendor/full-calendar/main.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-colorpicker.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="{{ asset('vendor/full-calendar/main.min.css') }}">
+<link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-colorpicker.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endpush
 
 @push('datatable-styles')
-    @include('sections.daterange_css')
+@include('sections.daterange_css')
 @endpush
 
 <form action="{{ route('appraisal.store') }}" method="POST" id="appraisalForm">
@@ -18,15 +18,15 @@
         <div class="add-page">
             <div class="p-20">
                 @if (session('success'))
-                    <div class="alert alert-success mt-4">{{ session('success') }}</div>
+                <div class="alert alert-success mt-4">{{ session('success') }}</div>
                 @endif
                 @if (session('error'))
-                    <div class="alert alert-danger mt-4">{{ session('error') }}</div>
+                <div class="alert alert-danger mt-4">{{ session('error') }}</div>
                 @endif
                 <script>
                     setTimeout(() => {
                         document.querySelectorAll('.alert').forEach(alert => alert.remove());
-                    }, 10000);
+                    }, 5000);
                 </script>
 
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
@@ -74,14 +74,14 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            flatpickr("#monthYearPicker", {
-                dateFormat: "m/Y",
-                allowInput: true,
-                disableMobile: true
-            });
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr("#monthYearPicker", {
+            dateFormat: "m/Y",
+            allowInput: true,
+            disableMobile: true
         });
-    </script>
+    });
+</script>
 @endpush

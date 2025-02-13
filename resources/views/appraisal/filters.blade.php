@@ -1,47 +1,59 @@
-<div class="filter-box" >
+<form method="GET" action="{{ route('appraisal.index') }}">
     <div class="d-lg-flex d-md-flex d-block flex-wrap filter-box bg-white client-list-filter">
-        <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
-            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.duration')</p>
-            <div class="select-status d-flex">
-                <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500 border-additional-grey"
-                    id="datatableRange" placeholder="@lang('placeholders.dateRange')">
-            </div>
-        </div>
-        <div class="select-box d-flex  py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
+        <!-- Employee Filter -->
+        <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0 align-items-center">
             <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.employee')</p>
             <div class="select-status">
-                <select class="form-control select-picker" name="employee" id="employee" data-live-search="true"
-                    data-size="8">
+                <select class="form-control select-picker" name="employee" id="employee" data-live-search="true">
+                    <option value="">All Employees</option>
+                    @foreach ($employees as $employee)
+                        <option value="{{ $employee->employee_name }}" {{ request('employee') == $employee->employee_name ? 'selected' : '' }}>
+                            {{ $employee->employee_name }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
         </div>
-        <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
-            <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
-                <div class="input-group bg-grey rounded">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text border-0 bg-additional-grey">
-                            <i class="fa fa-search f-13 text-dark-grey"></i>
-                        </span>
-                    </div>
-                    <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field"
-                        placeholder="@lang('app.startTyping')">
-                </div>
-            </form>
-        </div>
-        <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
-            <x-forms.button-secondary class="btn-xs d-none" id="reset-filters" icon="times-circle">
-                @lang('app.clearFilters')
-            </x-forms.button-secondary>
-        </div>
-        <div class="ml-auto d-flex align-items-center">
-            <div class="more-filters py-2 pl-0 pl-lg-2 pl-md-2 position-relative">
 
-                <a class="mb-0 d-none d-lg-block  f-14 text-dark-grey">
-                    <i class="fa fa-filter f-13 text-dark-grey mt-1 mr-1"> </i>
-                    @lang('app.moreFilters')
-                </a>
-
+        <!-- Deportment Filter -->
+        <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0 align-items-center">
+            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">department</p>
+            <div class="select-status">
+                <select class="form-control select-picker" name="department" id="department" data-live-search="true">
+                    <option value="">All Departments</option>
+                    @foreach ($departments as $department)
+                        <option value="{{ $department->department }}" {{ request('department') == $department->department ? 'selected' : '' }}>
+                            {{ $department->department }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
         </div>
+            
+        <!-- designation Filter --> 
+        <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0 align-items-center">
+            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">designation</p>
+            <div class="select-status">
+                <select class="form-control select-picker" name="designation" id="designation" data-live-search="true">
+                    <option value="">All Designations</option>
+                    @foreach ($designations as $designation)
+                        <option value="{{ $designation->designation }}" {{ request('designation') == $designation->designation ? 'selected' : '' }}>
+                            {{$designation->designation}}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        
+        <div class="select-box d-flex align-items-center py-2 px-2">
+                <button type="submit" class="btn btn-primary btn-xs">
+                    <i class="fa fa-filter"></i> Filter
+                </button>
+                <a href="{{ route('appraisal.index') }}"  class="btn btn-secondary btn-xs ml-2">
+                    <i class="fa fa-times-circle"></i> @lang('app.clearFilters')
+                </a>
+            </div>
+        <!-- Submit Button -->
+        
     </div>
-</div>
+</form>

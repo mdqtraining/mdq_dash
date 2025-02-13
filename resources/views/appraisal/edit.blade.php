@@ -15,12 +15,11 @@
 @endpush
 
 @section('content')
-<form action="{{ route('appraisal.store') }}" method="POST" id="appraisalForm">
+<form action="{{ route('appraisal.update', $appraisal->id) }}" method="POST" id="appraisalForm">
     @csrf
     <div class="content-wrapper">
         <div class="add-page">
             <div class="p-20">
-                <div id="alertMessage" class="alert" style="display: none;"></div>
 
                 @if (session('success'))
                 <div class="alert alert-success mt-4">
@@ -49,9 +48,11 @@
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Branch <sup class="f-14 mr-1">*</sup></label>
                             <select class="form-control height-35 f-14" name="branch" id="branch" required>
-                                <option value="" disabled selected>Select Branch</option>
                                 @foreach($branchname as $item)
-                                <option value="{{ $item }}">{{ $item }}</option>
+                                <option value="{{ $item }}"
+                                    {{ isset($appraisal) && $appraisal->branch == $item ? 'selected' : '' }}>
+                                    {{ $item }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -61,9 +62,11 @@
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Department <sup class="f-14 mr-1">*</sup></label>
                             <select class="form-control height-35 f-14" name="department" id="department" required>
-                                <option value="" disabled selected>Select Department</option>
                                 @foreach($department as $item)
-                                <option value="{{ $item }}">{{ $item }}</option>
+                                <option value="{{ $item }}"
+                                    {{ isset($appraisal) && $appraisal->department == $item ? 'selected' : '' }}>
+                                    {{ $item }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -73,9 +76,11 @@
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Employee <sup class="f-14 mr-1">*</sup></label>
                             <select class="form-control height-35 f-14" name="employee" id="employee" required>
-                                <option value="" disabled selected>Select employee</option>
                                 @foreach($employee as $item)
-                                <option>{{ $item }}</option>
+                                <option value="{{ $item }}"
+                                    {{isset($appraisal) && $appraisal->employee_name == $item ? 'selected' : '' }}>
+                                    {{ $item }}
+                                </option>
                                 @endforeach
                             </select>
                             @error('employee')
@@ -85,45 +90,62 @@
                     </div>
                 </div>
 
+
                 <div class="col-md-6 col-lg-4" id="deadlineBox">
                     <label for="monthYearPicker" class="f-14 text-dark-grey mb-12">Select Month and Year <sup class="f-14 mr-1">*</sup></label>
                     <input type="text" id="monthYearPicker" name="month_year" class="form-control height-35 f-14 bg-white"
-                        placeholder="MM/YYYY" required>
+                        placeholder="MM/YYYY" value="{{$appraisal->appraisal_date}}" required>
                 </div>
+
 
                 <div class="col-md-12 col-lg-6" id="remarkBox">
                     <div class="form-group my-3">
                         <label class="f-14 text-dark-grey mb-12" for="remarkInput">Remark</label>
                         <textarea id="remarkInput" name="remark" class="form-control height-35 f-14 bg-white"
-                            placeholder="Enter your remarks here..." rows="1" oninput="autoResize(this)" required></textarea>
+                            placeholder="Enter your remarks here..." rows="1" oninput="autoResize(this)" required> {{$appraisal->remark}}</textarea>
                     </div>
                 </div>
 
-                <div id="hidden" style="display: none">
+                <div>
+                    @php
+                    $indicator = $indicator->first();
+
+                    if ($indicator) {
+                    $field_ratings = json_decode($indicator->field_ratings, true);
+                    } else {
+                    $field_ratings = [];
+                    }
+                    $field_ratingsappraisal = json_decode($appraisal->field_ratings, true);
+                    @endphp
+
                     @foreach ($indicatorheaders as $category => $fields)
                     <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">{{ $category }}</h4>
                     <div class="p-20">
                         @foreach ($fields as $field)
                         <div class="d-flex p-20 align-items-center">
                             <div class="col-lg-4 col-md-6 text-dark-grey">{{ $field->field_name }}</div>
-
+                            @php
+                            $normalized_field_name = Str::slug(strtolower(trim($field->field_name)), '_');
+                            $appraisal_rating = $field_ratingsappraisal[$normalized_field_name] ?? 0;
+                            $rating = $field_ratings[$field->field_name] ?? 0;
+                            @endphp
                             <div class="f-21 col-6">
                                 <div class="d-flex" style="justify-content: space-between;">
-                                    <div class="rating" id="{{ $field->field_name }}" data-rating="0">
+                                    <div class="rating" id="{{ $field->field_name }}" data-rating="{{ $rating }}">
                                         <span data-value="1">&#9733;</span>
                                         <span data-value="2">&#9733;</span>
                                         <span data-value="3">&#9733;</span>
                                         <span data-value="4">&#9733;</span>
                                         <span data-value="5">&#9733;</span>
                                     </div>
-                                    <div class="rating_appraisal" data-rating="0">
+                                    <div class="rating_appraisal" data-rating="{{ $appraisal_rating }}">
                                         <span data-value="1">&#9733;</span>
                                         <span data-value="2">&#9733;</span>
                                         <span data-value="3">&#9733;</span>
                                         <span data-value="4">&#9733;</span>
                                         <span data-value="5">&#9733;</span>
                                     </div>
-                                    <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" value="0">
+                                    <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" value="{{$appraisal_rating}}">
                                 </div>
                             </div>
                         </div>
@@ -148,115 +170,7 @@
 <script>
     var designation = "{{ route('getDesignation') }}";
 </script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        function updateStars(ratingContainer) {
-            const stars = ratingContainer.querySelectorAll("span");
-            const ratingValue = parseInt(ratingContainer.getAttribute("data-rating")) || 0;
 
-            stars.forEach((star) => {
-                let starValue = parseInt(star.getAttribute("data-value"));
-                star.style.color = starValue <= ratingValue ? "#ffd700" : "#ccc";
-            });
-        }
-
-        function refreshRatings() {
-            document.querySelectorAll(".rating").forEach(updateStars);
-        }
-        async function getDesignation() {
-            try {
-                if (!designation.trim()) {
-                    console.error("Error: 'designation' variable is not a valid URL.");
-                    return;
-                }
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-                if (!csrfToken) {
-                    console.error("Error: CSRF token not found.");
-                    return;
-                }
-                const branchValue = document.getElementById("branch")?.value?.trim() || "";
-                const employeeValue = document.getElementById("employee")?.value?.trim() || "";
-
-                if (!branchValue || !employeeValue) {
-                    console.warn("Branch or Employee missing. Skipping API call.");
-                    return;
-                }
-
-                const response = await fetch(designation, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({
-                        branch: branchValue,
-                        employee: employeeValue
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP error! Status: ${response.status}. Server response: ${errorText}`);
-                }
-
-                const data = await response.json();
-
-                // Reset ratings to zero by default
-                document.querySelectorAll(".rating").forEach((field) => {
-                    field.setAttribute("data-rating", "0");
-                });
-
-                if (!data.designation || !Array.isArray(data.designation) || data.designation.length === 0) {
-                    console.warn("No valid designation data found in response. Resetting ratings.");
-                    refreshRatings();
-                    return;
-                }
-
-                const designationData = data.designation[0];
-
-                if (designationData.field_ratings) {
-                    try {
-                        const fieldRatings = JSON.parse(designationData.field_ratings);
-                        document.getElementById("hidden").style.display = "block";
-                        document.querySelectorAll(".rating").forEach((field) => {
-                            let fieldName = field.id;
-                            if (fieldRatings.hasOwnProperty(fieldName)) {
-                                field.setAttribute("data-rating", fieldRatings[fieldName]);
-                            } else {
-                                field.setAttribute("data-rating", "0");
-                            }
-                        });
-
-                    } catch (parseError) {
-                        console.error("Error parsing field_ratings JSON:", parseError);
-                    }
-                }
-
-                refreshRatings(); // Ensure stars update after API response
-
-            } catch (error) {
-                console.error("Error fetching Indicators:", error);
-            }
-        }
-
-        function fetchDesignations() {
-            if (document.getElementById("branch")?.value && document.getElementById("employee")?.value) {
-                getDesignation();
-            } else {
-                // Reset ratings to zero if no branch or employee is selected
-                document.querySelectorAll(".rating").forEach((field) => {
-                    field.setAttribute("data-rating", "0");
-                });
-                refreshRatings();
-            }
-        }
-
-        // Event Listeners for branch and employee selection
-        document.getElementById("branch")?.addEventListener("change", fetchDesignations);
-        document.getElementById("employee")?.addEventListener("change", fetchDesignations);
-
-    });
-</script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         function setupRatings(selector, interactive) {
@@ -336,7 +250,6 @@
         });
     });
 </script>
-
 @endpush
 
 @push('styles')

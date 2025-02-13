@@ -1,47 +1,72 @@
-<div class="filter-box">
-    <div class="d-lg-flex d-md-flex d-block flex-wrap filter-box bg-white client-list-filter">
-        <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
-            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.duration')</p>
-            <div class="select-status d-flex">
-                <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500 border-additional-grey"
-                    id="datatableRange" placeholder="@lang('placeholders.dateRange')">
-            </div>
-        </div>
-        <div class="select-box d-flex  py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
-            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.employee')</p>
-            <div class="select-status">
-                <select class="form-control select-picker" name="employee" id="employee" data-live-search="true"
-                    data-size="8">
-                </select>
-            </div>
-        </div>
-        <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
-            <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
-                <div class="input-group bg-grey rounded">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text border-0 bg-additional-grey">
-                            <i class="fa fa-search f-13 text-dark-grey"></i>
-                        </span>
-                    </div>
-                    <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field"
-                        placeholder="@lang('app.startTyping')">
+<form method="GET" action="{{ route('indicator.index') }}">
+    <div class="filter-box">
+        <div class="d-lg-flex d-md-flex d-block flex-wrap filter-box bg-white client-list-filter align-items-center">
+            
+            <!-- 🔹 Branch Filter -->
+            <div class="select-box d-flex align-items-center pr-2 border-right-grey border-right-grey-sm-0 py-2 px-2">
+                <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">Branch</p>
+                <div class="select-status d-flex align-items-center">
+                    <select class="form-control select-picker" name="branch">
+                        <option value="">@lang('app.all')</option>
+                        @foreach($branches as $branch)
+                            <option value="{{ $branch->company_name }}" {{ request('branch') == $branch->companyname ? 'selected' : '' }}>{{ $branch->company_name }}</option>
+                        @endforeach
+                    </select>
                 </div>
-            </form>
-        </div>
-        <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
-            <x-forms.button-secondary class="btn-xs d-none" id="reset-filters" icon="times-circle">
-                @lang('app.clearFilters')
-            </x-forms.button-secondary>
-        </div>
-        <div class="ml-auto d-flex align-items-center">
-            <div class="more-filters py-2 pl-0 pl-lg-2 pl-md-2 position-relative">
-
-                <a class="mb-0 d-none d-lg-block  f-14 text-dark-grey">
-                    <i class="fa fa-filter f-13 text-dark-grey mt-1 mr-1"> </i>
-                    @lang('app.moreFilters')
-                </a>
-
             </div>
+            
+
+            <!-- 🔹 Department Filter -->
+            <div class="select-box d-flex align-items-center pr-2 border-right-grey border-right-grey-sm-0 py-2 px-2">
+                <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.department')</p>
+                <div class="select-status d-flex align-items-center">
+                    <select class="form-control select-picker" name="department">
+                        <option value="">@lang('app.all')</option>
+                        @foreach($departments as $department)
+                            <option value="{{ $department->team_name }}" {{ request('department') == $department->team_name ? 'selected' : '' }}>{{ $department->team_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <!-- 🔹 Designation Filter -->
+            <div class="select-box d-flex align-items-center pr-2 border-right-grey border-right-grey-sm-0 py-2 px-2">
+                <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.designation')</p>
+                <div class="select-status d-flex align-items-center">
+                    <select class="form-control select-picker" name="designation">
+                        <option value="">@lang('app.all')</option>
+                        @foreach($designations as $designation)
+                            <option value="{{ $designation->name }}" {{ request('designation') == $designation->name ? 'selected' : '' }}>{{ $designation->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <!-- 🔹 Rating Filter -->
+            <div class="select-box d-flex align-items-center pr-2 border-right-grey border-right-grey-sm-0 py-2 px-2">
+                <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.rating')</p>
+                <div class="select-status d-flex align-items-center">
+                    <select class="form-control select-picker" name="rating">
+                        <option value="">@lang('app.all')</option>
+                        <option value="1" {{ request('rating') == '1' ? 'selected' : '' }}>1 Star</option>
+                        <option value="2" {{ request('rating') == '2' ? 'selected' : '' }}>2 Stars</option>
+                        <option value="3" {{ request('rating') == '3' ? 'selected' : '' }}>3 Stars</option>
+                        <option value="4" {{ request('rating') == '4' ? 'selected' : '' }}>4 Stars</option>
+                        <option value="5" {{ request('rating') == '5' ? 'selected' : '' }}>5 Stars</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 🔹 Buttons -->
+            <div class="select-box d-flex align-items-center py-2 px-2">
+                <button type="submit" class="btn btn-primary ">
+                    <i class="fa fa-filter"></i> Filter
+                </button>
+                <a href="{{ route('indicator.index') }}" class="btn btn-secondary ml-2 ">
+                    <i class="fa fa-times-circle"></i> @lang('app.clearFilters')
+                </a>
+            </div>
+
         </div>
     </div>
-</div>
+</form>

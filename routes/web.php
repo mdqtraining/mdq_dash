@@ -121,6 +121,8 @@ use App\Http\Controllers\AppraisalController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OfflinePaymentSettingController;
 use App\Http\Controllers\PerformanceController;
+use App\Exports\GoalTrackingExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('image/upload', [ImageController::class, 'store'])->name('image.store');
@@ -280,7 +282,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::resource('project-template-task', ProjectTemplateTaskController::class);
             Route::resource('project-template-sub-task', ProjectTemplateSubTaskController::class);
             Route::resource('project-calendar', ProjectCalendarController::class);
-
         }
     );
 
@@ -348,7 +349,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::get('awards/quick-create', [AwardController::class, 'quickCreate'])->name('awards.quick-create');
             Route::post('awards/quick-store', [AwardController::class, 'quickStore'])->name('awards.quick-store');
             Route::resource('awards', AwardController::class);
-        });
+        }
+    );
     Route::post('appreciations/apply-quick-action', [AppreciationController::class, 'applyQuickAction'])->name('appreciations.apply_quick_action');
     Route::resource('appreciations', AppreciationController::class);
 
@@ -764,8 +766,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('quickbooks', [QuickbookController::class, 'index'])->name('quickbooks.index');
     // Route::get('indicator', [HomeController::class, 'indicator'])->name('indicator.index');
 
- 
-    
+
+
     Route::get('indicator', [IndicatorController::class, 'indicator'])->name('indicator.index');
     Route::get('indicator/add', [IndicatorController::class, 'indicatorCreate'])->name('indicator.create');
     Route::get('indicator/edit/{id}', [IndicatorController::class, 'indicatorEdit'])->name('indicator.edit');
@@ -774,15 +776,21 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('indicator/store', [IndicatorController::class, 'indicatorstore'])->name('indicator.store');
     Route::post('indicator/delete/{id}', [IndicatorController::class, 'indicatorDestroy'])->name('indicator.destroy');
     Route::delete('indicator/delete/{id}', [IndicatorController::class, 'indicatorDestroy'])->name('indicator.destroy');
+    Route::post('/indicator/import', [IndicatorController::class, 'import'])->name('indicator.import');
+    Route::get('/indicator/export', [IndicatorController::class, 'export'])->name('indicator.export');
+    Route::post('indicator/create', [IndicatorController::class, 'fieldratingcreate'])->name('ratingfield.store');
     Route::get('/get-employee-indicator-data', [IndicatorController::class, 'getEmployeeIndicatorData'])->name('getEmployeeIndicatorData');
-    
+
     Route::get('appraisal', [AppraisalController::class, 'appraisal'])->name('appraisal.index');
     Route::get('appraisal/add', [AppraisalController::class, 'appraisalCreate'])->name('appraisal.create');
     Route::post('appraisal/store', [AppraisalController::class, 'appraisalstore'])->name('appraisal.store');
     Route::post('/account/get-designation', [AppraisalController::class, 'getDesignation'])->name('getDesignation');
     Route::get('appraisal/delete/{id}', [AppraisalController::class, 'appraisalDestroy'])->name('appraisal.destroy');
-    Route::get('appraisal/view/{id}',[AppraisalController::class, 'appraisalview'])->name('appraisal.view');
-    
+    Route::get('appraisal/view/{id}', [AppraisalController::class, 'appraisalview'])->name('appraisal.view');
+    Route::get('appraisal/export', [AppraisalController::class, 'export'])->name('appraisal.export');
+    Route::get('appraisal/edit/{id}', [AppraisalController::class, 'appraisaledit'])->name('appraisal.edit');
+    Route::post('appraisal/update/{id}', [AppraisalController::class, 'appraisalupdate'])->name('appraisal.update');
+
     Route::get('goaltracking', [GoalTrackingController::class, 'goaltracking'])->name('goaltracking.index');
     Route::get('goaltracking/add', [GoalTrackingController::class, 'goaltrackingCreate'])->name('goaltracking.create');
     Route::post('goaltracking/store', [GoalTrackingController::class, 'goaltrackingstore'])->name('goaltracking.store');
@@ -792,9 +800,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('goaltracking/view/{id}', [GoalTrackingController::class, 'goaltrackingview'])->name('goaltracking.show');
     Route::get('/get-employee-indicator-data', [EmployeeController::class, 'getEmployeeIndicatorData'])->name('getEmployeeIndicatorData');
 
+
+    Route::get('/goaltracking/export', function () {
+        return Excel::download(new GoalTrackingExport, 'goaltracking.xlsx');
+    })->name('goaltracking.export');
+
     // Route::resource('indicator', IndicatorController::class);
     // 
 });
-
-
-    
