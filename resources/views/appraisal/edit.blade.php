@@ -19,150 +19,163 @@
     @csrf
     <div class="content-wrapper">
         <div class="add-page">
-            <div class="p-20">
 
-                @if (session('success'))
-                <div class="alert alert-success mt-4">
-                    {{ session('success') }}
-                </div>
-                @endif
+            @if (session('success'))
+            <div class="alert alert-success mt-4">
+                {{ session('success') }}
+            </div>
+            @endif
 
-                @if (session('error'))
-                <div class="alert alert-danger mt-4 ">
-                    {{ session('error') }}
-                </div>
-                @endif
+            @if (session('error'))
+            <div class="alert alert-danger mt-4 ">
+                {{ session('error') }}
+            </div>
+            @endif
 
-                <script>
-                    setTimeout(() => {
-                        document.querySelectorAll('.alert').forEach(alert => alert.remove());
-                    }, 5000); // Message disappears after 5 seconds
-                </script>
+            <script>
+                setTimeout(() => {
+                    document.querySelectorAll('.alert').forEach(alert => alert.remove());
+                }, 5000); // Message disappears after 5 seconds
+            </script>
 
-                <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
-                    Appraisal Detials
-                </h4>
+            <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
+                Appraisal Detials
+            </h4>
 
-                <div class="row p-20">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Branch <sup class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="branch" id="branch" required>
-                                @foreach($branchname as $item)
-                                <option value="{{ $item }}"
-                                    {{ isset($appraisal) && $appraisal->branch == $item ? 'selected' : '' }}>
-                                    {{ $item }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Department <sup class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="department" id="department" required>
-                                @foreach($department as $item)
-                                <option value="{{ $item }}"
-                                    {{ isset($appraisal) && $appraisal->department == $item ? 'selected' : '' }}>
-                                    {{ $item }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Employee <sup class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="employee" id="employee" required>
-                                @foreach($employee as $item)
-                                <option value="{{ $item }}"
-                                    {{isset($appraisal) && $appraisal->employee_name == $item ? 'selected' : '' }}>
-                                    {{ $item }}
-                                </option>
-                                @endforeach
-                            </select>
-                            @error('employee')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-md-6 col-lg-4" id="deadlineBox">
-                    <label for="monthYearPicker" class="f-14 text-dark-grey mb-12">Select Month and Year <sup class="f-14 mr-1">*</sup></label>
-                    <input type="text" id="monthYearPicker" name="month_year" class="form-control height-35 f-14 bg-white"
-                        placeholder="MM/YYYY" value="{{$appraisal->appraisal_date}}" required>
-                </div>
-
-
-                <div class="col-md-12 col-lg-6" id="remarkBox">
+            <div class="row p-20">
+                <div class="col-lg-4 col-md-6">
                     <div class="form-group my-3">
-                        <label class="f-14 text-dark-grey mb-12" for="remarkInput">Remark</label>
-                        <textarea id="remarkInput" name="remark" class="form-control height-35 f-14 bg-white"
-                            placeholder="Enter your remarks here..." rows="1" oninput="autoResize(this)" required> {{$appraisal->remark}}</textarea>
+                        <label class="f-14 text-dark-grey mb-12">Branch <sup class="f-14 mr-1">*</sup></label>
+                        <select class="form-control height-35 f-14" name="branch" id="branch" readonly>
+                            <option value="{{$appraisal->branch}}" selected>
+                                {{ $appraisal->branch }}
+                            </option>
+                        </select>
                     </div>
                 </div>
 
-                <div>
-                    @php
-                    $indicator = $indicator->first();
+                <div class="col-lg-4 col-md-6">
+                    <div class="form-group my-3">
+                        <label class="f-14 text-dark-grey mb-12">Department <sup class="f-14 mr-1">*</sup></label>
+                        <select class="form-control height-35 f-14" name="department" id="department" readonly>
+                            <option value="{{ $appraisal->department }}" selected>
+                                {{$appraisal->department}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="form-group my-3">
+                        <label class="f-14 text-dark-grey mb-12">Employee <sup class="f-14 mr-1">*</sup></label>
+                        <select class="form-control height-35 f-14" name="employee" id="employee" readonly>
+                            <option value="{{ $appraisal->employee_name }}">
+                                {{ $appraisal->employee_name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" id="deadlineBox">
+                <label for="monthYearPicker" class="f-14 text-dark-grey mb-12">Select Month and Year <sup class="f-14 mr-1">*</sup></label>
+                <input type="text" id="monthYearPicker" name="month_year" class="form-control height-35 f-14 bg-white"
+                    placeholder="MM/YYYY" value="{{$appraisal->appraisal_date}}" required maxlength="7">
+                 <script>
+                    document.getElementById('monthYearPicker').addEventListener('input', function(e) {
+                        let value = e.target.value;
 
-                    if ($indicator) {
-                    $field_ratings = json_decode($indicator->field_ratings, true);
-                    } else {
-                    $field_ratings = [];
-                    }
-                    $field_ratingsappraisal = json_decode($appraisal->field_ratings, true);
-                    @endphp
+                        // Allow only numbers and "/"
+                        value = value.replace(/[^0-9\/]/g, '');
 
-                    @foreach ($indicatorheaders as $category => $fields)
-                    <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">{{ $category }}</h4>
-                    <div class="p-20">
-                        @foreach ($fields as $field)
-                        <div class="d-flex p-20 align-items-center">
-                            <div class="col-lg-4 col-md-6 text-dark-grey">{{ $field->field_name }}</div>
-                            @php
-                            $normalized_field_name = Str::slug(strtolower(trim($field->field_name)), '_');
-                            $appraisal_rating = $field_ratingsappraisal[$normalized_field_name] ?? 0;
-                            $rating = $field_ratings[$field->field_name] ?? 0;
-                            @endphp
-                            <div class="f-21 col-6">
-                                <div class="d-flex" style="justify-content: space-between;">
-                                    <div class="rating" id="{{ $field->field_name }}" data-rating="{{ $rating }}">
-                                        <span data-value="1">&#9733;</span>
-                                        <span data-value="2">&#9733;</span>
-                                        <span data-value="3">&#9733;</span>
-                                        <span data-value="4">&#9733;</span>
-                                        <span data-value="5">&#9733;</span>
-                                    </div>
-                                    <div class="rating_appraisal" data-rating="{{ $appraisal_rating }}">
-                                        <span data-value="1">&#9733;</span>
-                                        <span data-value="2">&#9733;</span>
-                                        <span data-value="3">&#9733;</span>
-                                        <span data-value="4">&#9733;</span>
-                                        <span data-value="5">&#9733;</span>
-                                    </div>
-                                    <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" value="{{$appraisal_rating}}">
+                        // Auto-add "/" after two digits
+                        if (value.length > 2 && value.charAt(2) !== '/') {
+                            value = value.slice(0, 2) + '/' + value.slice(2);
+                        }
+
+                        // Limit length to 7 characters (MM/YYYY)
+                        if (value.length > 7) {
+                            value = value.slice(0, 7);
+                        }
+
+                        e.target.value = value;
+                    });
+
+                    document.getElementById('monthYearPicker').addEventListener('blur', function(e) {
+                        let value = e.target.value.trim(); // Trim spaces
+                        let errorMessage = document.getElementById('error-message');
+
+                        // Regular expression to validate MM/YYYY format
+                        let regex = /^(0[1-9]|1[0-2])\/\d{4}$/;
+
+                        if (!regex.test(value)) {
+                            errorMessage.style.display = 'inline'; // Show error message
+                        } else {
+                            errorMessage.style.display = 'none'; // Hide error message
+                        }
+                    });
+                </script>
+            </div>
+            <div class="col-md-12 col-lg-6" id="remarkBox">
+                <div class="form-group my-3">
+                    <label class="f-14 text-dark-grey mb-12" for="remarkInput">Remark</label>
+                    <textarea id="remarkInput" name="remark" class="form-control height-35 f-14 bg-white"
+                        placeholder="Enter your remarks here..." rows="1" oninput="autoResize(this)" required> {{$appraisal->remark}}</textarea>
+                </div>
+            </div>
+            <div>
+                @php
+                $indicator = $indicator->first();
+
+                if ($indicator) {
+                $field_ratings = json_decode($indicator->field_ratings, true);
+                } else {
+                $field_ratings = [];
+                }
+                $field_ratingsappraisal = json_decode($appraisal->field_ratings, true);
+                @endphp
+                @foreach ($indicatorheaders as $category => $fields)
+                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">{{ $category }}</h4>
+                <div class="p-20">
+                    @foreach ($fields as $field)
+                    <div class="d-flex p-20 align-items-center">
+                        <div class="col-lg-4 col-md-6 text-dark-grey">{{ $field->field_name }}</div>
+                        @php
+                        $normalized_field_name = Str::slug(strtolower(trim($field->field_name)), '_');
+                        $appraisal_rating = $field_ratingsappraisal[$normalized_field_name] ?? 0;
+                        $rating = $field_ratings[$field->field_name] ?? 0;
+                        @endphp
+                        <div class="f-21 col-6">
+                            <div class="d-flex" style="justify-content: space-between;">
+                                <div class="rating" id="{{ $field->field_name }}" data-rating="{{ $rating }}">
+                                    <span data-value="1">&#9733;</span>
+                                    <span data-value="2">&#9733;</span>
+                                    <span data-value="3">&#9733;</span>
+                                    <span data-value="4">&#9733;</span>
+                                    <span data-value="5">&#9733;</span>
                                 </div>
+                                <div class="rating_appraisal" data-rating="{{ $appraisal_rating }}">
+                                    <span data-value="1">&#9733;</span>
+                                    <span data-value="2">&#9733;</span>
+                                    <span data-value="3">&#9733;</span>
+                                    <span data-value="4">&#9733;</span>
+                                    <span data-value="5">&#9733;</span>
+                                </div>
+                                <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" value="{{$appraisal_rating}}">
                             </div>
                         </div>
-                        @endforeach
                     </div>
                     @endforeach
                 </div>
-
+                @endforeach
+            </div>
+            <div class="p-20">
                 <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
                     <i class="fa fa-check mr-1"></i> Save
                 </button>
-                <a href="{{ route('appraisal.index') }}" class="btn-cancel rounded f-14 p-2">Cancel</a>
+                <a href="{{ route('appraisal.index') }}" class="btn-cancel rounded f-14 p-2 border-0">Cancel</a>
             </div>
         </div>
     </div>
 </form>
-
 @endsection
 
 @push('scripts')
@@ -170,7 +183,6 @@
 <script>
     var designation = "{{ route('getDesignation') }}";
 </script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         function setupRatings(selector, interactive) {
@@ -183,7 +195,6 @@
                         s.classList.toggle("selected", s.getAttribute("data-value") <= value);
                     });
                 }
-
                 // Set initial state
                 const currentRating = ratingContainer.getAttribute("data-rating") || 0;
                 updateStars(currentRating);
@@ -212,7 +223,6 @@
 
         // Apply static ratings (read-only display)
         setupRatings(".rating", false);
-
         // Apply interactive ratings (clickable & hover effects)
         setupRatings(".rating_appraisal", true);
     });
@@ -224,7 +234,6 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const remarkInput = document.getElementById("remarkInput");
-
         if (remarkInput) {
             remarkInput.addEventListener("keydown", function(event) {
                 const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab", "SpaceBar"];

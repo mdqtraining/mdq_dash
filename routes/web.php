@@ -124,6 +124,13 @@ use App\Http\Controllers\PerformanceController;
 use App\Exports\GoalTrackingExport;
 use Maatwebsite\Excel\Facades\Excel;
 
+Route::prefix('api')->group(function () {
+    Route::get('/departments/{branch}', [IndicatorController::class, 'getDepartments']);
+    Route::get('/designations/{branch}/{department}', [IndicatorController::class, 'getDesignations']);
+});
+
+
+
 Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('image/upload', [ImageController::class, 'store'])->name('image.store');
 
@@ -774,7 +781,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('indicator/view/{id}', [IndicatorController::class, 'indicatorview'])->name('indicator.view');
     Route::put('indicator-update/{id}', [IndicatorController::class, 'indicatorUpdate'])->name('indicator.update');
     Route::post('indicator/store', [IndicatorController::class, 'indicatorstore'])->name('indicator.store');
-    Route::post('indicator/delete/{id}', [IndicatorController::class, 'indicatorDestroy'])->name('indicator.destroy');
     Route::delete('indicator/delete/{id}', [IndicatorController::class, 'indicatorDestroy'])->name('indicator.destroy');
     Route::post('/indicator/import', [IndicatorController::class, 'import'])->name('indicator.import');
     Route::get('/indicator/export', [IndicatorController::class, 'export'])->name('indicator.export');

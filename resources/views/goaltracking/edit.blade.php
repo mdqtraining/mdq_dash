@@ -15,7 +15,6 @@
     <form action="{{ route('goaltracking.update', $goaltracking->id) }}" method="POST">
         @csrf
         <div class="add-page">
-            <div class="p-20">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                     Goal Tracking Detials
                 </h4>
@@ -195,11 +194,12 @@
                             });
                         });
                     </script>
-                </div>
+                </div> 
+            <div class="p-20">
                 <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
                     <i class="fa fa-check mr-1"></i>Save
                 </button>
-                <a href="{{route('goaltracking.index') }}" class="btn-cancel rounded f-14 p-2">cancel</a>
+                <a href="{{route('goaltracking.index') }}" class="btn-cancel rounded f-14 p-2 border-0">cancel</a>
             </div>
         </div>
     </form>

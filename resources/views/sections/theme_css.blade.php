@@ -56,15 +56,15 @@
         border-bottom: 3px solid var(--header_color) !important;
     }
 
-    .sidebar-light .sidebar-menu li .nav-item:focus,
+    /* .sidebar-light .sidebar-menu li .nav-item:focus,
     .sidebar-light .sidebar-menu li .nav-item:hover,
     .sidebar-light .sidebar-menu li .accordionItemContent a:hover {
         color: var(--blue) !important;
-    }
-
+    } */
+/* 
     .sidebar-light .accordionItem a.active {
         color: var(--header_color) !important;
-    }
+    } */
 
     .menu-item-count, .unread-notifications-count, .active-timer-count {
         background-color: var(--header_color) !important;

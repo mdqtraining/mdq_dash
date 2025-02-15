@@ -78,15 +78,28 @@ class AppraisalController extends AccountBaseController
     {
         $this->pageTitle = 'Add Appraisal';
         abort_403(!in_array('employee', user_roles()));
-        $branchname = Company::pluck('company_name');
-        $employee = User::pluck('name');
-        $department = Team::pluck('team_name');
-        $designations = Designation::pluck('name');
+        $branchname = Indicator::distinct()->pluck('branch')->toArray();
+        $department = Indicator::distinct()->pluck('department')->toArray();
+        $designation = Indicator::distinct()->pluck('designation')->toArray();
+        $branch_id = Company::whereIn('company_name', $branchname)->pluck('id')->toArray();
+        $department_id = Team::whereIn('team_name', $department)->pluck('id')->toArray();
+        $designation_id = Designation::whereIn('name', $designation)
+            ->whereIn('company_id', $branch_id)
+            ->pluck('id')
+            ->toArray();
+        $employees = EmployeeDetails::whereIn('company_id', $branch_id)
+            ->whereIn('department_id', $department_id)
+            ->whereIn('designation_id', $designation_id)
+            ->pluck('user_id')
+            ->toArray();
+        $employee = User::whereIn('id', $employees)
+            ->pluck('name')
+            ->toArray();
         $indicatorheaders = IndicatorfieldName::select('name', 'field_name')
             ->distinct()
             ->get()
             ->groupBy('name');
-        return view('appraisal.create', array_merge($this->data, ['employee' => $employee, 'branchname' => $branchname, 'indicatorheaders' => $indicatorheaders, 'designations' => $designations, 'department' => $department]));
+        return view('appraisal.create', array_merge($this->data, ['employee' => $employee, 'branchname' => $branchname, 'indicatorheaders' => $indicatorheaders, 'department' => $department]));
     }
     public function appraisalupdate(Request $request, $id)
     {
@@ -186,7 +199,19 @@ class AppraisalController extends AccountBaseController
         $this->pageTitle = 'view Appraisal';
         abort_403(!in_array('employee', user_roles()));
         $appraisal = Appraisal::findOrFail($id);
-        return view('appraisal.view', array_merge($this->data, ['appraisal' => $appraisal]));
+        $branch = $appraisal->branch;
+        $depart = $appraisal->department;
+        $designation = $appraisal->designation;
+        $indicator = Indicator::where('branch', $branch)->where('department', $depart)->where('designation', $designation)->get();
+        $branchname = Company::pluck('company_name');
+        $employee = User::pluck('name');
+        $department = Team::pluck('team_name');
+        $designations = Designation::pluck('name');
+        $indicatorheaders = IndicatorfieldName::select('name', 'field_name')
+            ->distinct()
+            ->get()
+            ->groupBy('name');
+        return view('appraisal.view', array_merge($this->data, ['appraisal' => $appraisal, 'employee' => $employee, 'branchname' => $branchname, 'indicatorheaders' => $indicatorheaders, 'designations' => $designations, 'department' => $department, 'indicator' => $indicator]));
     }
     public function appraisalstore(Request $request)
     {

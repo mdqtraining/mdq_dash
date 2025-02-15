@@ -36,7 +36,7 @@
                                     </div>
                                 </td>
                                 <td class="pr-20">
-                                    <span style="color: {{ $task->boardColumn->label_color }};">
+                                    <span style="color:{{ $task->boardColumn->label_color}};">
                                     {{ $task->boardColumn->column_name }}
                                     </span>
                                 </td>

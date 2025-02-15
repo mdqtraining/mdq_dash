@@ -13,27 +13,38 @@
 <form action="{{ route('indicator.store') }}" method="POST" id="indicatorForm">
     @csrf
     <div class="content-wrapper">
-        <div class="add-page">
-            <div class="p-20">
+    <div class="add-page">
+                <script>
+                    setTimeout(() => {
+                        document.querySelectorAll('.alert').forEach(alert => alert.remove());
+                    }, 5000); // Message disap  pears after 3 seconds
+                </script>
+                <div class="d-flex justify-content-between align-items-center border-bottom-grey p-20">
+                    <h4 class="mb-0 f-15 font-weight-normal text-capitalize">
+                        @lang('app.menu.indicatorDetials')
+                    </h4>
+                    <div>
+                        @if (session('error'))
+                        <div class="col-lg-4 col-md-6">
+                            <div class="form-group my-3">
+                                @if (session('indicator'))
+                                <a class="btn btn-primary" href="{{ route('indicator.edit', session('indicator')) }}">Edit</a>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                </div>
                 @if (session('success'))
                 <div class="alert alert-success mt-4">
                     {{ session('success') }}
                 </div>
                 @endif
-
                 @if (session('error'))
                 <div class="alert alert-danger mt-4">
                     {{ session('error') }}
-                </div>
+                </div>  
                 @endif
-                <script>
-                    setTimeout(() => {
-                        document.querySelectorAll('.alert').forEach(alert => alert.remove());
-                    }, 5000); // Message disappears after 3 seconds
-                </script>
-                <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
-                    @lang('app.menu.indicatorDetials')
-                </h4>
                 <div class="row p-20">
 
                     <!-- Branch Field -->
@@ -49,44 +60,27 @@
                         </div>
                     </div>
 
-                    <!-- Department Field -->
+                    <!-- Department Field (Dynamic) -->
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Department <sup class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="department" id="department" fieldname="department" required required>
-                                <option value="" disabled selected>Select department</option>
-                                @foreach($department as $item)
-                                <option value="{{ $item }}">{{ $item }}</option>
-                                @endforeach
+                            <select class="form-control height-35 f-14" name="department" id="department" required>
+                                <option value="" disabled selected>Select Department</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Designation Field -->
+                    <!-- Designation Field (Dynamic) -->
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Designation <sup class="f-14 mr-1">*</sup></label>
                             <select class="form-control height-35 f-14" name="designation" id="designation" required>
                                 <option value="" disabled selected>Select Designation</option>
-                                @foreach($designation as $item)
-                                <option value="{{ $item }}">{{ $item }}</option>
-                                @endforeach
                             </select>
                         </div>
                     </div>
 
-                    @if (session('error'))
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                            @if (session('indicator'))
-                            <a class="btn btn-primary" href="{{ route('indicator.edit', session('indicator')) }}">Edit</a>
-                            @endif
-                        </div>
-                    </div>
-                    @endif
+
 
                 </div>
 
@@ -127,17 +121,18 @@
                                 <span data-value="4">&#9733;</span>
                                 <span data-value="5">&#9733;</span>
                             </div>
-                            <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" required>
+                            <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]">
                         </div>
                     </div>
                     @endforeach
                 </div>
                 @endforeach
-
+                
+    <div class="p-20">
                 <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
                     <i class="fa fa-check mr-1"></i>Save
                 </button>
-                <a href="{{ route('indicator.index') }}" class="btn-cancel rounded f-14 p-2">Cancel</a>
+                <a href="{{ route('indicator.index') }}" class="btn-cancel rounded f-14 p-2 border-0">Cancel</a>
             </div>
         </div>
     </div>
@@ -166,7 +161,6 @@
                             @endforeach
                         </select>
                     </div>
-
                     <button type="submit" class="btn btn-success" id="submitRatingField">Save </button>
                 </form>
             </div>
@@ -176,6 +170,94 @@
 @endsection
 
 @push('scripts')
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const modalForm = document.getElementById("ratingFieldForm");
+    const modalSubmitBtn = document.getElementById("submitRatingField");
+    const fieldInput = document.getElementById("field_names");
+    const categorySelect = document.getElementById("category");
+
+    function checkModalFields() {
+        if (fieldInput.value.trim() !== "" && categorySelect.value.trim() !== "") {
+            modalSubmitBtn.removeAttribute("disabled"); // Enable button
+        } else {
+            modalSubmitBtn.setAttribute("disabled", "true"); // Disable button
+        }
+    }
+
+    // Check on input change
+    fieldInput.addEventListener("input", checkModalFields);
+    categorySelect.addEventListener("change", checkModalFields);
+
+    // Prevent required fields from blocking the main form
+    document.getElementById("indicatorForm").addEventListener("submit", function () {
+        fieldInput.removeAttribute("required");
+        categorySelect.removeAttribute("required");
+    });
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const branchSelect = document.getElementById("branch");
+    const departmentSelect = document.getElementById("department");
+    const designationSelect = document.getElementById("designation");
+
+    branchSelect.addEventListener("change", function () {
+        const branch = this.value;
+        console.log("Branch selected:", branch);
+        departmentSelect.innerHTML = `<option value="" disabled selected>Loading...</option>`;
+
+        fetch(`/api/departments/${encodeURIComponent(branch)}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Departments received:", data);
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    departmentSelect.innerHTML = `<option value="" disabled selected>No data found</option>`;
+                    return;
+                }
+
+                departmentSelect.innerHTML = `<option value="" disabled selected>Select Department</option>`;
+                data.forEach(dept => {
+                    departmentSelect.innerHTML += `<option value="${dept}">${dept}</option>`;
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching departments:", error);
+                departmentSelect.innerHTML = `<option value="" disabled selected>Error loading data</option>`;
+            });
+    });
+
+    departmentSelect.addEventListener("change", function () {
+        const branch = branchSelect.value;
+        const department = this.value;
+        console.log("Department selected:", department);
+        designationSelect.innerHTML = `<option value="" disabled selected>Loading...</option>`;
+
+        fetch(`/api/designations/${encodeURIComponent(branch)}/${encodeURIComponent(department)}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Designations received:", data);
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    designationSelect.innerHTML = `<option value="" disabled selected>No data found</option>`;
+                    return;
+                }
+
+                designationSelect.innerHTML = `<option value="" disabled selected>Select Designation</option>`;
+                data.forEach(designation => {
+                    designationSelect.innerHTML += `<option value="${designation}">${designation}</option>`;
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching designations:", error);
+                designationSelect.innerHTML = `<option value="" disabled selected>Error loading data</option>`;
+            });
+    });
+});
+</script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Prevent special characters in text fields
@@ -251,22 +333,7 @@
         });
     });
 </script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const indicatorForm = document.getElementById("indicatorForm");
-        const ratingFieldForm = document.getElementById("ratingFieldForm");
 
-        // Prevent the main form from interfering with modal form submission
-        ratingFieldForm.addEventListener("submit", function(event) {
-            event.stopPropagation(); // Stops the event from bubbling up to the parent form
-        });
-
-        // Ensure indicator form submits correctly
-        indicatorForm.addEventListener("submit", function(event) {
-            // Add validation logic here if needed
-        });
-    });
-</script>
 @endpush
 
 <style>

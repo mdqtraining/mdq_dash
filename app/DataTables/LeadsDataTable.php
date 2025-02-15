@@ -75,7 +75,7 @@ class LeadsDataTable extends BaseDataTable
                 || ($this->editLeadPermission == 'added' && user()->id == $row->added_by)
                 || ($this->editLeadPermission == 'owned' && !is_null($row->agent_id) && user()->id == $row->leadAgent->user->id)
                 || ($this->editLeadPermission == 'both' && ((!is_null($row->agent_id) && user()->id == $row->leadAgent->user->id)
-                        || user()->id == $row->added_by))
+                    || user()->id == $row->added_by))
             ) {
                 $action .= '<a class="dropdown-item" href="' . route('leads.edit', [$row->id]) . '">
                                 <i class="fa fa-edit mr-2"></i>
@@ -88,7 +88,7 @@ class LeadsDataTable extends BaseDataTable
                 || ($this->deleteLeadPermission == 'added' && user()->id == $row->added_by)
                 || ($this->deleteLeadPermission == 'owned' && !is_null($row->agent_id) && user()->id == $row->leadAgent->user->id)
                 || ($this->deleteLeadPermission == 'both' && ((!is_null($row->agent_id) && user()->id == $row->leadAgent->user->id)
-                        || user()->id == $row->added_by))
+                    || user()->id == $row->added_by))
             ) {
                 $action .= '<a class="dropdown-item delete-table-row" href="javascript:;" data-id="' . $row->id . '">
                         <i class="fa fa-trash mr-2"></i>
@@ -151,62 +151,36 @@ class LeadsDataTable extends BaseDataTable
 
         $datatables->addColumn('status', function ($row) use ($status) {
             $action = '--';
-            
-            
+
+
             if ($this->changeLeadStatusPermission == 'all') {
 
-                $statusLi = '--';
 
-                // foreach ($status as $st) {
-                //     if ($row->status_id == $st->id) {
-                //         $selected = 'selected';
-                //     }
-                //     else {
-                //         $selected = '';
-                //     }
-                    
-                    // 
-                    
+                $statusLi = '';
 
-                    // Construct the <option> tag with the dynamic background color
-                    foreach ($status as $st) {
-                        if ($row->status_id == $st->id) {
-                            $selected = 'selected';
-                        }
-                        else {
-                            $selected = '';
-                        }
-                        $backgroundColor = '';
-                        if ($st->type === 'done') {
-                            $backgroundColor = ' #6fd943'; // Green
-                        } elseif ($st->type === 'pending') {
-                            $backgroundColor = '#ff3a6e'; // Red
-                        } elseif ($st->type === 'in process') {
-                            $backgroundColor = '#ffa21d'; // Yellow
-                        }
-    
-                        $statusLi .= '<option data-content="<span style=\'color: ' . $st->label_color . '; font-weight:700; font-size: 15px;\'> ' . ucfirst($st->type) . ' </span> "' . $selected . ' value="' . $st->id . '">' . ucfirst($st->type) . '</option>';
+                foreach ($status as $st) {
+                    $selected = ($row->status_id == $st->id) ? 'selected' : '';
+                    $Color = '';
+                    if ($st->type === 'done') {
+                        $Color = '#6fd943'; 
+                    } elseif ($st->type === 'pending') {
+                        $Color = '#ff3a6e'; 
+                    } elseif ($st->type === 'in process') {
+                        $Color = '#ffa21d'; 
                     }
-    
-                    $action = '<select class="form-control statusChange" name="statusChange" onchange="changeStatus( ' . $row->id . ', this.value)">
+                    $statusLi .= '<option data-content="<span style=\'color: ' . $Color . '; font-weight:700; font-size: 15px;\'> ' . ucfirst($st->type) . ' </span>" ' . $selected . ' value="' . $st->id . '">' . ucfirst($st->type) . '</option>';
+                }
+                $action = '<select class="form-control statusChange" name="statusChange" onchange="changeStatus( ' . $row->id . ', this.value)">
                             ' . $statusLi . '
                         </select>';
-
-                
-
-                // $action = '<select class="form-control statusChange" name="statusChange" onchange="changeStatus( ' . $row->id . ', this.value)">
-                //         ' . $statusLi . '
-                //     </select>';
-
-            }
-            else {
+            } else {
                 foreach ($status as $st) {
                     if ($row->status_id == $st->id) {
                         $action = ucfirst($st->type);
                     }
                 }
             }
-            return  $action ;
+            return  $action;
         });
         $datatables->addColumn('leadStatus', function ($row) use ($status) {
             $leadStatus = '';
@@ -224,8 +198,7 @@ class LeadsDataTable extends BaseDataTable
         $datatables->editColumn('client_name', function ($row) {
             if ($row->client_id != null && $row->client_id != '') {
                 $label = '<label class="badge badge-secondary">' . __('app.client') . '</label>';
-            }
-            else {
+            } else {
                 $label = '';
             }
 
@@ -236,7 +209,7 @@ class LeadsDataTable extends BaseDataTable
                     <h5 class="mb-0 f-13 "><a href="' . route('leads.show', [$row->id]) . '">' . $client_name . '</a></h5>
                     <p class="mb-0">' . $label . '</p>
                     <p class="mb-0 f-12 text-dark-grey">
-                    '.$row->company_name.'
+                    ' . $row->company_name . '
                 </p>
                     </div>
                   ';
@@ -246,8 +219,7 @@ class LeadsDataTable extends BaseDataTable
                 // code...
                 if ($row->next_follow_up_date != null && $row->next_follow_up_date != '') {
                     $date = Carbon::parse($row->next_follow_up_date)->translatedFormat($this->company->date_format . ' ' . $this->company->time_format);
-                }
-                else {
+                } else {
                     $date = '--';
                 }
 
@@ -329,11 +301,9 @@ class LeadsDataTable extends BaseDataTable
 
             if ($this->request()->followUp == 'yes') {
                 $lead = $lead->where('leads.next_follow_up', 'yes');
-            }
-            else {
+            } else {
                 $lead = $lead->where('leads.next_follow_up', 'no');
             }
-
         }
 
         if (!is_null($this->request()->min) || !is_null($this->request()->max)) {
@@ -347,8 +317,7 @@ class LeadsDataTable extends BaseDataTable
 
             if ($this->request()->type == 'lead') {
                 $lead = $lead->whereNull('client_id');
-            }
-            else {
+            } else {
                 $lead = $lead->whereNotNull('client_id');
             }
         }
@@ -486,7 +455,7 @@ class LeadsDataTable extends BaseDataTable
             __('modules.lead.email') => ['data' => 'client_email', 'name' => 'client_email', 'title' => __('modules.lead.email')],
             __('modules.lead.mobile') => ['data' => 'mobile', 'name' => 'mobile', 'title' => __('modules.lead.mobile'), 'exportable' => false],
             __('app.lead') . ' ' . __('modules.lead.mobile') => ['data' => 'export_mobile', 'name' => 'mobile', 'title' => __('app.lead') . ' ' . __('modules.lead.mobile'), 'exportable' => true, 'visible' => false],
-            __('app.lead') .' '. __('app.value') => ['data' => 'lead_value', 'name' => 'value', 'title' => __('app.lead') .' '. __('app.value'), 'exportable' => false],
+            __('app.lead') . ' ' . __('app.value') => ['data' => 'lead_value', 'name' => 'value', 'title' => __('app.lead') . ' ' . __('app.value'), 'exportable' => false],
             __('app.createdOn') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('app.createdOn')],
             __('modules.lead.nextFollowUp') => ['data' => 'next_follow_up_date', 'name' => 'next_follow_up_date', 'searchable' => false, 'exportable' => ($this->viewLeadFollowUpPermission != 'none'), 'title' => __('modules.lead.nextFollowUp'), 'visible' => ($this->viewLeadFollowUpPermission != 'none')],
             __('modules.lead.leadAgent') => ['data' => 'agent_name', 'name' => 'users.name', 'exportable' => false, 'title' => __('modules.lead.leadAgent')],
@@ -506,7 +475,5 @@ class LeadsDataTable extends BaseDataTable
 
 
         return array_merge($data, CustomFieldGroup::customFieldsDataMerge(new Lead()), $action);
-
     }
-
 }

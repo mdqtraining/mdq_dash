@@ -10,7 +10,7 @@
                             <x-employee :user="$upcomingBirthday->user"/>
                         </td>
                         <td>
-                            <span class="badge badge-light p-2 text-white" style="background-color:#e83e8c;">
+                            <span class="badge  p-2 " style="background-color:#e83e8c; color:#fff">
                                 <i class="fa fa-birthday-cake"></i>
                                 {{ $upcomingBirthday->date_of_birth->translatedFormat('d M') }}
                             </span>
@@ -30,9 +30,9 @@
                             @endphp
 
                             @if ($dateBirth->isToday())
-                                <span class="badge badge-light text-success p-2"><i class="fa fa-smile"></i> @lang('app.today')</span>
+                                <span class="badge p-2" style="background-color:#6fd943; color:#fff;"><i class="fa fa-smile"></i> @lang('app.today')</span>
                             @else
-                                <span class="badge badge-light p-2 text-white " style="background-color:#3ec9d6">{{ $diffInDays }}</span>
+                                <span class="badge p-2  " style="background-color:#3ec9d6; color:#fff;">{{ $diffInDays }}</span>
                             @endif
                         </td>
                     </tr>

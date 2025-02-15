@@ -4,9 +4,9 @@ use Carbon\Carbon;
 
 <div class="d-flex flex-column w-tables rounded mt-3 bg-white table-responsive">
     <div class="dataTables_wrapper dt-bootstrap4 no-footer">
-        <div class="row">
-            <div class="col-sm-12">
-                <table class="table table-hover border-0 w-100">
+        <div style="display: flex; flex-wrap: wrap; width: 100%;">
+            <div class="col-sm-12" >
+                <table class="table table-hover border-0 w-100 dataTable no-footer" >
                     <thead>
                         <tr>
                             <th>Branch</th>
@@ -76,53 +76,56 @@ use Carbon\Carbon;
                 </table>
             </div>
         </div>
-
         <!-- Pagination and Entries Selection -->
-        <div class="d-flex justify-content-between align-items-center">
-            <!-- Entries Per Page Dropdown -->
-            <div class="dataTables_length">
-                <label style="display:flex; align-items: center; gap: 10px; margin: 0;">
-                    <span>Show</span>
-                    <select class="custom-select custom-select-sm form-control form-control-sm"
-                        onchange="window.location.href = '?per_page=' + this.value;">
-                        <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
-                        <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
-                    </select>
-                    <span>entries</span>
-                </label>
+        <div class="d-flex">
+            <div class="flex-grow-1">
+                <div class="dataTables_length">
+                    <label class="d-flex align-items-center">
+                        <span>Show &nbsp;</span>
+                        <select class="custom-select custom-select-sm form-control form-control-sm"
+                            style="width: auto !important;"
+                            onchange="window.location.href = '?per_page=' + this.value;">
+                            <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                            <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                        </select>
+                        <span>&nbsp; entries</span>
+                    </label>
+                </div>
             </div>
 
             <!-- Info Section -->
-            <div class="dataTables_info ">
-                Showing {{ $indicators->firstItem() }} to {{ $indicators->lastItem() }} of {{ $indicators->total() }} entries
+            <div>
+                <div class="dataTables_info ">
+                    Showing {{ $indicators->firstItem() }} to {{ $indicators->lastItem() }} of {{ $indicators->total() }} entries
+                </div>
             </div>
             <!-- Pagination Links -->
-            <div class="d-flex justify-content-center ">
-                
+            <div class="dataTables_paginate paging_simple_numbers">
+
                 <ul class="pagination">
-                    <li class="page-item {{ $indicators->onFirstPage() ? 'disabled' : '' }}">
+                    <li class="page-item paginate_button {{ $indicators->onFirstPage() ? 'disabled' : '' }}">
                         <a class="page-link text-white {{ $indicators->onFirstPage() ? 'bg-secondary' : 'bg-primary' }}"
                             href="{{ $indicators->onFirstPage() ? '#' : $indicators->previousPageUrl() }}">
-                            &laquo; Previous
+                            Previous
                         </a>
                     </li>
-   
+
                     {{-- Current Page --}}
-                    <li class="page-item active">
+                    <li class="page-item paginate_button active">
                         <span class="page-link bg-dark text-white border-dark">{{ $indicators->currentPage() }}</span>
                     </li>
 
                     {{-- Next Button --}}
-                    <li class="page-item {{ $indicators->hasMorePages() ? '' : 'disabled' }}">
+                    <li class="page-item paginate_button {{ $indicators->hasMorePages() ? '' : 'disabled' }}">
                         <a class="page-link text-white {{ $indicators->hasMorePages() ? 'bg-primary' : 'bg-secondary' }}"
                             href="{{ $indicators->hasMorePages() ? $indicators->nextPageUrl() : '#' }}">
-                            Next &raquo;
+                            Next
                         </a>
                     </li>
                 </ul>
-               
+
             </div>
         </div>
     </div>

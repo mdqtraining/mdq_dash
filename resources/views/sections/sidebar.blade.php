@@ -12,50 +12,40 @@
                 type="link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
                 @if (companyOrGlobalSetting()->sidebar_logo_style !== 'full')
-                    <!-- SIDEBAR BRAND NAME START -->
-                    <div class="sidebar-brand-name">
-                        <h1 class="mb-0 f-16 f-w-500 text-white-shade mt-0" data-placement="bottom" data-toggle="tooltip"
-                            data-original-title="{{ $appName }}">{{ $appName }}
-                            <i class="icon-arrow-down icons pl-2"></i>
-                        </h1>
-                        <div class="mb-0 position-relative pro-name">
-                            <span class="bg-light-green rounded-circle"></span>
-                            <p class="f-13 text-lightest mb-0" data-placement="bottom" data-toggle="tooltip"
-                                data-original-title="{{ mb_ucfirst(user()->name) }}">{{ mb_ucfirst(user()->name) }}</p>
-                        </div>
+                <!-- SIDEBAR BRAND NAME START -->
+                <div class="sidebar-brand-name">
+                    <h1 class="mb-0 f-16 f-w-500 text-white-shade mt-0" data-placement="bottom" data-toggle="tooltip"
+                        data-original-title="{{ $appName }}">{{ $appName }}
+                        <i class="icon-arrow-down icons pl-2"></i>
+                    </h1>
+                    <div class="mb-0 position-relative pro-name">
+                        <span class="bg-light-green rounded-circle"></span>
+                        <p class="f-13 text-lightest mb-0" data-placement="bottom" data-toggle="tooltip"
+                            data-original-title="{{ mb_ucfirst(user()->name) }}">{{ mb_ucfirst(user()->name) }}</p>
                     </div>
-                    <!-- SIDEBAR BRAND NAME END -->
-                    <!-- SIDEBAR BRAND LOGO START -->
-                    <div class="sidebar-brand-logo">
-                        <img src="{{ companyOrGlobalSetting()->logo_url }}">
-                    </div>
-                    <!-- SIDEBAR BRAND LOGO END -->
+                </div>
+                <!-- SIDEBAR BRAND NAME END -->
+                <!-- SIDEBAR BRAND LOGO START -->
+                <div class="sidebar-brand-logo">
+                    <img src="{{ companyOrGlobalSetting()->logo_url }}">
+                </div>
+                <!-- SIDEBAR BRAND LOGO END -->
                 @else
-                    <!-- SIDEBAR BRAND NAME START -->
-                    <div class="sidebar-brand-name">
-                        <h1 class="mb-0 f-16 f-w-500 text-blue mt-0" data-placement="bottom"
-                            data-toggle="tooltip" data-original-title="{{ $appName }}">
-                            <img src="{{ companyOrGlobalSetting()->logo_url }}">
-                        </h1>
-                    </div>
-                    <!-- SIDEBAR BRAND NAME END -->
-                    <!-- SIDEBAR BRAND LOGO START -->
-                    <div class="sidebar-brand-logo text-dark-gray f-12" 
-    style="
-        width: 20px; 
-        height: 20px; 
-        background: #ffffff; 
-        padding: 9px 10px; 
-        border-radius: 3px; 
-        box-shadow: -3px 4px 23px rgba(0, 0, 0, 0.1); 
-        display: flex; 
-        justify-content: center; 
-        align-items: center;
-    ">
-    <i class="icon-arrow-down icons"></i>
-</div>
+                <!-- SIDEBAR BRAND NAME START -->
+                <div class="sidebar-brand-name">
+                    <h1 class="mb-0 f-16 f-w-500 text-blue mt-0" data-placement="bottom"
+                        data-toggle="tooltip" data-original-title="{{ $appName }}">
+                        <img src="{{ companyOrGlobalSetting()->logo_url }}">
+                    </h1>
+                </div>
+                <!-- SIDEBAR BRAND NAME END -->
+                <!-- SIDEBAR BRAND LOGO START -->
+                <div class="sidebar-brand-logo sidebar-logo-color text-blue f-12"
+                    style=" width: 20px; height: 20px; background: #ffffff; padding: 9px 10px; border-radius: 3px; box-shadow: -3px 4px 23px rgba(0, 0, 0, 0.1); display: flex; justify-content: center;  align-items: center; font-weight: bold;">
+                    <i class="icon-arrow-down icons"></i>
+                </div>
 
-                    <!-- SIDEBAR BRAND LOGO END -->
+                <!-- SIDEBAR BRAND LOGO END -->
                 @endif
             </div>
             <!-- DROPDOWN - INFORMATION -->
@@ -63,31 +53,31 @@
                 aria-labelledby="dropdownMenuLink" tabindex="0"
                 style="padding: 0px 0px !important">
                 <div class="d-flex justify-content-between align-items-center profile-box">
-                    <a @if(!in_array('client', user_roles())) href="{{ route('employees.show', user()->id) }}" @endif >
-                            <div class="profileInfo d-flex align-items-center mr-1 flex-wrap">
-                                <div class="profileImg mr-2">
-                                    <img class="h-100" src="{{ $user->image_url }}"
-                                        alt="{{ mb_ucfirst(user()->name) }}">
-                                </div>
-                                <div class="ProfileData">
-                                    <h3 class="f-15 f-w-500 text-blue" data-placement="bottom" data-toggle="tooltip"
-                                        data-original-title="{{ mb_ucfirst(user()->name) }}">{{ mb_ucfirst(user()->name) }}</h3>
-                                    <p class="mb-0 f-12 text-black">{{ user()->employeeDetail->designation->name ?? '' }}</p>
-                                </div>
+                    <a @if(!in_array('client', user_roles())) href="{{ route('employees.show', user()->id) }}" @endif>
+                        <div class="profileInfo d-flex align-items-center mr-1 flex-wrap">
+                            <div class="profileImg mr-2">
+                                <img class="h-100" src="{{ $user->image_url }}"
+                                    alt="{{ mb_ucfirst(user()->name) }}">
+                            </div>
+                            <div class="ProfileData">
+                                <h3 class="f-15 f-w-500 text-blue" data-placement="bottom" data-toggle="tooltip"
+                                    data-original-title="{{ mb_ucfirst(user()->name) }}">{{ mb_ucfirst(user()->name) }}</h3>
+                                <p class="mb-0 f-12 text-black">{{ user()->employeeDetail->designation->name ?? '' }}</p>
+                            </div>
                         </div>
                     </a>
                     <a href="{{ route('profile-settings.index') }}" data-toggle="tooltip"
                         data-original-title="{{ __('app.menu.profileSettings') }}">
-                            <i class="side-icon bi bi-pencil-square"></i>
+                        <i class="side-icon bi bi-pencil-square"></i>
                     </a>
                 </div>
 
                 @if (!in_array('client', user_roles()) && ($sidebarUserPermissions['add_employees'] == 4 || $sidebarUserPermissions['add_employees'] == 1))
-                    <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark invite-member"
-                        href="javascript:;">
-                        <span>@lang('app.inviteMember') {{ mb_ucwords($companyName) }}</span>
-                        <i class="side-icon bi bi-person-plus"></i>
-                    </a>
+                <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark invite-member"
+                    href="javascript:;">
+                    <span>@lang('app.inviteMember') {{ mb_ucwords($companyName) }}</span>
+                    <i class="side-icon bi bi-person-plus"></i>
+                </a>
                 @endif
 
                 <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark"

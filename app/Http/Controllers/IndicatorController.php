@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\IndicatorImport;
+use App\Models\EmployeeDetails;
 use App\Exports\IndicatorExport; // Assuming the companies table stores branches
 use App\Models\Department;
 
@@ -152,7 +153,43 @@ class IndicatorController extends AccountBaseController
         return redirect()->back()->with('success', 'Rating field added successfully!');
     }
 
+    public function getDepartments($branch)
+    {
+        $company = Company::where('company_name', $branch)->first();
 
+        if (!$company) {
+            return response()->json([]); // Ensure an empty array, NOT an object
+        }
+
+        $departments = Team::where('company_id', $company->id)->pluck('Team_name');
+
+        return response()->json($departments->toArray()); // Convert collection to array
+    }
+    public function getDesignations($branch, $department)
+    {
+        $company = Company::where('company_name', $branch)->first();
+        if (!$company) {
+            return response()->json(["error" => "Company not found"], 400);
+        }
+
+        $department_id = Team::where('team_name', $department)->value('id');
+        if (!$department_id) {
+            return response()->json(["error" => "Department not found"], 400);
+        }
+
+        $designation_ids = EmployeeDetails::where('company_id', $company->id)
+            ->where('department_id', $department_id)
+            ->pluck('designation_id')
+            ->toArray();
+
+        if (empty($designation_ids)) {
+            return response()->json([], 200);
+        }
+
+        $designations = Designation::whereIn('id', $designation_ids)->pluck('name');
+
+        return response()->json($designations);
+    }
 
     public function indicatorEdit($id)
     {

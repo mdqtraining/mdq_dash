@@ -12,8 +12,7 @@
 
 @section('content')
 <div class="content-wrapper">
-    <div class="add-page">
-        <div class="p-20">
+<div class="add-page">
             <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                 Goal Tracking Detials
             </h4>
@@ -172,8 +171,10 @@
                     });
                 </script>
             </div>
+            
+<div class="p-20">
             <a href="{{route('goaltracking.edit',$goaltracking->id) }}" class="rounded f-14 p-2 edit-a-btn" style="background-color:#6FD943; color:white ;">Edit</a>
-            <a href="{{route('goaltracking.index') }}" class="btn-cancel rounded f-14 p-2">cancel</a>
+            <a href="{{route('goaltracking.index') }}" class="btn-cancel rounded f-14 p-2 border-0">cancel</a>
         </div>
     </div>
 </div>

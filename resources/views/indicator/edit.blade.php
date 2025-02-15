@@ -14,8 +14,7 @@
     @csrf
     @method('PUT')
     <div class="content-wrapper">
-        <div class="add-page">
-            <div class="p-20">
+    <div class="add-page">
                 @if (session('success'))
                 <div class="alert alert-success mt-4">
                     {{ session('success') }}
@@ -40,14 +39,8 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Branch &nbsp;<sup class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="branch" id="branch" required>
-                                @foreach($branchname as $item)
-                                <option value="{{ $item }}"
-                                    {{ $indicators->branch == $item ? 'selected' : '' }}>
-                                    {{ $item }}
-                                </option>
-                                @endforeach
-                            </select>
+                            <input type="text" class="form-control height-35 f-14" placeholder="Department"
+                                name="department" id="department" value="{{ $indicators->branch }}" readonly>
                         </div>
                     </div>
                     <!-- Department Field -->
@@ -55,18 +48,9 @@
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Department &nbsp;<sup
                                     class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="department" id="department" required>
-                                @foreach($departments as $item)
-                                <option value="{{ $item }}"
-                                    {{ isset($indicators) && $indicators->department == $item ? 'selected' : '' }}>
-                                    {{ $item }}
-                                </option>
-                                @endforeach
-                            </select>
+                            <input type="text" class="form-control height-35 f-14" placeholder="Department"
+                                name="department" id="department" value="{{ $indicators->department }}" disabled>
 
-                            @error('department')
-                            <div class="error-message">{{ $message }}</div>
-                            @enderror
                         </div>
                     </div>
 
@@ -74,17 +58,8 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12">Designation &nbsp;<sup class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="designation" id="designation" required>
-                                @foreach($designations as $item)
-                                <option value="{{ $item }}"
-                                    {{ $indicators->designation == $item ? 'selected' : '' }}>
-                                    {{ $item }}
-                                </option>
-                                @endforeach
-                            </select>
-                            @error('designation')
-                            <div class="error-message">{{ $message }}</div>
-                            @enderror
+                            <input type="text" class="form-control height-35 f-14" placeholder="Department"
+                                name="department" id="department" value="{{ $indicators->designation }}" readonly>
                         </div>
                     </div>
                 </div>
@@ -138,12 +113,15 @@
                     @endforeach
                 </div>
                 @endforeach
-
-                <button type="submit" class="btn btn-primary">Save</button>
+                
+    <div class="p-20">
+                <button type="submit" class="btn btn-primary f-14 p-2 mr-3">Save</button>
+                <a href="{{route('indicator.index') }}" class="btn-cancel rounded f-14 p-2 border-0">cancel</a>
             </div>
         </div>
     </div>
 </form>
+
 <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm"> <!-- ⬅ Makes modal smaller -->
         <div class="modal-content">
@@ -168,7 +146,6 @@
                             @endforeach
                         </select>
                     </div>
-
                     <button type="submit" class="btn btn-success" id="submitRatingField">Save </button>
                 </form>
             </div>
@@ -176,7 +153,32 @@
     </div>
 </div>
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const modalForm = document.getElementById("ratingFieldForm");
+        const modalSubmitBtn = document.getElementById("submitRatingField");
+        const fieldInput = document.getElementById("field_names");
+        const categorySelect = document.getElementById("category");
 
+        function checkModalFields() {
+            if (fieldInput.value.trim() !== "" && categorySelect.value.trim() !== "") {
+                modalSubmitBtn.removeAttribute("disabled"); // Enable button
+            } else {
+                modalSubmitBtn.setAttribute("disabled", "true"); // Disable button
+            }
+        }
+
+        // Check on input change
+        fieldInput.addEventListener("input", checkModalFields);
+        categorySelect.addEventListener("change", checkModalFields);
+
+        // Prevent required fields from blocking the main form
+        document.getElementById("indicatorForm").addEventListener("submit", function() {
+            fieldInput.removeAttribute("required");
+            categorySelect.removeAttribute("required");
+        });
+    });
+</script>
 <!-- Custom Styles and Scripts -->
 <style>
     .error-message {
@@ -219,7 +221,91 @@
         color: #ffd700;
     }
 </style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const branchSelect = document.getElementById("branch");
+        const departmentSelect = document.getElementById("department");
+        const designationSelect = document.getElementById("designation");
 
+        // Get pre-selected values (for edit mode)
+        const selectedBranch = branchSelect.dataset.selected; // e.g., "MDQuality Solutions LLP"
+        const selectedDepartment = departmentSelect.dataset.selected; // e.g., "Cyber Security"
+        const selectedDesignation = designationSelect.dataset.selected; // e.g., "Security Analyst"
+
+        // Function to fetch and populate departments
+        function fetchDepartments(branch, selectedDept = null) {
+            departmentSelect.innerHTML = `<option value="" disabled selected>Loading...</option>`;
+
+            fetch(`/api/departments/${encodeURIComponent(branch)}`)
+                .then(response => response.json())
+                .then(data => {
+                    departmentSelect.innerHTML = `<option value="" disabled selected>Select Department</option>`;
+
+                    if (!Array.isArray(data) || data.length === 0) {
+                        departmentSelect.innerHTML = `<option value="" disabled>No data found</option>`;
+                        return;
+                    }
+
+                    data.forEach(dept => {
+                        const isSelected = dept === selectedDept ? "selected" : "";
+                        departmentSelect.innerHTML += `<option value="${dept}" ${isSelected}>${dept}</option>`;
+                    });
+
+                    if (selectedDept) {
+                        fetchDesignations(branch, selectedDept, selectedDesignation);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching departments:", error);
+                    departmentSelect.innerHTML = `<option value="" disabled>Error loading data</option>`;
+                });
+        }
+
+        // Function to fetch and populate designations
+        function fetchDesignations(branch, department, selectedDesig = null) {
+            designationSelect.innerHTML = `<option value="" disabled selected>Loading...</option>`;
+
+            fetch(`/api/designations/${encodeURIComponent(branch)}/${encodeURIComponent(department)}`)
+                .then(response => response.json())
+                .then(data => {
+                    designationSelect.innerHTML = `<option value="" disabled selected>Select Designation</option>`;
+
+                    if (!Array.isArray(data) || data.length === 0) {
+                        designationSelect.innerHTML = `<option value="" disabled>No data found</option>`;
+                        return;
+                    }
+
+                    data.forEach(designation => {
+                        const isSelected = designation === selectedDesig ? "selected" : "";
+                        designationSelect.innerHTML += `<option value="${designation}" ${isSelected}>${designation}</option>`;
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching designations:", error);
+                    designationSelect.innerHTML = `<option value="" disabled>Error loading data</option>`;
+                });
+        }
+
+        // Handle branch selection
+        branchSelect.addEventListener("change", function() {
+            const branch = this.value;
+            fetchDepartments(branch);
+        });
+
+        // Handle department selection
+        departmentSelect.addEventListener("change", function() {
+            const branch = branchSelect.value;
+            const department = this.value;
+            fetchDesignations(branch, department);
+        });
+
+        // **For Edit Mode: Auto-select saved values**
+        if (selectedBranch) {
+            branchSelect.value = selectedBranch;
+            fetchDepartments(selectedBranch, selectedDepartment);
+        }
+    });
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Prevent special characters in text fields

@@ -1,6 +1,6 @@
 <div class="d-flex flex-column w-tables rounded mt-3 bg-white table-responsive">
     <div class="dataTables_wrapper dt-bootstrap4 no-footer">
-        <div class="row">
+        <div style="display: flex; flex-wrap: wrap; width: 100%;">
             <div class="col-sm-12">
                 <table class="table table-hover border-0 w-100 dataTable no-footer">
                     <thead>
@@ -110,7 +110,7 @@
                     <li class="page-item {{ $appraisals->onFirstPage() ? 'disabled' : '' }}">
                         <a class="page-link text-white {{ $appraisals->onFirstPage() ? 'bg-secondary' : 'bg-primary' }}"
                             href="{{ $appraisals->onFirstPage() ? '#' : $appraisals->previousPageUrl() }}">
-                            &laquo; Previous
+                            Previous
                         </a>
                     </li>
 
@@ -126,7 +126,7 @@
                         <li class="page-item {{ $appraisals->hasMorePages() ? '' : 'disabled' }}">
                             <a class="page-link text-white {{ $appraisals->hasMorePages() ? 'bg-primary' : 'bg-secondary' }}"
                                 href="{{ $appraisals->hasMorePages() ? $appraisals->nextPageUrl() : '#' }}">
-                                Next &raquo;
+                                Next
                             </a>
                         </li>
                 </ul>

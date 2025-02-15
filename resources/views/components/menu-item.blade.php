@@ -5,7 +5,7 @@
            title="{{ $text }}">
             @isset($iconPath)
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                     class="bi bi-{{ $icon }} " style="background: #ffffff; padding: 5px; border-radius:10px; box-shadow: -3px 4px 23px rgba(0, 0, 0, 0.1); " viewBox="0 0 16 16">
+                     class="bi bi-{{ $icon }} "  viewBox="0 0 16 16">
                     {!! $iconPath !!}
                     
                 </svg>
@@ -28,7 +28,7 @@
            title="{{ $text }}">
             @isset($iconPath)
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                     class="bi bi-{{ $icon }}" style="background:#ffffff; padding: 5px; border-radius:10px;box-shadow: -3px 4px 23px rgba(0, 0, 0, 0.1);" viewBox="0 0 16 16">
+                     class="bi bi-{{ $icon }}"  viewBox="0 0 16 16">
                     {!! $iconPath !!}
                 </svg>
             @endisset

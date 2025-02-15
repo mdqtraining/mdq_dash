@@ -19,123 +19,157 @@
     @csrf
     <div class="content-wrapper">
         <div class="add-page">
-            <div class="p-20">
-                <div id="alertMessage" class="alert" style="display: none;"></div>
 
-                @if (session('success'))
-                <div class="alert alert-success mt-4">
-                    {{ session('success') }}
+            @if (session('success'))
+            <div class="alert alert-success mt-4">
+                {{ session('success') }}
+            </div>
+            @endif
+
+            @if (session('error'))
+            <div class="alert alert-danger mt-4 ">
+                {{ session('error') }}
+            </div>
+            @endif
+
+            <script>
+                setTimeout(() => {
+                    document.querySelectorAll('.alert').forEach(alert => alert.remove());
+                }, 5000); // Message disappears after 5 seconds
+            </script>
+
+            <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
+                Appraisal Detials
+            </h4>
+
+            <div class="row p-20">
+                <div class="col-lg-4 col-md-6">
+                    <div class="form-group my-3">
+                        <label class="f-14 text-dark-grey mb-12">Branch <sup class="f-14 mr-1">*</sup></label>
+                        <select class="form-control height-35 f-14" name="branch" id="branch" required>
+                            <option value="" disabled selected>Select Branch</option>
+                            @foreach($branchname as $item)
+                            <option value="{{ $item }}">{{ $item }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-                @endif
 
-                @if (session('error'))
-                <div class="alert alert-danger mt-4 ">
-                    {{ session('error') }}
+                <div class="col-lg-4 col-md-6">
+                    <div class="form-group my-3">
+                        <label class="f-14 text-dark-grey mb-12">Department <sup class="f-14 mr-1">*</sup></label>
+                        <select class="form-control height-35 f-14" name="department" id="department" required>
+                            <option value="" disabled selected>Select Department</option>
+                            @foreach($department as $item)
+                            <option value="{{ $item }}">{{ $item }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-                @endif
 
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="form-group my-3">
+                        <label class="f-14 text-dark-grey mb-12">Employee <sup class="f-14 mr-1">*</sup></label>
+                        <select class="form-control height-35 f-14" name="employee" id="employee" required>
+                            <option value="" disabled selected>Select employee</option>
+                            @foreach($employee as $item)
+                            <option>{{ $item }}</option>
+                            @endforeach
+                        </select>
+                        @error('employee')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4" id="deadlineBox">
+                <label for="monthYearPicker" class="f-14 text-dark-grey mb-12">Select Month and Year <sup class="f-14 mr-1">*</sup></label>
+                <input type="text" id="monthYearPicker" name="month_year" class="form-control height-35 f-14 bg-white"
+                    placeholder="MM/YYYY" required >
                 <script>
-                    setTimeout(() => {
-                        document.querySelectorAll('.alert').forEach(alert => alert.remove());
-                    }, 5000); // Message disappears after 5 seconds
+                    document.getElementById('monthYearPicker').addEventListener('input', function(e) {
+                        let value = e.target.value;
+
+                        // Allow only numbers and "/"
+                        value = value.replace(/[^0-9\/]/g, '');
+
+                        // Auto-add "/" after two digits
+                        if (value.length > 2 && value.charAt(2) !== '/') {
+                            value = value.slice(0, 2) + '/' + value.slice(2);
+                        }
+
+                        // Limit length to 7 characters (MM/YYYY)
+                        if (value.length > 7) {
+                            value = value.slice(0, 7);
+                        }
+
+                        e.target.value = value;
+                    });
+
+                    document.getElementById('monthYearPicker').addEventListener('blur', function(e) {
+                        let value = e.target.value.trim(); // Trim spaces
+                        let errorMessage = document.getElementById('error-message');
+
+                        // Regular expression to validate MM/YYYY format
+                        let regex = /^(0[1-9]|1[0-2])\/\d{4}$/;
+
+                        if (!regex.test(value)) {
+                            errorMessage.style.display = 'inline'; // Show error message
+                        } else {
+                            errorMessage.style.display = 'none'; // Hide error message
+                        }
+                    });
                 </script>
 
-                <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
-                    Appraisal Detials
-                </h4>
+            </div>
 
-                <div class="row p-20">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Branch <sup class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="branch" id="branch" required>
-                                <option value="" disabled selected>Select Branch</option>
-                                @foreach($branchname as $item)
-                                <option value="{{ $item }}">{{ $item }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Department <sup class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="department" id="department" required>
-                                <option value="" disabled selected>Select Department</option>
-                                @foreach($department as $item)
-                                <option value="{{ $item }}">{{ $item }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12">Employee <sup class="f-14 mr-1">*</sup></label>
-                            <select class="form-control height-35 f-14" name="employee" id="employee" required>
-                                <option value="" disabled selected>Select employee</option>
-                                @foreach($employee as $item)
-                                <option>{{ $item }}</option>
-                                @endforeach
-                            </select>
-                            @error('employee')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+            <div class="col-md-12 col-lg-6" id="remarkBox">
+                <div class="form-group my-3">
+                    <label class="f-14 text-dark-grey mb-12" for="remarkInput">Remark</label>
+                    <textarea id="remarkInput" name="remark" class="form-control height-35 f-14 bg-white"
+                        placeholder="Enter your remarks here..." rows="1" oninput="autoResize(this)" required></textarea>
                 </div>
+            </div>
 
-                <div class="col-md-6 col-lg-4" id="deadlineBox">
-                    <label for="monthYearPicker" class="f-14 text-dark-grey mb-12">Select Month and Year <sup class="f-14 mr-1">*</sup></label>
-                    <input type="text" id="monthYearPicker" name="month_year" class="form-control height-35 f-14 bg-white"
-                        placeholder="MM/YYYY" required>
-                </div>
+            <div id="hidden" style="display: none">
+                @foreach ($indicatorheaders as $category => $fields)
+                <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">{{ $category }}</h4>
+                <div class="p-20">
+                    @foreach ($fields as $field)
+                    <div class="d-flex p-20 align-items-center">
+                        <div class="col-lg-4 col-md-6 text-dark-grey">{{ $field->field_name }}</div>
 
-                <div class="col-md-12 col-lg-6" id="remarkBox">
-                    <div class="form-group my-3">
-                        <label class="f-14 text-dark-grey mb-12" for="remarkInput">Remark</label>
-                        <textarea id="remarkInput" name="remark" class="form-control height-35 f-14 bg-white"
-                            placeholder="Enter your remarks here..." rows="1" oninput="autoResize(this)" required></textarea>
-                    </div>
-                </div>
-
-                <div id="hidden" style="display: none">
-                    @foreach ($indicatorheaders as $category => $fields)
-                    <h4 class="mb-0 p-20 f-15 font-weight-normal text-capitalize border-bottom-grey">{{ $category }}</h4>
-                    <div class="p-20">
-                        @foreach ($fields as $field)
-                        <div class="d-flex p-20 align-items-center">
-                            <div class="col-lg-4 col-md-6 text-dark-grey">{{ $field->field_name }}</div>
-
-                            <div class="f-21 col-6">
-                                <div class="d-flex" style="justify-content: space-between;">
-                                    <div class="rating" id="{{ $field->field_name }}" data-rating="0">
-                                        <span data-value="1">&#9733;</span>
-                                        <span data-value="2">&#9733;</span>
-                                        <span data-value="3">&#9733;</span>
-                                        <span data-value="4">&#9733;</span>
-                                        <span data-value="5">&#9733;</span>
-                                    </div>
-                                    <div class="rating_appraisal" data-rating="0">
-                                        <span data-value="1">&#9733;</span>
-                                        <span data-value="2">&#9733;</span>
-                                        <span data-value="3">&#9733;</span>
-                                        <span data-value="4">&#9733;</span>
-                                        <span data-value="5">&#9733;</span>
-                                    </div>
-                                    <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" value="0">
+                        <div class="f-21 col-6">
+                            <div class="d-flex" style="justify-content: space-between;">
+                                <div class="rating" id="{{ $field->field_name }}" data-rating="0">
+                                    <span data-value="1">&#9733;</span>
+                                    <span data-value="2">&#9733;</span>
+                                    <span data-value="3">&#9733;</span>
+                                    <span data-value="4">&#9733;</span>
+                                    <span data-value="5">&#9733;</span>
                                 </div>
+                                <div class="rating_appraisal" data-rating="0">
+                                    <span data-value="1">&#9733;</span>
+                                    <span data-value="2">&#9733;</span>
+                                    <span data-value="3">&#9733;</span>
+                                    <span data-value="4">&#9733;</span>
+                                    <span data-value="5">&#9733;</span>
+                                </div>
+                                <input type="hidden" name="ratings[{{ Str::slug($field->field_name, '_') }}]" value="0">
                             </div>
                         </div>
-                        @endforeach
                     </div>
                     @endforeach
                 </div>
-
+                @endforeach
+            </div>
+            <div class="p-20">
                 <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
                     <i class="fa fa-check mr-1"></i> Save
                 </button>
-                <a href="{{ route('appraisal.index') }}" class="btn-cancel rounded f-14 p-2">Cancel</a>
+                <a href="{{ route('appraisal.index') }}" class="btn-cancel rounded f-14 p-2 border-0">Cancel</a>
             </div>
         </div>
     </div>
