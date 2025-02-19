@@ -796,6 +796,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('appraisal/export', [AppraisalController::class, 'export'])->name('appraisal.export');
     Route::get('appraisal/edit/{id}', [AppraisalController::class, 'appraisaledit'])->name('appraisal.edit');
     Route::post('appraisal/update/{id}', [AppraisalController::class, 'appraisalupdate'])->name('appraisal.update');
+    Route::get('/departments/{branch}', [App\Http\Controllers\AppraisalController::class, 'getDepartments']);
+    Route::get('/employees/{branch}/{department}', [App\Http\Controllers\AppraisalController::class, 'getEmployees']);
 
     Route::get('goaltracking', [GoalTrackingController::class, 'goaltracking'])->name('goaltracking.index');
     Route::get('goaltracking/add', [GoalTrackingController::class, 'goaltrackingCreate'])->name('goaltracking.create');

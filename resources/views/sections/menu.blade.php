@@ -62,13 +62,13 @@
                 d="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5"/>
             </x-slot>
             <div class="accordionItemContent pb-2">
-                @if (in_array('employees', user_modules()) && $sidebarUserPermissions['view_employees'] != 5 && $sidebarUserPermissions['view_employees'] != 'none')
-                    <x-sub-menu-item :link="route('indicator.index')" :text="__('app.menu.indicator')" />
+            @if (in_array('leaves', user_modules()) && $sidebarUserPermissions['view_leave'] != 5 && $sidebarUserPermissions['view_leave'] != 'none')
+            <x-sub-menu-item :link="route('indicator.index')" :text="__('app.menu.indicator')" />
                 @endif
                 @if (in_array('leaves', user_modules()) && $sidebarUserPermissions['view_leave'] != 5 && $sidebarUserPermissions['view_leave'] != 'none')
                     <x-sub-menu-item :link="route('appraisal.index')" :text="__('app.menu.appraisal')" />
                 @endif
-                @if (in_array('attendance', user_modules()) && isset($sidebarUserPermissions['view_shift_roster']) && $sidebarUserPermissions['view_shift_roster'] != 5 && $sidebarUserPermissions['view_shift_roster'] != 'none')
+                @if (in_array('leaves', user_modules()) && $sidebarUserPermissions['view_leave'] != 5 && $sidebarUserPermissions['view_leave'] != 'none')
                     <x-sub-menu-item :link="route('goaltracking.index')" :text="__('app.menu.goaltracking')" />
                 @endif
             </div>
