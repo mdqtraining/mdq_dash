@@ -46,7 +46,7 @@
 
                             <!-- Appraisal Date -->
                             <td>{{ $appraisal->appraisal_date }}</td>
-
+                            
                             <!-- Action -->
                             <td class="text-right pr-20">
                                 <div class="task_view">
@@ -58,12 +58,14 @@
                                             <a href="{{ route('appraisal.view',$appraisal->id)}}" class="dropdown-item">
                                                 <i class="fa fa-eye mr-2"></i> View
                                             </a>
+                                            @if ($role_id == 1)
                                             <a class="dropdown-item" href="{{ route('appraisal.edit', $appraisal->id) }}">
                                                 <i class="fa fa-edit mr-2"></i> Edit
                                             </a>
                                             <a class="dropdown-item delete-table-row" href="{{ route('appraisal.destroy', $appraisal->id) }}">
                                                 <i class="fa fa-trash mr-2"></i> Delete
                                             </a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

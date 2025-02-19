@@ -786,6 +786,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/indicator/export', [IndicatorController::class, 'export'])->name('indicator.export');
     Route::post('indicator/create', [IndicatorController::class, 'fieldratingcreate'])->name('ratingfield.store');
     Route::get('/get-employee-indicator-data', [IndicatorController::class, 'getEmployeeIndicatorData'])->name('getEmployeeIndicatorData');
+    Route::get('orders/create',[IndicatorController::class,'newordercreate'])->name('orders.createnew');
 
     Route::get('appraisal', [AppraisalController::class, 'appraisal'])->name('appraisal.index');
     Route::get('appraisal/add', [AppraisalController::class, 'appraisalCreate'])->name('appraisal.create');

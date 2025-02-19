@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Company;
 use App\Models\Designation;
 use App\Models\Team;
+use App\Models\RoleUser;
 use Illuminate\Support\Str;
 use App\Models\IndicatorfieldName;
 use Illuminate\Http\Request;
@@ -19,8 +20,6 @@ use App\Models\Department;
 
 class IndicatorController extends AccountBaseController
 {
-
-
     public function indicator(Request $request)
     {
         $this->pageTitle = 'app.menu.indicator';
@@ -72,18 +71,19 @@ class IndicatorController extends AccountBaseController
             'designations' => $designations
         ]));
     }
-
+    public function newordercreate()
+    {
+        $this->pageTitle = 'create order';
+        abort_403(!in_array('employee', user_roles()));
+        return view('orders.newwindow', $this->data);
+    }
     public function import(Request $request)
     {
         $request->validate([
             'import_file' => 'required|file|mimes:xlsx,csv',
         ]);
-
         $file = $request->file('import_file');
-
-        // Process file using Laravel Excel
         Excel::import(new IndicatorImport, $file);
-
         return redirect()->back()->with('success', 'Indicators imported successfully!');
     }
 
@@ -97,17 +97,13 @@ class IndicatorController extends AccountBaseController
     {
         $employeeId = $request->id;
         $employee = User::find($employeeId);
-
         if (!$employee) {
             return response()->json(['error' => 'Employee not found'], 404);
         }
-
         $designation = Designation::where('user_id', $employeeId)->first();
-
         if (!$designation) {
             return response()->json(['error' => 'Role not found for this employee'], 404);
-        }
-
+        } 
         $indicators = Indicator::where('designation', $designation)->get();
     }
 
@@ -138,13 +134,10 @@ class IndicatorController extends AccountBaseController
     }
     public function fieldratingcreate(Request $request)
     {
-        // Validate input
         $validated = $request->validate([
             'field_name' => 'required|string|max:255',
             'category' => 'required|string|max:255',
         ]);
-
-        // Store the new rating field
         $ratingField = new IndicatorfieldName();
         $ratingField->field_name = $validated['field_name'];
         $ratingField->name = $validated['category'];
@@ -156,14 +149,11 @@ class IndicatorController extends AccountBaseController
     public function getDepartments($branch)
     {
         $company = Company::where('company_name', $branch)->first();
-
         if (!$company) {
-            return response()->json([]); // Ensure an empty array, NOT an object
+            return response()->json([]); 
         }
-
         $departments = Team::where('company_id', $company->id)->pluck('Team_name');
-
-        return response()->json($departments->toArray()); // Convert collection to array
+        return response()->json($departments->toArray());     
     }
     public function getDesignations($branch, $department)
     {

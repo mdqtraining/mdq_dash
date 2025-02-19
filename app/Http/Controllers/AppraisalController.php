@@ -11,8 +11,10 @@ use App\Models\Indicator;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Company;
+use App\Models\RoleUser;
 use Illuminate\Http\Request;
 use App\Models\IndicatorfieldName;
+use Illuminate\Support\Facades\Auth;
 use QuickBooksOnline\API\Facades\Department;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,53 +25,68 @@ use App\Exports\AppraisalExport;
 class AppraisalController extends AccountBaseController
 {
     public function appraisal(Request $request)
-    {
+    {   
         $this->pageTitle = 'app.menu.appraisal';
-
-        abort_403(!in_array('employee', user_roles()));
-
-        // Get the 'per_page' value from request, default is 10
+        $user_id = Auth::user()->id;
+        $user_name = Auth::user()->name;
+        $role_id = RoleUser::where('user_id', $user_id)->value('role_id'); // Get role as integer
+    
         $perPage = $request->input('per_page', 10);
-
-        // Start query builder
-        $query = Appraisal::query();
-
-        // Apply filters
-        if ($request->filled('employee')) {
-            $query->where('employee_name', $request->employee);
+    
+        // Default empty paginated collection
+        $appraisals = Appraisal::paginate($perPage); // This ensures pagination is always applied
+    
+        $employees = collect();
+        $departments = collect();
+        $designations = collect();
+        $branches = collect();
+    
+        if ($role_id == 1) { // Admin
+            $query = Appraisal::query();
+    
+            if ($request->filled('employee')) {
+                $query->where('employee_name', $request->employee);
+            }
+            if ($request->filled('department')) {
+                $query->where('department', $request->department);
+            }
+            if ($request->filled('designation')) {
+                $query->where('designation', $request->designation);
+            }
+            if ($request->filled('branch')) {
+                $query->where('branch', $request->branch);
+            }
+    
+            $appraisals = $query->paginate($perPage); // ✅ Always paginate
+    
+            // Get filter options
+            $employees = Appraisal::select('employee_name')->distinct()->get();
+            $departments = Appraisal::select('department')->distinct()->whereNotNull('department')->get();
+            $designations = Appraisal::select('designation')->distinct()->whereNotNull('designation')->get();
+            $branches = Appraisal::select('branch')->distinct()->whereNotNull('branch')->get();
+            return view('appraisal.index', array_merge($this->data, [
+                'appraisals' => $appraisals,
+                'employees' => $employees,
+                'departments' => $departments,
+                'designations' => $designations,
+                'branches' => $branches,
+                'role_id' => $role_id
+            ]));
         }
-
-        if ($request->filled('department')) {
-            $query->where('department', $request->department);
+        elseif ($role_id == 2) { // Employee 
+            $appraisals = Appraisal::where('employee_name', $user_name)->paginate($perPage);
+            return view('appraisal.index', array_merge($this->data, [
+                'appraisals' => $appraisals,
+                'employees' => $employees,
+                'departments' => $departments,
+                'designations' => $designations,
+                'branches' => $branches,
+                'role_id' => $role_id
+            ]));
         }
-
-        if ($request->filled('designation')) {
-            $query->where('designation', $request->designation);
-        }
-
-        if ($request->filled('branch')) {
-            $query->where('branch', $request->branch);
-        }
-
-        // Fetch paginated results
-        $appraisals = $query->paginate($perPage);
-
-        // Fetch filter options (Get distinct values from the table)
-        $employees = Appraisal::select('employee_name')->distinct()->get();
-        $departments = Appraisal::select('department')->distinct()->whereNotNull('department')->get();
-        $designations = Appraisal::select('designation')->distinct()->whereNotNull('designation')->get();
-        $branches = Appraisal::select('branch')->distinct()->whereNotNull('branch')->get();
-
-        return view('appraisal.index', array_merge($this->data, [
-            'appraisals' => $appraisals,
-            'employees' => $employees,
-            'departments' => $departments,
-            'designations' => $designations,
-            'branches' => $branches
-        ]));
+        
+      
     }
-
-
     public function export()
     {
         return Excel::download(new AppraisalExport, 'appraisals.xlsx');
@@ -198,6 +215,8 @@ class AppraisalController extends AccountBaseController
     {
         $this->pageTitle = 'view Appraisal';
         abort_403(!in_array('employee', user_roles()));
+        $user_id = Auth::user()->id;
+        $role_id = RoleUser::where('user_id', $user_id)->value('role_id');
         $appraisal = Appraisal::findOrFail($id);
         $branch = $appraisal->branch;
         $depart = $appraisal->department;
@@ -211,7 +230,7 @@ class AppraisalController extends AccountBaseController
             ->distinct()
             ->get()
             ->groupBy('name');
-        return view('appraisal.view', array_merge($this->data, ['appraisal' => $appraisal, 'employee' => $employee, 'branchname' => $branchname, 'indicatorheaders' => $indicatorheaders, 'designations' => $designations, 'department' => $department, 'indicator' => $indicator]));
+        return view('appraisal.view', array_merge($this->data, ['appraisal' => $appraisal, 'employee' => $employee, 'branchname' => $branchname, 'indicatorheaders' => $indicatorheaders, 'designations' => $designations, 'department' => $department, 'role_id' => $role_id, 'indicator' => $indicator]));
     }
     public function appraisalstore(Request $request)
     {

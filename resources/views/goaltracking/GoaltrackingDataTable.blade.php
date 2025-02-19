@@ -13,7 +13,7 @@
                             <th>End Date</th>
                             <th>Rating</th>
                             <th>Progress</th>
-                            <th >Action</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody style="width: 100%">
@@ -26,7 +26,7 @@
                             <td>{{ $goaltrackings->target }}</td>
                             <td>{{ \Carbon\Carbon::parse($goaltrackings->start_date)->format('d-m-Y') }}</td>
                             <td>{{ \Carbon\Carbon::parse($goaltrackings->end_date)->format('d-m-Y') }}</td>
-                            <td >
+                            <td>
                                 <div class="star-rating" data-rating="{{ $goaltrackings->rating }}">
                                     @for ($i = 1; $i <= 5; $i++)
                                         <span class="star" data-value="{{ $i }}">&#9733;</span>
@@ -91,49 +91,48 @@
             </table>
         </div>
         <!-- Entries Per Page Dropdown -->
-        <div class="d-flex ">
-            <div class="flex-grow-1">
-                <div class="dataTables_length ">
-                    <label class="d-flex align-items-center"><span>Show &nbsp;</span><select class="custom-select custom-select-sm form-control form-control-sm" style="width:auto !important;" onchange="window.location.href = '?per_page=' + this.value;">
-                            <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
-                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                            <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
-                        </select><span>&nbsp; entries</span></label>
-                </div>
+
+    </div>
+    <div class="d-flex justify-content-between align-items-center ">
+        <div class="flex-grow-1">
+            <div class="dataTables_length ">
+                <label class="d-flex align-items-center"><span>Show &nbsp;</span><select class="custom-select custom-select-sm form-control form-control-sm" style="width:auto !important;" onchange="window.location.href = '?per_page=' + this.value;">
+                        <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                    </select><span>&nbsp; entries</span></label>
             </div>
+        </div>
 
-            <div>
-                <div class="dataTables_info ">
-                    Showing {{ $goaltracking->firstItem() }} to {{ $goaltracking->lastItem() }} of {{ $goaltracking->total() }} entries
-                </div>
-            </div>
+        <div class="dataTables_info ">
+            Showing {{ $goaltracking->firstItem() }} to {{ $goaltracking->lastItem() }} of {{ $goaltracking->total() }} entries
+        </div>
 
-            <!-- Pagination Links -->
-            <div class="dataTables_paginate paging_simple_numbers">
-                <ul class="pagination">
-                    <!-- Previous Button -->
-                    <li class="paginate_button page-item {{ $goaltracking->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link text-white {{ $goaltracking->onFirstPage() ? 'bg-secondary' : 'bg-primary' }}"
-                            href="{{ $goaltracking->onFirstPage() ? '#' : $goaltracking->previousPageUrl() }}">
-                            Previous
-                        </a>
-                    </li>
+        <!-- Pagination Links -->
+        <div class="dataTables_paginate paging_simple_numbers">
+            <ul class="pagination">
+                <!-- Previous Button -->
+                <li class="paginate_button page-item {{ $goaltracking->onFirstPage() ? 'disabled' : '' }}">
+                    <a class="page-link text-white {{ $goaltracking->onFirstPage() ? 'bg-secondary' : 'bg-primary' }}"
+                        href="{{ $goaltracking->onFirstPage() ? '#' : $goaltracking->previousPageUrl() }}">
+                        Previous
+                    </a>
+                </li>
 
-                    <!-- Current Page -->
-                    <li class="paginate_button page-item active">
-                        <span class="page-link bg-dark border-dark">{{ $goaltracking->currentPage() }}</span>
-                    </li>
+                <!-- Current Page -->
+                <li class="paginate_button page-item active">
+                    <span class="page-link bg-dark border-dark">{{ $goaltracking->currentPage() }}</span>
+                </li>
 
-                    <!-- Next Button -->
-                    <li class="paginate_button page-item {{ $goaltracking->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link {{ $goaltracking->hasMorePages() ? 'bg-primary' : 'bg-secondary' }} text-white"
-                            href="{{ $goaltracking->hasMorePages() ? $goaltracking->nextPageUrl() : '#' }}">
-                            Next
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                <!-- Next Button -->
+                <li class="paginate_button page-item {{ $goaltracking->hasMorePages() ? '' : 'disabled' }}">
+                    <a class="page-link {{ $goaltracking->hasMorePages() ? 'bg-primary' : 'bg-secondary' }} text-white"
+                        href="{{ $goaltracking->hasMorePages() ? $goaltracking->nextPageUrl() : '#' }}">
+                        Next
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

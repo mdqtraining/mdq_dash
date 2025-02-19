@@ -152,7 +152,9 @@
                 </div>
                 
             <div class="p-20">
+            @if ($role_id == 1)
                 <a href="{{route('appraisal.edit',$appraisal->id) }}" class="rounded f-14 p-2 edit-a-btn" style="background-color:#6FD943; color:white ;">Edit</a>
+            @endif
                 <a href="{{route('appraisal.index') }}" class="btn-cancel rounded f-14 p-2 border-0">cancel</a>
             </div>
         </div>

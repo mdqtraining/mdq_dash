@@ -9,11 +9,11 @@
 @include('sections.daterange_css')
 @endpush
 
+@if($role_id==1)
 @section('filter-section')
-
 @include('indicator.filters')
-
 @endsection
+@endif
 
 
 @section('content')
